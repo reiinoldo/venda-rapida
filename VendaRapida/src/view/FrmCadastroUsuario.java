@@ -5,6 +5,7 @@
 package view;
 
 import controller.UsuarioController;
+import controller.impl.UsuarioControllerImpl;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import model.Usuario;
@@ -19,7 +20,7 @@ public class FrmCadastroUsuario extends javax.swing.JFrame {
      * Creates new form FrmCadastroUsuario
      */
     
-    UsuarioController usuarioController = new UsuarioController();
+    UsuarioController usuarioController = new UsuarioControllerImpl();
     
     public FrmCadastroUsuario() {
         initComponents();
