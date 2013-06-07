@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.5" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+  <Properties>
+    <Property name="defaultCloseOperation" type="int" value="3"/>
+  </Properties>
+  <SyntheticProperties>
+    <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
+  </SyntheticProperties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="lbNovoUsuario" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="99" max="-2" attributes="0"/>
+                              <Component id="lbNome" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="edNome" min="-2" pref="271" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="lbLogin" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lbSenha" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lbConfirmarSenha" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lbComissao" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="edConfirmarSenha" min="-2" pref="271" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="edLogin" max="32767" attributes="0"/>
+                                      <Component id="edSenha" min="-2" pref="271" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="edComissao" alignment="0" min="-2" pref="271" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                      </Group>
+                      <EmptySpace min="0" pref="8" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="cbAdministrador" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                              <Component id="cbVendeProduto" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="cbCadastraProduto" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="btCancelar" min="-2" pref="68" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="btLimpar" min="-2" pref="68" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="btOk" min="-2" pref="68" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                  </Group>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="lbNovoUsuario" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lbNome" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="edNome" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lbLogin" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="edLogin" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="edSenha" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lbSenha" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="edConfirmarSenha" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lbConfirmarSenha" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="edComissao" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lbComissao" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="cbAdministrador" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cbVendeProduto" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cbCadastraProduto" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="btOk" min="-2" max="-2" attributes="0"/>
+                  <Component id="btLimpar" min="-2" max="-2" attributes="0"/>
+                  <Component id="btCancelar" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace pref="17" max="32767" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="javax.swing.JLabel" name="lbNovoUsuario">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="14" style="1"/>
+        </Property>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/img/cadastroCliente.png"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Novo Usu&#xe1;rio"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lbNome">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Verdana" size="15" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Nome:"/>
+        <Property name="name" type="java.lang.String" value="" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="edNome">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Verdana" size="15" style="1"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lbLogin">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Verdana" size="15" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Login:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="edLogin">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Verdana" size="15" style="1"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lbSenha">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Verdana" size="15" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Senha:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JPasswordField" name="edSenha">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Verdana" size="15" style="1"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lbConfirmarSenha">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Verdana" size="15" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Confirmar Senha:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JPasswordField" name="edConfirmarSenha">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Verdana" size="15" style="1"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lbComissao">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Verdana" size="15" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Comiss&#xe3;o (%):"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="edComissao">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Verdana" size="15" style="1"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="cbAdministrador">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Administrador"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="cbVendeProduto">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Vende produto"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="cbCadastraProduto">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Cadastra Produto"/>
+      </Properties>
+      <BindingProperties>
+        <BindingProperty name="nextFocusableComponent" source="btOk" target="cbCadastraProduto" targetPath="nextFocusableComponent" updateStrategy="0" immediately="false"/>
+      </BindingProperties>
+    </Component>
+    <Component class="javax.swing.JButton" name="btOk">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/img/confirma.png"/>
+        </Property>
+      </Properties>
+      <BindingProperties>
+        <BindingProperty name="nextFocusableComponent" source="btLimpar" target="btOk" targetPath="nextFocusableComponent" updateStrategy="0" immediately="false"/>
+      </BindingProperties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btOkActionPerformed"/>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="btOkKeyPressed"/>
+      </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="getRootPane().setDefaultButton(btOk);"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JButton" name="btLimpar">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/img/limpar.png"/>
+        </Property>
+      </Properties>
+      <BindingProperties>
+        <BindingProperty name="nextFocusableComponent" source="btCancelar" target="btLimpar" targetPath="nextFocusableComponent" updateStrategy="0" immediately="false"/>
+      </BindingProperties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btLimparActionPerformed"/>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="btLimparKeyPressed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btCancelar">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/img/remove-icon.png"/>
+        </Property>
+      </Properties>
+      <BindingProperties>
+        <BindingProperty name="nextFocusableComponent" source="edNome" target="btCancelar" targetPath="nextFocusableComponent" updateStrategy="0" immediately="false"/>
+      </BindingProperties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btCancelarActionPerformed"/>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="btCancelarKeyPressed"/>
+      </Events>
+    </Component>
+  </SubComponents>
+</Form>
