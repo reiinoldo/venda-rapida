@@ -4,7 +4,7 @@
  */
 package view;
 
-import controller.UsuarioController;
+import controller.impl.UsuarioControllerImpl;
 import controller.dao.util.ConnectionMySql;
 import java.awt.Event;
 import java.awt.Image;
@@ -24,7 +24,7 @@ public class FrmTelaLogin extends javax.swing.JFrame {
     /**
      * Creates new form telaLogin
      */
-    private UsuarioController usuarioController = new UsuarioController();
+    private UsuarioControllerImpl usuarioController = new UsuarioControllerImpl();
     private Usuario usuario;
 
     public FrmTelaLogin() {
