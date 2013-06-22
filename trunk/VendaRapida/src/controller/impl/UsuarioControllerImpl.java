@@ -66,4 +66,9 @@ public class UsuarioControllerImpl implements UsuarioController {
             throw new RegraNegocioException("Senha incorreta");
         usuarioDao.excluir(login);
     }
+
+    @Override
+    public Usuario buscar(String login) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

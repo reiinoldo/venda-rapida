@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package view;
 
 import controller.UsuarioController;
@@ -10,21 +6,16 @@ import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import model.Usuario;
 
-/**
- *
- * @author andrebampi
- */
-public class FrmCadastroUsuario extends javax.swing.JFrame {
+public class FrmCadastroUsuario extends javax.swing.JDialog {
+    
+    UsuarioController usuarioController = new UsuarioControllerImpl();
 
     /**
      * Creates new form FrmCadastroUsuario
      */
-    
-    UsuarioController usuarioController = new UsuarioControllerImpl();
-    
-    public FrmCadastroUsuario() {
+    public FrmCadastroUsuario(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
-        getRootPane().setDefaultButton(null);
     }
 
     /**
@@ -35,45 +26,82 @@ public class FrmCadastroUsuario extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        lbNovoUsuario = new javax.swing.JLabel();
         lbNome = new javax.swing.JLabel();
-        edNome = new javax.swing.JTextField();
+        cbCadastraProduto = new javax.swing.JCheckBox();
+        lbNovoUsuario = new javax.swing.JLabel();
+        cbVendeProduto = new javax.swing.JCheckBox();
         lbLogin = new javax.swing.JLabel();
+        cbAdministrador = new javax.swing.JCheckBox();
+        edNome = new javax.swing.JTextField();
+        btPesquisar = new javax.swing.JButton();
         edLogin = new javax.swing.JTextField();
+        btOk = new javax.swing.JButton();
         lbSenha = new javax.swing.JLabel();
+        btLimpar = new javax.swing.JButton();
         edSenha = new javax.swing.JPasswordField();
         lbConfirmarSenha = new javax.swing.JLabel();
         edConfirmarSenha = new javax.swing.JPasswordField();
         lbComissao = new javax.swing.JLabel();
         edComissao = new javax.swing.JTextField();
-        cbAdministrador = new javax.swing.JCheckBox();
-        cbVendeProduto = new javax.swing.JCheckBox();
-        cbCadastraProduto = new javax.swing.JCheckBox();
-        btOk = new javax.swing.JButton();
-        btLimpar = new javax.swing.JButton();
-        btPesquisar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        lbNovoUsuario.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        lbNovoUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cadastroCliente.png"))); // NOI18N
-        lbNovoUsuario.setText("Cadastro de Usuários");
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         lbNome.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
         lbNome.setText("Nome:");
         lbNome.setName(""); // NOI18N
 
-        edNome.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
+        cbCadastraProduto.setText("Cadastra Produto");
+
+        lbNovoUsuario.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lbNovoUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cadastroCliente.png"))); // NOI18N
+        lbNovoUsuario.setText("Cadastro de Usuários");
+
+        cbVendeProduto.setText("Vende produto");
 
         lbLogin.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
         lbLogin.setText("Login:");
 
+        cbAdministrador.setText("Administrador");
+
+        edNome.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
+
+        btPesquisar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/search-icon.png"))); // NOI18N
+        btPesquisar.setToolTipText("Pesquisar");
+        btPesquisar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btPesquisarActionPerformed(evt);
+            }
+        });
+
         edLogin.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
+
+        btOk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/confirma.png"))); // NOI18N
+        btOk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btOkActionPerformed(evt);
+            }
+        });
+        btOk.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btOkKeyPressed(evt);
+            }
+        });
 
         lbSenha.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
         lbSenha.setText("Senha:");
+
+        btLimpar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/limpar.png"))); // NOI18N
+        btLimpar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btLimparActionPerformed(evt);
+            }
+        });
+        btLimpar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btLimparKeyPressed(evt);
+            }
+        });
 
         edSenha.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
 
@@ -86,55 +114,6 @@ public class FrmCadastroUsuario extends javax.swing.JFrame {
         lbComissao.setText("Comissão (%):");
 
         edComissao.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
-
-        cbAdministrador.setText("Administrador");
-
-        cbVendeProduto.setText("Vende produto");
-
-        cbCadastraProduto.setText("Cadastra Produto");
-
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, btOk, org.jdesktop.beansbinding.ObjectProperty.create(), cbCadastraProduto, org.jdesktop.beansbinding.BeanProperty.create("nextFocusableComponent"));
-        bindingGroup.addBinding(binding);
-
-        btOk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/confirma.png"))); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, btLimpar, org.jdesktop.beansbinding.ObjectProperty.create(), btOk, org.jdesktop.beansbinding.BeanProperty.create("nextFocusableComponent"));
-        bindingGroup.addBinding(binding);
-
-        btOk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btOkActionPerformed(evt);
-            }
-        });
-        btOk.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                btOkKeyPressed(evt);
-            }
-        });
-
-        btLimpar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/limpar.png"))); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, new javax.swing.JButton(), org.jdesktop.beansbinding.ObjectProperty.create(), btLimpar, org.jdesktop.beansbinding.BeanProperty.create("nextFocusableComponent"));
-        bindingGroup.addBinding(binding);
-
-        btLimpar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btLimparActionPerformed(evt);
-            }
-        });
-        btLimpar.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                btLimparKeyPressed(evt);
-            }
-        });
-
-        btPesquisar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/search-icon.png"))); // NOI18N
-        btPesquisar.setToolTipText("Pesquisar");
-        btPesquisar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btPesquisarActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -151,9 +130,9 @@ public class FrmCadastroUsuario extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(cbAdministrador)
-                                .addGap(12, 12, 12)
-                                .addComponent(cbVendeProduto)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cbVendeProduto)
+                                .addGap(12, 12, 12)
                                 .addComponent(cbCadastraProduto))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(btLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -185,12 +164,11 @@ public class FrmCadastroUsuario extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lbNovoUsuario)
-                .addGap(44, 44, 44)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(edLogin)
-                        .addComponent(lbLogin)))
+                    .addComponent(edLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbLogin))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(edNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -221,22 +199,14 @@ public class FrmCadastroUsuario extends javax.swing.JFrame {
 
         getRootPane().setDefaultButton(btOk);
 
-        bindingGroup.bind();
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLimparActionPerformed
-        edNome.setText("");
-        edLogin.setText("");
-        edSenha.setText("");
-        edConfirmarSenha.setText("");
-        edComissao.setText("");
-        cbAdministrador.setSelected(false);
-        cbVendeProduto.setSelected(false);
-        cbCadastraProduto.setSelected(false);
-        edNome.requestFocus();
-    }//GEN-LAST:event_btLimparActionPerformed
+    private void btPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPesquisarActionPerformed
+        if (edLogin.getText().trim().equals("")) {
+            // usuarioController.
+        }
+    }//GEN-LAST:event_btPesquisarActionPerformed
 
     private void btOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btOkActionPerformed
         try {
@@ -244,12 +214,12 @@ public class FrmCadastroUsuario extends javax.swing.JFrame {
             usuario.setNome(edNome.getText());
             usuario.setLogin(edLogin.getText());
             usuario.setSenha(new String(edSenha.getPassword()));
-            
+
             //Tava dando erro "empty String" quando deixava o campo comissão vazio.
             if (edComissao.getText().trim().equals(""))
-                usuario.setComissao(0);
+            usuario.setComissao(0);
             else
-                usuario.setComissao(Double.parseDouble(edComissao.getText()));
+            usuario.setComissao(Double.parseDouble(edComissao.getText()));
             usuario.setAdministrador(cbAdministrador.isSelected());
             usuario.setVendeProduto(cbVendeProduto.isSelected());
             usuario.setCadastraProduto(cbCadastraProduto.isSelected());
@@ -264,18 +234,25 @@ public class FrmCadastroUsuario extends javax.swing.JFrame {
 
     private void btOkKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btOkKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER)
-            btOkActionPerformed(null);
+        btOkActionPerformed(null);
     }//GEN-LAST:event_btOkKeyPressed
+
+    private void btLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLimparActionPerformed
+        edNome.setText("");
+        edLogin.setText("");
+        edSenha.setText("");
+        edConfirmarSenha.setText("");
+        edComissao.setText("");
+        cbAdministrador.setSelected(false);
+        cbVendeProduto.setSelected(false);
+        cbCadastraProduto.setSelected(false);
+        edNome.requestFocus();
+    }//GEN-LAST:event_btLimparActionPerformed
 
     private void btLimparKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btLimparKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER)
-            btLimparActionPerformed(null);
+        btLimparActionPerformed(null);
     }//GEN-LAST:event_btLimparKeyPressed
-
-    private void btPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPesquisarActionPerformed
-        carregarTransacao();
-
-    }//GEN-LAST:event_btPesquisarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -304,10 +281,10 @@ public class FrmCadastroUsuario extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
+        /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrmCadastroUsuario().setVisible(true);
+                
             }
         });
     }
@@ -329,6 +306,5 @@ public class FrmCadastroUsuario extends javax.swing.JFrame {
     private javax.swing.JLabel lbNome;
     private javax.swing.JLabel lbNovoUsuario;
     private javax.swing.JLabel lbSenha;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

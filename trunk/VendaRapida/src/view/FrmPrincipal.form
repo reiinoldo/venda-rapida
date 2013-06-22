@@ -30,7 +30,7 @@
           </Group>
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="32767" attributes="0"/>
-              <Component id="btCancelar" min="-2" pref="68" max="-2" attributes="0"/>
+              <Component id="btTrocarUsuario" min="-2" pref="68" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -41,7 +41,7 @@
               <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
               <Component id="btnCadastroUsuario" min="-2" max="-2" attributes="0"/>
               <EmptySpace pref="178" max="32767" attributes="0"/>
-              <Component id="btCancelar" min="-2" max="-2" attributes="0"/>
+              <Component id="btTrocarUsuario" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -56,14 +56,14 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCadastroUsuarioActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="btCancelar">
+    <Component class="javax.swing.JButton" name="btTrocarUsuario">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/img/remove-icon.png"/>
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btCancelarActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btTrocarUsuarioActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
