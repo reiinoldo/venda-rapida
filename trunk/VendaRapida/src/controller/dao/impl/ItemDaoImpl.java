@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Item;
 
-public class ItemDaoImpl implements ItemDao{
+public class ItemDaoImpl implements ItemDao {
 
     @Override
     public boolean salvar(Item item) throws Exception {
@@ -43,9 +43,9 @@ public class ItemDaoImpl implements ItemDao{
     public boolean excluir(int codigoVenda, String referenciaProduto) throws Exception {
         ConnectionMySql.getConnection();
 
-        PreparedStatement p = ConnectionMySql.connection.prepareStatement("delete from " + Item.TABELA_ITEM + 
-                                                                          " where " + Item.CAMPO_CODIGOVENDA + " = ?" +
-                                                                          " and " + Item.CAMPO_REFERENCIAPRODUTO + " = ?");
+        PreparedStatement p = ConnectionMySql.connection.prepareStatement("delete from " + Item.TABELA_ITEM
+                + " where " + Item.CAMPO_CODIGOVENDA + " = ?"
+                + " and " + Item.CAMPO_REFERENCIAPRODUTO + " = ?");
         p.setInt(1, codigoVenda);
         p.setString(2, referenciaProduto);
 
@@ -58,11 +58,11 @@ public class ItemDaoImpl implements ItemDao{
     @Override
     public List<Item> listar(int codigoVenda) throws Exception {
         ConnectionMySql.getConnection();
-        
+
         PreparedStatement p = ConnectionMySql.connection.prepareStatement("select * from " + Item.TABELA_ITEM + "where " + Item.CAMPO_CODIGOVENDA + " = ?");
         p.setInt(1, codigoVenda);
         ResultSet r = p.executeQuery();
-        
+
         List<Item> list = new ArrayList<Item>();
 
         while (r.next()) {
@@ -76,5 +76,23 @@ public class ItemDaoImpl implements ItemDao{
         ConnectionMySql.closeConnection();
         return list;
     }
-    
+
+    @Override
+    public Item buscarItemPorProduto(String referenciaProduto) throws Exception {
+        ConnectionMySql.getConnection();
+        PreparedStatement ps = ConnectionMySql.connection.prepareStatement("select * from " + Item.TABELA_ITEM + " where " + Item.CAMPO_REFERENCIAPRODUTO + " = ?");
+        ps.setString(1, referenciaProduto);
+        ResultSet r = ps.executeQuery();
+
+        Item item = null;
+        if (r.next()) {
+            item = new Item();
+            item.setCodigoVenda(r.getInt(Item.CAMPO_CODIGOVENDA));
+            item.setQuantidade(r.getInt(Item.CAMPO_QUANTIDADE));
+            item.setReferenciaProduto(r.getString(Item.CAMPO_REFERENCIAPRODUTO));
+            item.setValor(r.getDouble(Item.CAMPO_VALOR));
+        }
+        ConnectionMySql.closeConnection();
+        return item;
+    }
 }
