@@ -150,7 +150,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/img/cadastroCliente.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Cadastro de Usu&#xe1;rios"/>
+        <Property name="text" type="java.lang.String" value="Cadastro de Usu&#xe1;rio"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JCheckBox" name="cbVendeProduto">
