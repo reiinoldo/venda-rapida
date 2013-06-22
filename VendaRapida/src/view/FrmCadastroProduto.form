@@ -45,15 +45,17 @@
                           <Component id="lbLogin" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="edConfirmarSenha" alignment="0" min="-2" pref="271" max="-2" attributes="0"/>
-                          <Component id="edSenha" alignment="0" min="-2" pref="271" max="-2" attributes="0"/>
-                          <Component id="edNome" alignment="0" min="-2" pref="271" max="-2" attributes="0"/>
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="edLogin" max="32767" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btPesquisar" min="-2" pref="33" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="edValor" alignment="0" min="-2" pref="271" max="-2" attributes="0"/>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <Component id="edReferencia" max="32767" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="btPesquisar" min="-2" pref="33" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
+                          <Component id="edCodigoBarras" min="-2" pref="271" max="-2" attributes="0"/>
+                          <Component id="edDescricao" min="-2" pref="271" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                   </Group>
@@ -70,23 +72,23 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="btPesquisar" alignment="0" pref="0" max="32767" attributes="0"/>
-                  <Component id="edLogin" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="edReferencia" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="lbLogin" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="edNome" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="lbNome" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="edCodigoBarras" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="edSenha" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="lbSenha" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="edDescricao" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="edConfirmarSenha" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="lbConfirmarSenha" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="lbConfirmarSenha" min="-2" max="-2" attributes="0"/>
+                  <Component id="edValor" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -107,13 +109,6 @@
         <Property name="text" type="java.lang.String" value="Valor:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JPasswordField" name="edConfirmarSenha">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Verdana" size="15" style="1"/>
-        </Property>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JButton" name="btLimpar">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
@@ -124,13 +119,6 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btLimparActionPerformed"/>
         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="btLimparKeyPressed"/>
       </Events>
-    </Component>
-    <Component class="javax.swing.JPasswordField" name="edSenha">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Verdana" size="15" style="1"/>
-        </Property>
-      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="btOk">
       <Properties>
@@ -163,7 +151,7 @@
         <Property name="name" type="java.lang.String" value="" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="edLogin">
+    <Component class="javax.swing.JTextField" name="edReferencia">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Verdana" size="15" style="1"/>
@@ -200,7 +188,21 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btPesquisarActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="edNome">
+    <Component class="javax.swing.JTextField" name="edValor">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Verdana" size="15" style="1"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="edCodigoBarras">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Verdana" size="15" style="1"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="edDescricao">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Verdana" size="15" style="1"/>

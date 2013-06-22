@@ -4,11 +4,20 @@
  */
 package view;
 
+import controller.ProdutoController;
+import controller.impl.ProdutoControllerImpl;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import model.Produto;
+
 /**
  *
  * @author Maicon
  */
 public class FrmCadastroProduto extends javax.swing.JDialog {
+
+    private ProdutoController produtoController = new ProdutoControllerImpl();
 
     /**
      * Creates new form FrmCadastroProduto
@@ -28,24 +37,22 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
     private void initComponents() {
 
         lbConfirmarSenha = new javax.swing.JLabel();
-        edConfirmarSenha = new javax.swing.JPasswordField();
         btLimpar = new javax.swing.JButton();
-        edSenha = new javax.swing.JPasswordField();
         btOk = new javax.swing.JButton();
         lbSenha = new javax.swing.JLabel();
         lbNome = new javax.swing.JLabel();
-        edLogin = new javax.swing.JTextField();
+        edReferencia = new javax.swing.JTextField();
         lbLogin = new javax.swing.JLabel();
         lbNovoUsuario = new javax.swing.JLabel();
         btPesquisar = new javax.swing.JButton();
-        edNome = new javax.swing.JTextField();
+        edValor = new javax.swing.JTextField();
+        edCodigoBarras = new javax.swing.JTextField();
+        edDescricao = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         lbConfirmarSenha.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
         lbConfirmarSenha.setText("Valor:");
-
-        edConfirmarSenha.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
 
         btLimpar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/limpar.png"))); // NOI18N
         btLimpar.addActionListener(new java.awt.event.ActionListener() {
@@ -58,8 +65,6 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
                 btLimparKeyPressed(evt);
             }
         });
-
-        edSenha.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
 
         btOk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/confirma.png"))); // NOI18N
         btOk.addActionListener(new java.awt.event.ActionListener() {
@@ -80,7 +85,7 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
         lbNome.setText("Código de Barras:");
         lbNome.setName(""); // NOI18N
 
-        edLogin.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
+        edReferencia.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
 
         lbLogin.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
         lbLogin.setText("Referência:");
@@ -97,7 +102,11 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
             }
         });
 
-        edNome.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
+        edValor.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
+
+        edCodigoBarras.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
+
+        edDescricao.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -122,14 +131,15 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
                             .addComponent(lbNome)
                             .addComponent(lbLogin))
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(edConfirmarSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(edSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(edNome, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(edLogin)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(edValor, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addComponent(edReferencia)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(btPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(edCodigoBarras, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(edDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(12, 12, 12)))
                 .addContainerGap())
         );
@@ -141,20 +151,20 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(edLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(edReferencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbLogin))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(edNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbNome))
+                    .addComponent(lbNome)
+                    .addComponent(edCodigoBarras, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(edSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbSenha))
+                    .addComponent(lbSenha)
+                    .addComponent(edDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(edConfirmarSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbConfirmarSenha))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lbConfirmarSenha)
+                    .addComponent(edValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btOk)
@@ -171,70 +181,40 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
     }//GEN-LAST:event_btLimparActionPerformed
 
     private void btLimparKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btLimparKeyPressed
-        
     }//GEN-LAST:event_btLimparKeyPressed
 
     private void btOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btOkActionPerformed
-        
+        Produto produto = new Produto();
+        produto.setCodigoBarrra(edCodigoBarras.getText());
+        produto.setDescricao(edDescricao.getText());
+        produto.setReferencia(edReferencia.getText());
+        produto.setValor(edValor.getText().isEmpty() ? 0d : Double.parseDouble(edValor.getText()));
+        try {
+            if (produtoController.buscar(produto.getReferencia()) == null) {
+                produtoController.salvar(produto);
+                JOptionPane.showMessageDialog(null, "Produto Salvo Com Sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                produtoController.editar(produto);
+                JOptionPane.showMessageDialog(null, "Produto Editado Com Sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btOkActionPerformed
 
     private void btOkKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btOkKeyPressed
-        
     }//GEN-LAST:event_btOkKeyPressed
 
     private void btPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPesquisarActionPerformed
-        
     }//GEN-LAST:event_btPesquisarActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrmCadastroProduto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrmCadastroProduto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrmCadastroProduto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmCadastroProduto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                FrmCadastroProduto dialog = new FrmCadastroProduto(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btLimpar;
     private javax.swing.JButton btOk;
     private javax.swing.JButton btPesquisar;
-    private javax.swing.JPasswordField edConfirmarSenha;
-    private javax.swing.JTextField edLogin;
-    private javax.swing.JTextField edNome;
-    private javax.swing.JPasswordField edSenha;
+    private javax.swing.JTextField edCodigoBarras;
+    private javax.swing.JTextField edDescricao;
+    private javax.swing.JTextField edReferencia;
+    private javax.swing.JTextField edValor;
     private javax.swing.JLabel lbConfirmarSenha;
     private javax.swing.JLabel lbLogin;
     private javax.swing.JLabel lbNome;
