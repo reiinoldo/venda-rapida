@@ -20,7 +20,7 @@ public class FornecedorControllerImpl implements FornecedorController {
         if (fornecedor.getNome().trim().equals(""))
             throw new RegraNegocioException("Nome não informado");
         if (fornecedor.getCpfCnpj().trim().equals(""))
-            throw new RegraNegocioException("Número do documento não informado");
+            throw new RegraNegocioException("Número do CPF/CNPJ não informado");
         if (fornecedor.getEndereco().trim().equals(""))
             throw new RegraNegocioException("Endereço não informado");
     }

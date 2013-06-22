@@ -1,5 +1,7 @@
 package model;
 
+import controller.dao.util.StringUtil;
+
 public class Fornecedor {
     
     public static final String TABELA_FORNECEDOR = "vendarapida.fornecedor";
@@ -50,8 +52,8 @@ public class Fornecedor {
         return cpfCnpj;
     }
 
-    public void setCpfCnpj(String cpfCnpj) {
-        this.cpfCnpj = cpfCnpj;
+    public void setCpfCnpj(String cpfCnpj) {        
+        this.cpfCnpj = StringUtil.returnDigito(cpfCnpj);
     }
 
     public String getEmail() {
@@ -66,8 +68,9 @@ public class Fornecedor {
         return telefone;
     }
 
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
+    public void setTelefone(String telefone) {        
+        this.telefone = StringUtil.returnDigito(telefone);
+    }  
+    
     
 }
