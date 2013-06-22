@@ -8,7 +8,7 @@ public interface UsuarioController {
 
     Usuario efetuarLogin(String login, String senha) throws Exception;
 
-    void excluir(String login, String senha) throws Exception;
+    void excluir(String login) throws Exception;
 
     void salvar(Usuario usuario, String confirmarSenha) throws Exception;
     

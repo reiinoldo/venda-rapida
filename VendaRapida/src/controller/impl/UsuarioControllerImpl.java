@@ -1,9 +1,13 @@
 package controller.impl;
 
 import controller.UsuarioController;
+import controller.VendaController;
 import controller.dao.UsuarioDao;
 import controller.dao.impl.UsuarioDaoImpl;
+import java.util.ArrayList;
+import java.util.List;
 import model.Usuario;
+import model.Venda;
 
 public class UsuarioControllerImpl implements UsuarioController {
 
@@ -55,20 +59,23 @@ public class UsuarioControllerImpl implements UsuarioController {
     }
     
     @Override
-    public void excluir(String login, String senha) throws Exception{
-        
-        //Falta colocar alguma regra que impeça de excluir o cliente
-        
+    public void excluir(String login) throws Exception{
+        VendaController vendaController = new VendaControllerImpl();
+        Venda venda = new Venda();
+        venda.setLoginUsuario(login);
+        List<Venda> listaVenda = vendaController.listar(venda, null, null, null);
+
+        if (!listaVenda.isEmpty()) 
+            throw new RegraNegocioException("Usuário já efetuou vendas e não pode ser excluído");
+
         Usuario usuario = usuarioDao.buscar(login);
         if (usuario == null)
             throw new RegraNegocioException("Usuário não cadastrado");
-        if (!confirmarSenha(usuario.getSenha(), senha))
-            throw new RegraNegocioException("Senha incorreta");
         usuarioDao.excluir(login);
     }
 
     @Override
     public Usuario buscar(String login) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return usuarioDao.buscar(login);
     }
 }

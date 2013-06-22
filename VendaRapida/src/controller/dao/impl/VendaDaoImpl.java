@@ -94,16 +94,16 @@ public class VendaDaoImpl implements VendaDao{
             str.append(Venda.CAMPO_DATAVENDA + ", ");
             str.append(Venda.CAMPO_DESCONTO + ", ");
             str.append(Venda.CAMPO_IDCLIENTE + ", ");
-            str.append(Venda.CAMPO_LOGINUSUARIO + ", ");
+            str.append(Venda.CAMPO_LOGINUSUARIO + " ");
             str.append(" FROM " + Venda.TABELA_VENDA);
             str.append(" WHERE ");
             str.append(Venda.CAMPO_CODIGOVENDA + " LIKE ? AND ");
-            str.append(Venda.CAMPO_CODIGOPAGSEGURO + "LIKE ? AND ");
+            str.append(Venda.CAMPO_CODIGOPAGSEGURO + " LIKE ? AND ");
             str.append(Venda.CAMPO_DATAVENDA + " >= ? AND ");
             str.append(Venda.CAMPO_DATAVENDA + " <= ? AND ");
             str.append(Venda.CAMPO_DESCONTO + " LIKE ? AND ");
-            str.append(Venda.CAMPO_IDCLIENTE + "LIKE ? AND ");
-            str.append(Venda.CAMPO_LOGINUSUARIO + " LIKE ? AND ");
+            str.append(Venda.CAMPO_IDCLIENTE + " LIKE ? AND ");
+            str.append(Venda.CAMPO_LOGINUSUARIO + " LIKE ?");
 
             ConnectionMySql.getConnection();
 
@@ -184,7 +184,7 @@ public class VendaDaoImpl implements VendaDao{
     public Venda buscar(int codigoVenda) throws Exception {
         ConnectionMySql.getConnection();
         
-        PreparedStatement p = ConnectionMySql.connection.prepareStatement("select * from " + Venda.TABELA_VENDA + "where " + Venda.CAMPO_CODIGOVENDA + " = ?");
+        PreparedStatement p = ConnectionMySql.connection.prepareStatement("select * from " + Venda.TABELA_VENDA + " where " + Venda.CAMPO_CODIGOVENDA + " = ?");
         p.setInt(1, codigoVenda);
         ResultSet r = p.executeQuery();
 

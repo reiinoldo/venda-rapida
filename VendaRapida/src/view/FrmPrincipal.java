@@ -1,13 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package view;
 
-/**
- *
- * @author andrebampi
- */
 public class FrmPrincipal extends javax.swing.JFrame {
 
     /**

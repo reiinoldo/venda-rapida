@@ -35,10 +35,12 @@ public class VendaControllerImpl implements VendaController {
     }
     
     private void verificarCamposListagem(Venda venda, Date dataFinal, Double valorInicial, Double valorFinal) throws RegraNegocioException {
-        if (valorInicial > valorFinal)
-            throw new RegraNegocioException("Valor inicial maior que o valor final");
-        if (dataFinal.before(venda.getDataVenda()))
-            throw new RegraNegocioException("Data inicial maior que a data final");
+        if ((dataFinal != null) && (valorInicial != null) && (valorFinal != null)) {
+            if (valorInicial > valorFinal)
+                throw new RegraNegocioException("Valor inicial maior que o valor final");
+            if (dataFinal.before(venda.getDataVenda()))
+                throw new RegraNegocioException("Data inicial maior que a data final");
+        }
     }
     
     private List<Venda> adicionarItensNaListaDeVendas(List<Venda> lista) throws Exception {
