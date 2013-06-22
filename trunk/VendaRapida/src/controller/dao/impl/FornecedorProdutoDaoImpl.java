@@ -6,7 +6,6 @@ import controller.dao.ProdutoDao;
 import controller.dao.util.ConnectionMySql;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import model.Fornecedor;
@@ -61,7 +60,7 @@ public class FornecedorProdutoDaoImpl implements FornecedorProdutoDao{
         PreparedStatement ps = ConnectionMySql.connection.prepareStatement("select * from " + FornecedorProduto.TABELA_FORNECEDORPRODUTO + "where " + FornecedorProduto.CAMPO_IDFORNECEDOR + " = ?");
         ps.setInt(1, idFornecedor);
         ResultSet r = ps.executeQuery();
-        List<Produto> list = new ArrayList<>();
+        List<Produto> list = new ArrayList<Produto>();
 
         while (r.next()) {
             ProdutoDao p = new ProdutoDaoImpl();
@@ -78,7 +77,7 @@ public class FornecedorProdutoDaoImpl implements FornecedorProdutoDao{
         PreparedStatement p = ConnectionMySql.connection.prepareStatement("select * from " + FornecedorProduto.TABELA_FORNECEDORPRODUTO + "where " + FornecedorProduto.CAMPO_REFERENCIAPRODUTO + " = ?");
         p.setString(1, referenciaProduto);
         ResultSet r = p.executeQuery();
-        List<Fornecedor> list = new ArrayList<>();
+        List<Fornecedor> list = new ArrayList<Fornecedor>();
 
         while (r.next()) {
             FornecedorDao f = new FornecedorDaoImpl();

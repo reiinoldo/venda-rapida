@@ -66,7 +66,7 @@ public class VendaDaoImpl implements VendaDao{
         ConnectionMySql.getConnection();
         
         ResultSet r = ConnectionMySql.connection.prepareStatement("select * from " + Venda.TABELA_VENDA).executeQuery();
-        List<Venda> list = new ArrayList<>();
+        List<Venda> list = new ArrayList<Venda>();
 
         while (r.next()) {
             Venda v = new Venda();
@@ -159,7 +159,7 @@ public class VendaDaoImpl implements VendaDao{
             
             ResultSet r = pr.executeQuery();
       
-            List<Venda> list = new ArrayList<>();
+            List<Venda> list = new ArrayList<Venda>();
             while (r.next()) {
                 Venda v = new Venda();
                 v.setCodigoVenda(r.getInt(Venda.CAMPO_CODIGOVENDA));
