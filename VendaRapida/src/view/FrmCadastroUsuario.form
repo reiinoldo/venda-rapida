@@ -26,36 +26,9 @@
           <Group type="102" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="lbNovoUsuario" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="99" max="-2" attributes="0"/>
-                              <Component id="lbNome" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="edNome" min="-2" pref="271" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="lbLogin" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lbSenha" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lbConfirmarSenha" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lbComissao" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="edConfirmarSenha" min="-2" pref="271" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="edLogin" max="32767" attributes="0"/>
-                                      <Component id="edSenha" min="-2" pref="271" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="edComissao" alignment="0" min="-2" pref="271" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                      </Group>
-                      <EmptySpace min="0" pref="8" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="lbNovoUsuario" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -68,13 +41,34 @@
                               <Component id="cbCadastraProduto" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
-                              <Component id="btCancelar" min="-2" pref="68" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
                               <Component id="btLimpar" min="-2" pref="68" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="btOk" min="-2" pref="68" max="-2" attributes="0"/>
                           </Group>
                       </Group>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="lbSenha" min="-2" max="-2" attributes="0"/>
+                          <Component id="lbConfirmarSenha" min="-2" max="-2" attributes="0"/>
+                          <Component id="lbComissao" min="-2" max="-2" attributes="0"/>
+                          <Component id="lbNome" min="-2" max="-2" attributes="0"/>
+                          <Component id="lbLogin" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="edConfirmarSenha" min="-2" pref="271" max="-2" attributes="0"/>
+                          <Component id="edSenha" min="-2" pref="271" max="-2" attributes="0"/>
+                          <Component id="edComissao" alignment="0" min="-2" pref="271" max="-2" attributes="0"/>
+                          <Component id="edNome" min="-2" pref="271" max="-2" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="edLogin" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="btPesquisar" min="-2" pref="33" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -86,15 +80,18 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="lbNovoUsuario" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lbNome" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="edNome" alignment="3" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="btPesquisar" pref="0" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="edLogin" alignment="0" max="32767" attributes="0"/>
+                      <Component id="lbLogin" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lbLogin" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="edLogin" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="edNome" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lbNome" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -121,9 +118,8 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="btOk" min="-2" max="-2" attributes="0"/>
                   <Component id="btLimpar" min="-2" max="-2" attributes="0"/>
-                  <Component id="btCancelar" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="17" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -137,7 +133,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/img/cadastroCliente.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Novo Usu&#xe1;rio"/>
+        <Property name="text" type="java.lang.String" value="Cadastro de Usu&#xe1;rios"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lbNome">
@@ -265,18 +261,15 @@
         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="btLimparKeyPressed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="btCancelar">
+    <Component class="javax.swing.JButton" name="btPesquisar">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/img/remove-icon.png"/>
+          <Image iconType="3" name="/img/search-icon.png"/>
         </Property>
+        <Property name="toolTipText" type="java.lang.String" value="Pesquisar"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="nextFocusableComponent" source="edNome" target="btCancelar" targetPath="nextFocusableComponent" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btCancelarActionPerformed"/>
-        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="btCancelarKeyPressed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btPesquisarActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
