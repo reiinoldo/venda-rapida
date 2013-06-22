@@ -16,5 +16,6 @@ public interface ClienteController {
     List<Cliente> listar(Cliente cliente) throws Exception;
 
     void salvar(Cliente cliente) throws Exception;
-    
+
+    int incrementar() throws Exception;
 }

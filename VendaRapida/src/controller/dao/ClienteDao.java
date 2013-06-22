@@ -10,4 +10,5 @@ public interface ClienteDao {
      public List<Cliente> listar() throws Exception;
      public List<Cliente> listar(Cliente cliente) throws Exception;
      public boolean editar(Cliente cliente) throws Exception;
+     public int incrementar() throws Exception;
 }

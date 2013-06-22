@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Cliente;
 
-public class ClienteDaoImpl implements ClienteDao{
+public class ClienteDaoImpl implements ClienteDao {
 
     @Override
     public boolean salvar(Cliente cliente) throws Exception {
@@ -62,7 +62,7 @@ public class ClienteDaoImpl implements ClienteDao{
     @Override
     public List<Cliente> listar() throws Exception {
         ConnectionMySql.getConnection();
-        
+
         ResultSet r = ConnectionMySql.connection.prepareStatement("select * from " + Cliente.TABELA_CLIENTE).executeQuery();
         List<Cliente> list = new ArrayList<Cliente>();
 
@@ -114,7 +114,7 @@ public class ClienteDaoImpl implements ClienteDao{
                 pr.setString(2, "%" + cliente.getCpfCnpj() + "%");
             } else {
                 pr.setString(2, "%%");
-            }            
+            }
 
             if (cliente.getEmail() != null) {
                 pr.setString(3, "%" + cliente.getEmail() + "%");
@@ -127,21 +127,21 @@ public class ClienteDaoImpl implements ClienteDao{
             } else {
                 pr.setString(4, "%%");
             }
-            
+
             if (cliente.getNome() != null) {
                 pr.setString(5, "%" + cliente.getNome() + "%");
             } else {
                 pr.setString(5, "%%");
             }
-            
+
             if (cliente.getTelefone() != null) {
                 pr.setString(6, "%" + cliente.getTelefone() + "%");
             } else {
                 pr.setString(6, "%%");
             }
-            
+
             ResultSet r = pr.executeQuery();
-      
+
             List<Cliente> list = new ArrayList<Cliente>();
             while (r.next()) {
                 Cliente c = new Cliente();
@@ -153,55 +153,56 @@ public class ClienteDaoImpl implements ClienteDao{
                 c.setTelefone(r.getString(Cliente.CAMPO_TELEFONE));
                 list.add(c);
             }
-            
+
             ConnectionMySql.closeConnection();
             return list;
 
-        } else
+        } else {
             return this.listar();
+        }
     }
 
     @Override
     public boolean editar(Cliente cliente) throws Exception {
-            if (cliente != null) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("update "+ Cliente.TABELA_CLIENTE +" ");
-                sb.append("set ");
-                sb.append(Cliente.CAMPO_CPFCNPJ +  " = ?, ");
-                sb.append(Cliente.CAMPO_EMAIL +  " = ?, ");
-                sb.append(Cliente.CAMPO_ENDERECO +  " = ? ");
-                sb.append(Cliente.CAMPO_NOME +  " = ?, ");
-                sb.append(Cliente.CAMPO_TELEFONE +  " = ? ");
-                sb.append("where ");
-                sb.append(Cliente.CAMPO_ID +  " = ?");
-        
-                ConnectionMySql.getConnection();
-                PreparedStatement pr = ConnectionMySql.connection.prepareStatement(sb.toString());
+        if (cliente != null) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("update " + Cliente.TABELA_CLIENTE + " ");
+            sb.append("set ");
+            sb.append(Cliente.CAMPO_CPFCNPJ + " = ?, ");
+            sb.append(Cliente.CAMPO_EMAIL + " = ?, ");
+            sb.append(Cliente.CAMPO_ENDERECO + " = ?, ");
+            sb.append(Cliente.CAMPO_NOME + " = ?, ");
+            sb.append(Cliente.CAMPO_TELEFONE + " = ? ");
+            sb.append("where ");
+            sb.append(Cliente.CAMPO_ID + " = ?");
 
-                pr.setString(1, cliente.getCpfCnpj());
-                pr.setString(2, cliente.getEmail());
-                pr.setString(3, cliente.getEndereco());
-                pr.setString(4, cliente.getNome());
-                pr.setString(5, cliente.getTelefone());
-                pr.setInt(6, cliente.getId());
-                
-                boolean execution = pr.execute();
-                ConnectionMySql.closeConnection();
-                return execution;
-            } else {
-                throw new SQLException("Cliente inválido");
-            }
+            ConnectionMySql.getConnection();
+            PreparedStatement pr = ConnectionMySql.connection.prepareStatement(sb.toString());
+
+            pr.setString(1, cliente.getCpfCnpj());
+            pr.setString(2, cliente.getEmail());
+            pr.setString(3, cliente.getEndereco());
+            pr.setString(4, cliente.getNome());
+            pr.setString(5, cliente.getTelefone());
+            pr.setInt(6, cliente.getId());
+
+            boolean execution = pr.execute();
+            ConnectionMySql.closeConnection();
+            return execution;
+        } else {
+            throw new SQLException("Cliente inválido");
+        }
     }
 
     @Override
     public Cliente buscar(int id) throws Exception {
         ConnectionMySql.getConnection();
-        
-        PreparedStatement p = ConnectionMySql.connection.prepareStatement("select * from " + Cliente.TABELA_CLIENTE + "where " + Cliente.CAMPO_ID + " = ?");
+
+        PreparedStatement p = ConnectionMySql.connection.prepareStatement("select * from " + Cliente.TABELA_CLIENTE + " where " + Cliente.CAMPO_ID + " = ?");
         p.setInt(1, id);
         ResultSet r = p.executeQuery();
 
-        Cliente c = null; 
+        Cliente c = null;
         if (r.next()) {
             c = new Cliente();
             c.setId(r.getInt(Cliente.CAMPO_ID));
@@ -214,5 +215,12 @@ public class ClienteDaoImpl implements ClienteDao{
         ConnectionMySql.closeConnection();
         return c;
     }
-    
+
+    @Override
+    public int incrementar() throws Exception {
+        ConnectionMySql.getConnection();
+        int r = ConnectionMySql.nextId(Cliente.TABELA_CLIENTE, Cliente.CAMPO_ID);
+        ConnectionMySql.closeConnection();
+        return r;
+    }
 }
