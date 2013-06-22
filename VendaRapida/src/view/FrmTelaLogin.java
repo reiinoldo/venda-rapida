@@ -1,38 +1,47 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package view;
 
+import controller.UsuarioController;
 import controller.impl.UsuarioControllerImpl;
-import controller.dao.util.ConnectionMySql;
 import java.awt.Event;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import model.Usuario;
+import model.Sessao;
 
-/**
- *
- * @author pc
- */
+
 public class FrmTelaLogin extends javax.swing.JFrame {
 
     /**
      * Creates new form telaLogin
      */
-    private UsuarioControllerImpl usuarioController = new UsuarioControllerImpl();
-    private Usuario usuario;
+    Sessao sessao;
+    UsuarioController usuarioController;
 
-    public FrmTelaLogin() {
+    private static FrmTelaLogin frmTelaLogin;
+    
+    public static FrmTelaLogin getInstance(boolean visivel) {
+        if (frmTelaLogin == null)
+            frmTelaLogin = new FrmTelaLogin();
+        frmTelaLogin.setVisible(visivel);
+        frmTelaLogin.limpar();;
+        return frmTelaLogin;
+    }
+    
+    private void limpar() {
+        edLogin.setText("");
+        edSenha.setText("");
+        edLogin.requestFocus();
+    }
+    
+    private FrmTelaLogin() {
         initComponents();
         setLocationRelativeTo(null);
 
         Image image = Toolkit.getDefaultToolkit().getImage("src/img/dinheiro.png");
         setIconImage(image);
+        
+        usuarioController = new UsuarioControllerImpl();
+        sessao = Sessao.getInstance();
     }
 
     /**
@@ -49,7 +58,6 @@ public class FrmTelaLogin extends javax.swing.JFrame {
         edLogin = new javax.swing.JTextField();
         lbSenha = new javax.swing.JLabel();
         btEntrar = new javax.swing.JToggleButton();
-        brNovoUsuario = new javax.swing.JButton();
         edSenha = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -81,18 +89,6 @@ public class FrmTelaLogin extends javax.swing.JFrame {
             }
         });
 
-        brNovoUsuario.setText("Novo Usuário");
-        brNovoUsuario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                brNovoUsuarioActionPerformed(evt);
-            }
-        });
-        brNovoUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                brNovoUsuarioKeyPressed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -114,10 +110,6 @@ public class FrmTelaLogin extends javax.swing.JFrame {
                                 .addGap(64, 64, 64))
                             .addComponent(edSenha))))
                 .addContainerGap(110, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(brNovoUsuario)
-                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -134,9 +126,7 @@ public class FrmTelaLogin extends javax.swing.JFrame {
                     .addComponent(edSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
-                .addComponent(brNovoUsuario)
-                .addContainerGap())
+                .addContainerGap(94, Short.MAX_VALUE))
         );
 
         getAccessibleContext().setAccessibleName("TEsteeeeeeeee");
@@ -145,44 +135,14 @@ public class FrmTelaLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEntrarActionPerformed
-        if (!edLogin.getText().equals("")
-                && !edSenha.getText().equals("")) {
-            usuario = new Usuario();
-            usuario.setLogin(edLogin.getText());
-            usuario.setSenha(edSenha.getText());
-            try {
-                Usuario usu = usuarioController.verificarLogar(usuario);
-                if (usu != null) {
-                    usuario = usu;
-                    new TelaPrincipalControleFinancas(usuario).setVisible(true);
-                    this.dispose();
-                } else {
-                    throw new BussinessException("Senha ou usuário não conferem.");
-                }
-            } catch (BussinessException ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-                Logger.getLogger(FrmTelaLogin.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SQLException ex) {
-                Logger.getLogger(FrmTelaLogin.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(null, "Erro ao manipular dados do usuario. " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            } finally {
-                try {
-                    if (ConnectionMySql.connection != null) {
-                        ConnectionMySql.closeConnection();
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger(FrmTelaLogin.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Login e senha devem ser digitados.", "Erro", JOptionPane.ERROR_MESSAGE);
+        try {
+            sessao.setUsuario(usuarioController.efetuarLogin(edLogin.getText(), new String(edSenha.getPassword())));
+            this.setVisible(false);
+            new FrmPrincipal().setVisible(true);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btEntrarActionPerformed
-
-    private void brNovoUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_brNovoUsuarioActionPerformed
-        DialogCadastroUsuario dialog = new DialogCadastroUsuario(new javax.swing.JFrame(), true);
-        dialog.setVisible(true);
-    }//GEN-LAST:event_brNovoUsuarioActionPerformed
 
     private void btEntrarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btEntrarKeyPressed
         if(evt.getKeyCode() == Event.ENTER){
@@ -194,14 +154,7 @@ public class FrmTelaLogin extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_formKeyPressed
 
-    private void brNovoUsuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_brNovoUsuarioKeyPressed
-        if(evt.getKeyCode() == Event.ENTER){
-            brNovoUsuarioActionPerformed(null);
-        }
-    }//GEN-LAST:event_brNovoUsuarioKeyPressed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton brNovoUsuario;
     private javax.swing.JToggleButton btEntrar;
     private javax.swing.JTextField edLogin;
     private javax.swing.JPasswordField edSenha;

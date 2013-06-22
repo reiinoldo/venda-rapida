@@ -12,4 +12,6 @@ public interface UsuarioController {
 
     void salvar(Usuario usuario, String confirmarSenha) throws Exception;
     
+    Usuario buscar(String login) throws Exception;
+    
 }

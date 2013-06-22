@@ -27,7 +27,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         btnCadastroUsuario = new javax.swing.JButton();
-        btCancelar = new javax.swing.JButton();
+        btTrocarUsuario = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -38,10 +38,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
 
-        btCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/remove-icon.png"))); // NOI18N
-        btCancelar.addActionListener(new java.awt.event.ActionListener() {
+        btTrocarUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/remove-icon.png"))); // NOI18N
+        btTrocarUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btCancelarActionPerformed(evt);
+                btTrocarUsuarioActionPerformed(evt);
             }
         });
 
@@ -55,7 +55,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addContainerGap(234, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btTrocarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -64,7 +64,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addComponent(btnCadastroUsuario)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 178, Short.MAX_VALUE)
-                .addComponent(btCancelar)
+                .addComponent(btTrocarUsuario)
                 .addContainerGap())
         );
 
@@ -72,12 +72,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCadastroUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastroUsuarioActionPerformed
-        new FrmCadastroUsuario().setVisible(true);
+        new FrmCadastroUsuario(this, true).setVisible(true);
     }//GEN-LAST:event_btnCadastroUsuarioActionPerformed
 
-    private void btCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarActionPerformed
-        Runtime.getRuntime().exit(0); 
-    }//GEN-LAST:event_btCancelarActionPerformed
+    private void btTrocarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btTrocarUsuarioActionPerformed
+        this.setVisible(false);
+        FrmTelaLogin.getInstance(true);
+        //Runtime.getRuntime().exit(0);
+    }//GEN-LAST:event_btTrocarUsuarioActionPerformed
 
     /**
      * @param args the command line arguments
@@ -114,7 +116,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btCancelar;
+    private javax.swing.JButton btTrocarUsuario;
     private javax.swing.JButton btnCadastroUsuario;
     // End of variables declaration//GEN-END:variables
 }
