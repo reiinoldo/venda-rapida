@@ -29,10 +29,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnCadastroUsuario = new javax.swing.JButton();
         btTrocarUsuario = new javax.swing.JButton();
         btnCadastroProdutos = new javax.swing.JButton();
+        btCadastroFornecedor = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        btnCadastroUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cadastroCliente.png"))); // NOI18N
         btnCadastroUsuario.setText("Cadastro de usuário");
+        btnCadastroUsuario.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCadastroUsuario.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        btnCadastroUsuario.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnCadastroUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCadastroUsuarioActionPerformed(evt);
@@ -47,10 +52,25 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
 
+        btnCadastroProdutos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/product-icon.png"))); // NOI18N
         btnCadastroProdutos.setText("Cadastro de Produtos");
+        btnCadastroProdutos.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCadastroProdutos.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        btnCadastroProdutos.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnCadastroProdutos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCadastroProdutosActionPerformed(evt);
+            }
+        });
+
+        btCadastroFornecedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/motorista.png"))); // NOI18N
+        btCadastroFornecedor.setText("Cadastro de Fornecedor");
+        btCadastroFornecedor.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btCadastroFornecedor.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        btCadastroFornecedor.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btCadastroFornecedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btCadastroFornecedorActionPerformed(evt);
             }
         });
 
@@ -59,28 +79,34 @@ public class FrmPrincipal extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(36, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btTrocarUsuario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btTrocarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnCadastroUsuario)
-                            .addComponent(btnCadastroProdutos))
-                        .addGap(0, 193, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(btnCadastroProdutos, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
+                            .addComponent(btnCadastroUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(btCadastroFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(31, 31, 31)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(btnCadastroUsuario)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnCadastroProdutos)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 132, Short.MAX_VALUE)
-                .addComponent(btTrocarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(57, 57, 57)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btCadastroFornecedor)
+                    .addComponent(btnCadastroUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btTrocarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(btnCadastroProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(70, Short.MAX_VALUE))))
         );
 
         pack();
@@ -100,7 +126,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
         new FrmCadastroProduto(this, true).setVisible(true);
     }//GEN-LAST:event_btnCadastroProdutosActionPerformed
 
+    private void btCadastroFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCadastroFornecedorActionPerformed
+        new FrmCadastroFornecedor(this, true).setVisible(true);
+    }//GEN-LAST:event_btCadastroFornecedorActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btCadastroFornecedor;
     private javax.swing.JButton btTrocarUsuario;
     private javax.swing.JButton btnCadastroProdutos;
     private javax.swing.JButton btnCadastroUsuario;

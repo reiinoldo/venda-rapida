@@ -17,4 +17,6 @@ public interface FornecedorController {
 
     void salvar(Fornecedor fornecedor) throws Exception;
     
+    int incrementar()throws Exception;
+    
 }
