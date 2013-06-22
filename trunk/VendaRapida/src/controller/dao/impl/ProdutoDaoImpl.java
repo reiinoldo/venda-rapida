@@ -175,7 +175,7 @@ public class ProdutoDaoImpl implements ProdutoDao{
     public Produto buscar(String referencia) throws Exception {
         ConnectionMySql.getConnection();
         
-        PreparedStatement ps = ConnectionMySql.connection.prepareStatement("select * from " + Produto.TABELA_PRODUTO + "where " + Produto.CAMPO_REFERENCIA + " = ?");
+        PreparedStatement ps = ConnectionMySql.connection.prepareStatement("select * from " + Produto.TABELA_PRODUTO + " where " + Produto.CAMPO_REFERENCIA + " = ?");
         ps.setString(1, referencia);
         ResultSet r = ps.executeQuery();
 

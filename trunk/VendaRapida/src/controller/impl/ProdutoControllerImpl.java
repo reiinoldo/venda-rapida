@@ -51,8 +51,6 @@ public class ProdutoControllerImpl implements ProdutoController {
     @Override
     public Produto buscar(String referencia) throws Exception {
         Produto produto = produtoDao.buscar(referencia);
-        if (produto == null)
-            throw new RegraNegocioException("Produto não encontrado");
         return produto;
     }
     
