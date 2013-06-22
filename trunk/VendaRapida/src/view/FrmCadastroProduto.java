@@ -86,6 +86,11 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
         lbNome.setName(""); // NOI18N
 
         edReferencia.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
+        edReferencia.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                edReferenciaFocusLost(evt);
+            }
+        });
 
         lbLogin.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
         lbLogin.setText("Referência:");
@@ -178,7 +183,16 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLimparActionPerformed
+        limpar();
     }//GEN-LAST:event_btLimparActionPerformed
+
+    private void limpar() {
+        this.edReferencia.setText("");
+        this.edCodigoBarras.setText("");
+        this.edDescricao.setText("");
+        this.edValor.setText("");
+        this.edReferencia.setEnabled(true);
+    }
 
     private void btLimparKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btLimparKeyPressed
     }//GEN-LAST:event_btLimparKeyPressed
@@ -197,6 +211,7 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
                 produtoController.editar(produto);
                 JOptionPane.showMessageDialog(null, "Produto Editado Com Sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             }
+            limpar();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
@@ -206,7 +221,30 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
     }//GEN-LAST:event_btOkKeyPressed
 
     private void btPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPesquisarActionPerformed
+        buscar();
     }//GEN-LAST:event_btPesquisarActionPerformed
+
+    private void edReferenciaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edReferenciaFocusLost
+        buscar();
+    }//GEN-LAST:event_edReferenciaFocusLost
+
+    private void buscar() {
+        if (!edReferencia.getText().isEmpty()) {
+            try {
+                Produto produto = produtoController.buscar(edReferencia.getText());
+                if (produto != null) {
+                    this.edReferencia.setText(produto.getReferencia());
+                    this.edCodigoBarras.setText(produto.getCodigoBarrra());
+                    this.edDescricao.setText(produto.getDescricao());
+                    this.edValor.setText(String.valueOf(produto.getValor()));
+
+                    this.edReferencia.setEnabled(false);
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(FrmCadastroProduto.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btLimpar;
     private javax.swing.JButton btOk;
