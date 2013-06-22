@@ -61,7 +61,7 @@ public class FrmCadastroUsuario extends javax.swing.JDialog {
 
         lbNovoUsuario.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lbNovoUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cadastroCliente.png"))); // NOI18N
-        lbNovoUsuario.setText("Cadastro de Usuários");
+        lbNovoUsuario.setText("Cadastro de Usuário");
 
         cbVendeProduto.setText("Vende produto");
 
@@ -306,17 +306,21 @@ public class FrmCadastroUsuario extends javax.swing.JDialog {
     }//GEN-LAST:event_btLimparKeyPressed
 
     private void edLoginFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edLoginFocusLost
+        if (!edLogin.getText().trim().equals(""))
         pesquisar();
     }//GEN-LAST:event_edLoginFocusLost
 
     private void btExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExcluirActionPerformed
         try {
-            usuarioController.excluir(edLogin.getText());
-            JOptionPane.showMessageDialog(null, "Usuário excluído com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            int excluir = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir este usuário?", "Excluir", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (excluir == JOptionPane.OK_OPTION) {
+                usuarioController.excluir(edLogin.getText());
+                JOptionPane.showMessageDialog(null, "Usuário excluído com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                limpar();
+            }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
-        limpar();
     }//GEN-LAST:event_btExcluirActionPerformed
 
     private void btExcluirKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btExcluirKeyPressed
