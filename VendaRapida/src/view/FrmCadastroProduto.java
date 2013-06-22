@@ -48,6 +48,7 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
         edValor = new javax.swing.JTextField();
         edCodigoBarras = new javax.swing.JTextField();
         edDescricao = new javax.swing.JTextField();
+        btExcluir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -113,6 +114,18 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
 
         edDescricao.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
 
+        btExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/remove-icon.png"))); // NOI18N
+        btExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btExcluirActionPerformed(evt);
+            }
+        });
+        btExcluir.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btExcluirKeyPressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -125,11 +138,13 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btOk, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(lbSenha)
                             .addComponent(lbConfirmarSenha)
@@ -173,7 +188,8 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btOk)
-                    .addComponent(btLimpar))
+                    .addComponent(btLimpar)
+                    .addComponent(btExcluir))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -228,6 +244,23 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
         buscar();
     }//GEN-LAST:event_edReferenciaFocusLost
 
+    private void btExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExcluirActionPerformed
+        try {
+            int excluir = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir este produto?", "Excluir", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (excluir == JOptionPane.OK_OPTION) {
+                produtoController.excluir(null);
+                JOptionPane.showMessageDialog(null, "Usuário excluído com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                limpar();
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btExcluirActionPerformed
+
+    private void btExcluirKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btExcluirKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btExcluirKeyPressed
+
     private void buscar() {
         if (!edReferencia.getText().isEmpty()) {
             try {
@@ -246,6 +279,7 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btExcluir;
     private javax.swing.JButton btLimpar;
     private javax.swing.JButton btOk;
     private javax.swing.JButton btPesquisar;
