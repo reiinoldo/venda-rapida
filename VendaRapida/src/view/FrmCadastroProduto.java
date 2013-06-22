@@ -248,8 +248,8 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
         try {
             int excluir = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir este produto?", "Excluir", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
             if (excluir == JOptionPane.OK_OPTION) {
-                produtoController.excluir(null);
-                JOptionPane.showMessageDialog(null, "Usuário excluído com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                produtoController.excluir(edReferencia.getText());
+                JOptionPane.showMessageDialog(null, "Produto excluído com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                 limpar();
             }
         } catch (Exception ex) {
