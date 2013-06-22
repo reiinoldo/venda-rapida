@@ -50,10 +50,7 @@ public class FornecedorControllerImpl implements FornecedorController {
     
     @Override
     public Fornecedor buscar (int id) throws Exception {
-        Fornecedor fornecedor =  fornecedorDao.buscar(id);
-        if (fornecedor == null)
-            throw new RegraNegocioException("Fornecedor não encontrado");
-        return fornecedor;
+        return fornecedorDao.buscar(id);        
     }
     
     @Override

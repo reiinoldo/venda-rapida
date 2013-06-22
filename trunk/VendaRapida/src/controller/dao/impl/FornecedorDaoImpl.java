@@ -169,7 +169,7 @@ public class FornecedorDaoImpl implements FornecedorDao{
                 sb.append("set ");
                 sb.append(Fornecedor.CAMPO_CPFCNPJ +  " = ?, ");
                 sb.append(Fornecedor.CAMPO_EMAIL +  " = ?, ");
-                sb.append(Fornecedor.CAMPO_ENDERECO +  " = ? ");
+                sb.append(Fornecedor.CAMPO_ENDERECO +  " = ?, ");
                 sb.append(Fornecedor.CAMPO_NOME +  " = ?, ");
                 sb.append(Fornecedor.CAMPO_TELEFONE +  " = ? ");
                 sb.append("where ");
@@ -197,7 +197,7 @@ public class FornecedorDaoImpl implements FornecedorDao{
     public Fornecedor buscar(int id) throws Exception {
         ConnectionMySql.getConnection();
         
-        PreparedStatement p = ConnectionMySql.connection.prepareStatement("select * from " + Fornecedor.TABELA_FORNECEDOR + "where " + Fornecedor.CAMPO_ID + " = ?");
+        PreparedStatement p = ConnectionMySql.connection.prepareStatement("select * from " + Fornecedor.TABELA_FORNECEDOR + " where " + Fornecedor.CAMPO_ID + " = ?");
         p.setInt(1, id);
         ResultSet r = p.executeQuery();
 
@@ -217,6 +217,9 @@ public class FornecedorDaoImpl implements FornecedorDao{
 
     @Override
     public int incrementar() throws Exception {
-        return ConnectionMySql.nextId(Fornecedor.TABELA_FORNECEDOR, Fornecedor.CAMPO_ID);
+        ConnectionMySql.getConnection();
+        int r = ConnectionMySql.nextId(Fornecedor.TABELA_FORNECEDOR, Fornecedor.CAMPO_ID);
+        ConnectionMySql.closeConnection();
+        return r;
     }
 }
