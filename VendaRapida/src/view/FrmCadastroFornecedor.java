@@ -34,9 +34,12 @@ public class FrmCadastroFornecedor extends javax.swing.JDialog {
         try {
             int id = Integer.parseInt(edCodigo.getText());            
             Fornecedor fornecedor = fornecedorController.buscar(id);
+            if (fornecedor == null)
+                throw new RegraNegocioException("Fornecedor não encontrado");
             edCodigo.setText(String.valueOf(fornecedor.getId()));
             edNome.setText(fornecedor.getNome());
-            edEndereco.setText(fornecedor.getEndereco());
+            edCpfCnpj.setText(fornecedor.getCpfCnpj());
+            edEndereco.setText(fornecedor.getEndereco());            
             edEmail.setText(fornecedor.getEmail());
             edTelefone.setText(fornecedor.getTelefone());
             edCodigo.setEnabled(false);
@@ -81,6 +84,11 @@ public class FrmCadastroFornecedor extends javax.swing.JDialog {
         lbContato.setText("Contato:");
 
         edTelefone.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
+        edTelefone.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                edTelefoneActionPerformed(evt);
+            }
+        });
 
         lbNome.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
         lbNome.setText("Nome:");
@@ -151,6 +159,12 @@ public class FrmCadastroFornecedor extends javax.swing.JDialog {
             }
         });
 
+        edEmail.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
+
+        edCpfCnpj.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
+
+        edEndereco.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
+
         btExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/remove-icon.png"))); // NOI18N
         btExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -211,39 +225,39 @@ public class FrmCadastroFornecedor extends javax.swing.JDialog {
                 .addComponent(lbNovoFornecedor)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(edCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(edCodigo)
                     .addComponent(lbCodigo)
                     .addComponent(btPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(edNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(edNome)
                     .addComponent(lbNome))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbCpfCnpj)
-                    .addComponent(edCpfCnpj, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(edCpfCnpj))
                 .addGap(9, 9, 9)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbEndereco)
-                    .addComponent(edEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(edEndereco))
                 .addGap(18, 18, 18)
                 .addComponent(lbContato)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lbEmail)
-                    .addComponent(edEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(edEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(edTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbTelefone))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbTelefone)
+                    .addComponent(edTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btOk, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btLimpar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btExcluir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addGap(16, 16, 16))
         );
 
         getRootPane().setDefaultButton(btOk);
@@ -258,6 +272,7 @@ public class FrmCadastroFornecedor extends javax.swing.JDialog {
     private void btLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLimparActionPerformed
         edCodigo.setText("");
         edNome.setText("");        
+        edCpfCnpj.setText("");
         edEndereco.setText("");
         edEmail.setText("");
         edTelefone.setText("");        
@@ -281,19 +296,25 @@ public class FrmCadastroFornecedor extends javax.swing.JDialog {
 
     private void btOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btOkActionPerformed
         try {
+            
+            int id = Integer.parseInt(edCodigo.getText());
             Fornecedor fornecedor = new Fornecedor();
-            fornecedor.setId(Integer.parseInt(edCodigo.getText()));
+            fornecedor.setId(id);
             fornecedor.setNome(edNome.getText());      
             fornecedor.setCpfCnpj(edCpfCnpj.getText());
             fornecedor.setEndereco(edEndereco.getText());           
             fornecedor.setEmail(edEmail.getText());
             fornecedor.setTelefone(edTelefone.getText());            
             
-            fornecedorController.salvar(fornecedor);
+            Fornecedor fornAux = fornecedorController.buscar(id);
+            if(fornAux == null){
+                fornecedorController.salvar(fornecedor);
+                JOptionPane.showMessageDialog(null, "Fornecedor cadastrado com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);   
+            }else{
+                fornecedorController.editar(fornecedor);
+                JOptionPane.showMessageDialog(null, "Fornecedor alterado com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);   
+            }                
             
-            fornecedorController.editar(fornecedor);
-            
-            JOptionPane.showMessageDialog(null, "Fornecedor cadastrado com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             btLimparActionPerformed(null);            
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -319,13 +340,17 @@ public class FrmCadastroFornecedor extends javax.swing.JDialog {
     }//GEN-LAST:event_edCodigoFocusLost
 
     private void btExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExcluirActionPerformed
-        try {
-            // TODO add your handling code here:
+        try {            
             fornecedorController.excluir(Integer.parseInt(edCodigo.getText()));
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
+        btLimparActionPerformed(null);
     }//GEN-LAST:event_btExcluirActionPerformed
+
+    private void edTelefoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edTelefoneActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_edTelefoneActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btExcluir;

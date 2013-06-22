@@ -38,7 +38,7 @@ public class ConnectionMySql {
     public static void closeConnection() throws SQLException{
         connection.close();
         connection = null;
-    }
+    }   
     
     public static int nextId(String tabela, String primaryKeyName) throws SQLException{        
         ResultSet r = connection.prepareStatement("select max("+primaryKeyName+") from "+tabela).executeQuery();
