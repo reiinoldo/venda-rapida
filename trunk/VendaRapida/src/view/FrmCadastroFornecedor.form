@@ -23,13 +23,10 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="jSeparator2" max="32767" attributes="0"/>
-              <EmptySpace min="-2" pref="84" max="-2" attributes="0"/>
-          </Group>
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="32767" attributes="0"/>
+              <Component id="btExcluir" min="-2" pref="71" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="btLimpar" min="-2" pref="68" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="btOk" min="-2" pref="68" max="-2" attributes="0"/>
@@ -48,23 +45,17 @@
                           <Component id="lbTelefone" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="edTelefone" max="32767" attributes="0"/>
-                              <Component id="edEmail" min="-2" pref="271" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="edTelefone" max="32767" attributes="0"/>
+                          <Component id="edEmail" pref="271" max="32767" attributes="0"/>
+                          <Component id="edCpfCnpj" alignment="1" max="32767" attributes="0"/>
+                          <Component id="edEndereco" alignment="1" pref="271" max="32767" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="edCodigo" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="btPesquisar" min="-2" pref="33" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="edNome" alignment="0" min="-2" pref="271" max="-2" attributes="0"/>
-                              <Group type="102" alignment="1" attributes="0">
-                                  <Component id="edCodigo" min="-2" pref="232" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="btPesquisar" min="-2" pref="33" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="edCpfCnpj" max="32767" attributes="0"/>
-                              <Component id="edEndereco" pref="271" max="32767" attributes="0"/>
-                          </Group>
+                          <Component id="edNome" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -78,6 +69,11 @@
               </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jSeparator2" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -86,10 +82,10 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="lbNovoFornecedor" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="btPesquisar" alignment="0" pref="0" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="edCodigo" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="lbCodigo" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="btPesquisar" min="-2" pref="30" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -121,9 +117,10 @@
                   <Component id="lbTelefone" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="btOk" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="btLimpar" alignment="0" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="btOk" alignment="0" max="32767" attributes="0"/>
+                  <Component id="btLimpar" alignment="0" max="32767" attributes="0"/>
+                  <Component id="btExcluir" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace pref="16" max="32767" attributes="0"/>
           </Group>
@@ -176,7 +173,7 @@
           <Font name="Tahoma" size="14" style="1"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/img/cadastroCliente.png"/>
+          <Image iconType="3" name="/img/motorista.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Cadastro de Fornecedor"/>
       </Properties>
@@ -212,6 +209,7 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="edCodigoActionPerformed"/>
+        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="edCodigoFocusLost"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="lbCpfCnpj">
@@ -236,7 +234,7 @@
     <Component class="javax.swing.JButton" name="btPesquisar">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/img/1371939518_search_16.png"/>
+          <Image iconType="3" name="/img/search_16.png"/>
         </Property>
         <Property name="toolTipText" type="java.lang.String" value="Pesquisar"/>
       </Properties>
@@ -263,6 +261,16 @@
     <Component class="javax.swing.JTextField" name="edCpfCnpj">
     </Component>
     <Component class="javax.swing.JTextField" name="edEndereco">
+    </Component>
+    <Component class="javax.swing.JButton" name="btExcluir">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/img/remove-icon.png"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btExcluirActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

@@ -214,4 +214,9 @@ public class FornecedorDaoImpl implements FornecedorDao{
         ConnectionMySql.closeConnection();
         return f;
     }    
+
+    @Override
+    public int incrementar() throws Exception {
+        return ConnectionMySql.nextId(Fornecedor.TABELA_FORNECEDOR, Fornecedor.CAMPO_ID);
+    }
 }

@@ -65,4 +65,9 @@ public class FornecedorControllerImpl implements FornecedorController {
     public List<Fornecedor> listar(Fornecedor fornecedor) throws Exception {
         return fornecedorDao.listar(fornecedor);
     }
+
+    @Override
+    public int incrementar() throws Exception {
+        return fornecedorDao.incrementar();
+    }
 }

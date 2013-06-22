@@ -10,4 +10,5 @@ public interface FornecedorDao {
      public List<Fornecedor> listar() throws Exception;
      public List<Fornecedor> listar(Fornecedor fornecedor) throws Exception;
      public boolean editar(Fornecedor fornecedor) throws Exception;
+     public int incrementar() throws Exception;
 }
