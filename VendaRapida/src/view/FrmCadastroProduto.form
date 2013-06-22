@@ -157,6 +157,9 @@
           <Font name="Verdana" size="15" style="1"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="edReferenciaFocusLost"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="lbLogin">
       <Properties>
