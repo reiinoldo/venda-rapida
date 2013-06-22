@@ -60,7 +60,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
         sb.append(Usuario.CAMPO_ADMINISTRADOR + " = ?, ");
         sb.append(Usuario.CAMPO_CADASTRAPRODUTO + " = ?, ");
         sb.append(Usuario.CAMPO_VENDEPRODUTO + " = ?, ");
-        sb.append("where ");
+        sb.append(" where ");
         sb.append(Usuario.CAMPO_LOGIN +  " = ?");
         
         PreparedStatement pr = ConnectionMySql.connection.prepareStatement(sb.toString());

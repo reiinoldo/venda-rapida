@@ -1,14 +1,19 @@
 package view;
 
 import controller.UsuarioController;
+import controller.impl.RegraNegocioException;
 import controller.impl.UsuarioControllerImpl;
 import java.awt.event.KeyEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import model.Sessao;
 import model.Usuario;
 
 public class FrmCadastroUsuario extends javax.swing.JDialog {
     
     UsuarioController usuarioController = new UsuarioControllerImpl();
+    Sessao sessao = Sessao.getInstance();
 
     /**
      * Creates new form FrmCadastroUsuario
@@ -44,6 +49,7 @@ public class FrmCadastroUsuario extends javax.swing.JDialog {
         edConfirmarSenha = new javax.swing.JPasswordField();
         lbComissao = new javax.swing.JLabel();
         edComissao = new javax.swing.JTextField();
+        btExcluir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -75,6 +81,11 @@ public class FrmCadastroUsuario extends javax.swing.JDialog {
         });
 
         edLogin.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
+        edLogin.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                edLoginFocusLost(evt);
+            }
+        });
 
         btOk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/confirma.png"))); // NOI18N
         btOk.addActionListener(new java.awt.event.ActionListener() {
@@ -115,6 +126,18 @@ public class FrmCadastroUsuario extends javax.swing.JDialog {
 
         edComissao.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
 
+        btExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/remove-icon.png"))); // NOI18N
+        btExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btExcluirActionPerformed(evt);
+            }
+        });
+        btExcluir.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btExcluirKeyPressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -135,6 +158,8 @@ public class FrmCadastroUsuario extends javax.swing.JDialog {
                                 .addGap(12, 12, 12)
                                 .addComponent(cbCadastraProduto))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(btExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btOk, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -167,8 +192,9 @@ public class FrmCadastroUsuario extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(edLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbLogin))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(edLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lbLogin)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(edNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -193,7 +219,8 @@ public class FrmCadastroUsuario extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btOk)
-                    .addComponent(btLimpar))
+                    .addComponent(btLimpar)
+                    .addComponent(btExcluir))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -203,11 +230,34 @@ public class FrmCadastroUsuario extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPesquisarActionPerformed
-        if (edLogin.getText().trim().equals("")) {
-            // usuarioController.
-        }
+        pesquisar();
     }//GEN-LAST:event_btPesquisarActionPerformed
 
+    private void pesquisar() {
+        if (edLogin.getText().trim().equals("")) {
+            JOptionPane.showMessageDialog(null, "Pesquisa específica em construção");
+        } else {
+            try {
+                Usuario usuario = usuarioController.buscar(edLogin.getText());
+                if (usuario != null) {
+                    edLogin.setText(usuario.getLogin());
+                    edLogin.setEditable(false);
+                    edNome.setText(usuario.getNome());
+                    edSenha.setText("");
+                    edConfirmarSenha.setText("");
+                    edComissao.setText(String.valueOf(usuario.getComissao()));
+                    if (sessao.getUsuario().getLogin().equals(usuario.getLogin()))
+                        cbAdministrador.setEnabled(false);
+                    cbAdministrador.setSelected(usuario.isAdministrador());
+                    cbCadastraProduto.setSelected(usuario.isCadastraProduto());
+                    cbVendeProduto.setSelected(usuario.isVendeProduto());
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    
     private void btOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btOkActionPerformed
         try {
             Usuario usuario = new Usuario();
@@ -217,15 +267,24 @@ public class FrmCadastroUsuario extends javax.swing.JDialog {
 
             //Tava dando erro "empty String" quando deixava o campo comissão vazio.
             if (edComissao.getText().trim().equals(""))
-            usuario.setComissao(0);
+                usuario.setComissao(0);
             else
-            usuario.setComissao(Double.parseDouble(edComissao.getText()));
+                usuario.setComissao(Double.parseDouble(edComissao.getText()));
+            
             usuario.setAdministrador(cbAdministrador.isSelected());
             usuario.setVendeProduto(cbVendeProduto.isSelected());
             usuario.setCadastraProduto(cbCadastraProduto.isSelected());
-            usuarioController.salvar(usuario, new String(edConfirmarSenha.getPassword()));
-            JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            btLimparActionPerformed(null);
+            
+            Usuario usuarioAux = usuarioController.buscar(edLogin.getText());
+            if (usuarioAux == null) {
+                usuarioController.salvar(usuario, new String(edConfirmarSenha.getPassword()));
+                JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                usuarioController.editar(usuario, new String(edConfirmarSenha.getPassword()));
+                JOptionPane.showMessageDialog(null, "Usuário editado com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            }
+            
+            limpar();
             edNome.requestFocus();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -238,6 +297,33 @@ public class FrmCadastroUsuario extends javax.swing.JDialog {
     }//GEN-LAST:event_btOkKeyPressed
 
     private void btLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLimparActionPerformed
+        limpar();
+    }//GEN-LAST:event_btLimparActionPerformed
+
+    private void btLimparKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btLimparKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+        btLimparActionPerformed(null);
+    }//GEN-LAST:event_btLimparKeyPressed
+
+    private void edLoginFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edLoginFocusLost
+        pesquisar();
+    }//GEN-LAST:event_edLoginFocusLost
+
+    private void btExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExcluirActionPerformed
+        try {
+            usuarioController.excluir(edLogin.getText());
+            JOptionPane.showMessageDialog(null, "Usuário excluído com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        limpar();
+    }//GEN-LAST:event_btExcluirActionPerformed
+
+    private void btExcluirKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btExcluirKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btExcluirKeyPressed
+
+    private void limpar() {
         edNome.setText("");
         edLogin.setText("");
         edSenha.setText("");
@@ -246,15 +332,13 @@ public class FrmCadastroUsuario extends javax.swing.JDialog {
         cbAdministrador.setSelected(false);
         cbVendeProduto.setSelected(false);
         cbCadastraProduto.setSelected(false);
-        edNome.requestFocus();
-    }//GEN-LAST:event_btLimparActionPerformed
-
-    private void btLimparKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btLimparKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
-        btLimparActionPerformed(null);
-    }//GEN-LAST:event_btLimparKeyPressed
-
+        edLogin.setEditable(true);
+        cbAdministrador.setEnabled(true);
+        edLogin.requestFocus();
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btExcluir;
     private javax.swing.JButton btLimpar;
     private javax.swing.JButton btOk;
     private javax.swing.JButton btPesquisar;
