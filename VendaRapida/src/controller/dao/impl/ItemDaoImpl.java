@@ -63,7 +63,7 @@ public class ItemDaoImpl implements ItemDao{
         p.setInt(1, codigoVenda);
         ResultSet r = p.executeQuery();
         
-        List<Item> list = new ArrayList<>();
+        List<Item> list = new ArrayList<Item>();
 
         while (r.next()) {
             Item i = new Item();

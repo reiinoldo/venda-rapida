@@ -58,7 +58,7 @@ public class ProdutoDaoImpl implements ProdutoDao{
         ConnectionMySql.getConnection();
         
         ResultSet r = ConnectionMySql.connection.prepareStatement("select * from " + Produto.TABELA_PRODUTO).executeQuery();
-        List<Produto> list = new ArrayList<>();
+        List<Produto> list = new ArrayList<Produto>();
 
         while (r.next()) {
             Produto p = new Produto();
@@ -125,7 +125,7 @@ public class ProdutoDaoImpl implements ProdutoDao{
             
             ResultSet r = pr.executeQuery();
       
-            List<Produto> list = new ArrayList<>();
+            List<Produto> list = new ArrayList<Produto>();
             while (r.next()) {
                 Produto p = new Produto();
 

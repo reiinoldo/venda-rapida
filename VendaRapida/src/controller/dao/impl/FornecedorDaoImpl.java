@@ -64,7 +64,7 @@ public class FornecedorDaoImpl implements FornecedorDao{
         ConnectionMySql.getConnection();
         
         ResultSet r = ConnectionMySql.connection.prepareStatement("select * from " + Fornecedor.TABELA_FORNECEDOR).executeQuery();
-        List<Fornecedor> list = new ArrayList<>();
+        List<Fornecedor> list = new ArrayList<Fornecedor>();
 
         while (r.next()) {
             Fornecedor f = new Fornecedor();
@@ -142,7 +142,7 @@ public class FornecedorDaoImpl implements FornecedorDao{
             
             ResultSet r = pr.executeQuery();
       
-            List<Fornecedor> list = new ArrayList<>();
+            List<Fornecedor> list = new ArrayList<Fornecedor>();
             while (r.next()) {
                 Fornecedor f = new Fornecedor();
                 f.setId(r.getInt(Fornecedor.CAMPO_ID));

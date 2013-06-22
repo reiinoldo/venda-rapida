@@ -64,7 +64,7 @@ public class ClienteDaoImpl implements ClienteDao{
         ConnectionMySql.getConnection();
         
         ResultSet r = ConnectionMySql.connection.prepareStatement("select * from " + Cliente.TABELA_CLIENTE).executeQuery();
-        List<Cliente> list = new ArrayList<>();
+        List<Cliente> list = new ArrayList<Cliente>();
 
         while (r.next()) {
             Cliente f = new Cliente();
@@ -142,7 +142,7 @@ public class ClienteDaoImpl implements ClienteDao{
             
             ResultSet r = pr.executeQuery();
       
-            List<Cliente> list = new ArrayList<>();
+            List<Cliente> list = new ArrayList<Cliente>();
             while (r.next()) {
                 Cliente c = new Cliente();
                 c.setId(r.getInt(Cliente.CAMPO_ID));
