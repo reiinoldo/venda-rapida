@@ -4,7 +4,6 @@ import controller.UsuarioController;
 import controller.VendaController;
 import controller.dao.UsuarioDao;
 import controller.dao.impl.UsuarioDaoImpl;
-import java.util.ArrayList;
 import java.util.List;
 import model.Usuario;
 import model.Venda;
