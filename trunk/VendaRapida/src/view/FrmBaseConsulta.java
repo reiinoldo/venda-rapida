@@ -4,8 +4,8 @@
  */
 package view;
 
-import controller.BussinessException;
-import controller.TransacaoController;
+//import controller.BussinessException;
+//import controller.TransacaoController;
 import controller.dao.util.ConnectionMySql;
 import java.awt.Color;
 import java.awt.Image;
@@ -21,9 +21,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import model.FormaPagamento;
-import model.TipoPagamento;
-import model.Transacao;
+//import model.FormaPagamento;
+//import model.TipoPagamento;
+//import model.Transacao;
 import model.Usuario;
 
 /**
@@ -33,12 +33,12 @@ import model.Usuario;
 public class FrmBaseConsulta extends javax.swing.JDialog {
 
     private DefaultTableModel dtm;
-    private Transacao transacao;
-    private Transacao transacaoSelecionada;
-    private List<Transacao> listaTransacoesBuscadas;
-    private TransacaoController transacaoController = new TransacaoController();
+//    private Transacao transacao;
+//    private Transacao transacaoSelecionada;
+//    private List<Transacao> listaTransacoesBuscadas;
+//    private TransacaoController transacaoController = new TransacaoController();
     private Usuario usuario;
-    private TelaPrincipalControleFinancas telaPrincipal;
+//    private TelaPrincipalControleFinancas telaPrincipal;
     private Double valorTotalReceita;
     private Double valorTotalDespesa;
     private Double valorTotalSaldo;
@@ -47,181 +47,181 @@ public class FrmBaseConsulta extends javax.swing.JDialog {
     /**
      * Creates new form TelaConsulta
      */
-    public FrmBaseConsulta(java.awt.Frame parent, boolean modal, Usuario usuario, TelaPrincipalControleFinancas telaPrincipal) {
-        super(parent, modal);
+//    public FrmBaseConsulta(java.awt.Frame parent, boolean modal, Usuario usuario, TelaPrincipalControleFinancas telaPrincipal) {
+//        super(parent, modal);
+//
+//        this.usuario = usuario;
+//        this.telaPrincipal = telaPrincipal;
+//
+//        initComponents();
+//        setLocationRelativeTo(null);
+//        setFormasDePagamento();
+//
+//        Image image = Toolkit.getDefaultToolkit().getImage("src/img/dinheiro.png");
+//        setIconImage(image);
+//
+//        limpar();
+//    }
+//
+//    private void setFormasDePagamento() {
+//        for (FormaPagamento forma : FormaPagamento.values()) {
+//            cbFormaPagamento.addItem(forma.getForma());
+//        }
+//    }
 
-        this.usuario = usuario;
-        this.telaPrincipal = telaPrincipal;
-
-        initComponents();
-        setLocationRelativeTo(null);
-        setFormasDePagamento();
-
-        Image image = Toolkit.getDefaultToolkit().getImage("src/img/dinheiro.png");
-        setIconImage(image);
-
-        limpar();
-    }
-
-    private void setFormasDePagamento() {
-        for (FormaPagamento forma : FormaPagamento.values()) {
-            cbFormaPagamento.addItem(forma.getForma());
-        }
-    }
-
-    public void carregarTransacao() {
-        if (transacaoController.verificarAntesDeBuscar(edDataInicial.getText(), edDataFinal.getText(), edValorInicial.getText(), edValorFinal.getText())) {
-            transacao = new Transacao();
-            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-            if (!edDataInicial.getText().equals("  /  /    ")) {
-                try {
-                    transacao.setData(format.parse(edDataInicial.getText()));
-                } catch (ParseException ex) {
-                    Logger.getLogger(FrmBaseConsulta.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-            if (!edDestinatario.getText().equals("")) {
-                transacao.setDestinatario(edDestinatario.getText());
-            }
-
-            if (cbFormaPagamento.getSelectedIndex() == 0) {
-                transacao.setFormaPagamento(null);
-            } else {
-                transacao.setFormaPagamento(FormaPagamento.getFormaPagamento(cbFormaPagamento.getSelectedIndex() - 1));
-            }
-
-            if (!edLocal.getText().equals("")) {
-                transacao.setLocalTransacao(edLocal.getText());
-            }
-            if (!edObservacao.getText().equals("")) {
-                transacao.setObservacao(edObservacao.getText());
-            }
-
-            if (cbTipoPagamento.getSelectedIndex() == 0) {
-                transacao.setTipoPagamento(null);
-            } else {
-                transacao.setTipoPagamento(TipoPagamento.getTipoPagamento(cbTipoPagamento.getSelectedIndex() - 1));
-            }
-            transacao.setUsuario(usuario);
-            if (!edValorInicial.getText().equals("")) {
-                transacao.setValor(transacaoController.getRealDouble(edValorInicial.getText()));
-            }
-            try {
-                listaTransacoesBuscadas = transacaoController.buscar(transacao, !edDataFinal.getText().equals("  /  /    ") ? format.parse(edDataFinal.getText()) : null,
-                        !edValorFinal.getText().equals("") ? transacaoController.getRealDouble(edValorFinal.getText()) : null);
-                carregarGrid();
-            } catch (SQLException ex) {
-                Logger.getLogger(FrmBaseConsulta.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ParseException ex) {
-                Logger.getLogger(FrmBaseConsulta.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
-                try {
-                    if (ConnectionMySql.connection != null) {
-                        ConnectionMySql.closeConnection();
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger(TelaLogin.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-        }
-    }
-
-    public void carregarGrid() {
-        Vector<Vector> dados = new Vector<Vector>();
-        valorTotalReceita = new Double(0);
-        valorTotalDespesa = new Double(0);
-        valorTotalSaldo = new Double(0);
-
-        for (Transacao tran : listaTransacoesBuscadas) {
-            Vector registroDb = new Vector();
-
-            registroDb.add(tran.getTipoPagamento().getTipo());
-            registroDb.add(tran.getFormaPagamento().getForma());
-            registroDb.add(tran.getDestinatario());
-
-            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-            registroDb.add(format.format(tran.getData()));
-            registroDb.add(tran.getLocalTransacao());
-            registroDb.add(tran.getObservacao());
-            registroDb.add(dec.format(tran.getValor()));
-
-            if (tran.getTipoPagamento().ordinal() == 0) {
-                valorTotalReceita += tran.getValor();
-                valorTotalSaldo += tran.getValor();
-            } else {
-                valorTotalDespesa += tran.getValor();
-                valorTotalSaldo -= tran.getValor();
-            }
-
-            dados.add(registroDb);
-        }
-
-        formatarLabels();
-        dtm = (DefaultTableModel) tabelaConsulta.getModel();
-        dtm.setRowCount(0);
-
-        for (Vector v : dados) {
-            dtm.addRow(v);
-        }
-
-    }
-
-    public void formatarLabels() {
-        
-        lbValorTotalReceitas.setText(String.valueOf(dec.format(valorTotalReceita)));
-        lbValorTotaDespesas.setText(String.valueOf(dec.format(valorTotalDespesa)));
-        lbValorSaldoTotal.setText(String.valueOf(dec.format(valorTotalSaldo)));
-        if (valorTotalSaldo > 0) {
-            lbValorSaldoTotal.setForeground(new Color(0, 102, 0));//verde
-        } else if (valorTotalSaldo < 0) {
-            lbValorSaldoTotal.setForeground(new Color(255, 0, 0));//vermelho
-        } else {
-            lbValorSaldoTotal.setForeground(new Color(0, 0, 0));//preto
-        }
-    }
-
-    private void limpar() {
-        transacaoSelecionada = new Transacao();
-
-        cbFormaPagamento.setSelectedIndex(0);
-        cbTipoPagamento.setSelectedIndex(0);
-        edDataInicial.setText("");
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        edDataFinal.setText(String.valueOf(format.format(new Date().getTime())));
-        edDestinatario.setText("");
-        lbDestinatario.setText("Quem:");
-        edLocal.setText("");
-        edValorInicial.setText("");
-        edValorFinal.setText("");
-        edObservacao.setText("");
-
-
-        dtm = new DefaultTableModel();
-        dtm = (DefaultTableModel) tabelaConsulta.getModel();
-
-        dtm.setRowCount(0);
-
-        valorTotalReceita = new Double(0);
-        valorTotalDespesa = new Double(0);
-        valorTotalSaldo = new Double(0);
-        formatarLabels();
-    }
-
-    public void carregarEdicao() {
-        try {
-            if (tabelaConsulta.getSelectedRow() != -1) {
-                transacaoSelecionada = listaTransacoesBuscadas.get(tabelaConsulta.getSelectedRow());
-                telaPrincipal.editarCampos(transacaoSelecionada);
-                this.dispose();
-            } else {
-                throw new BussinessException("Favor selecionar uma linha da lista para editar.");
-            }
-        } catch (BussinessException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+//    public void carregarTransacao() {
+//        if (transacaoController.verificarAntesDeBuscar(edDataInicial.getText(), edDataFinal.getText(), edValorInicial.getText(), edValorFinal.getText())) {
+//            transacao = new Transacao();
+//            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+//            if (!edDataInicial.getText().equals("  /  /    ")) {
+//                try {
+//                    transacao.setData(format.parse(edDataInicial.getText()));
+//                } catch (ParseException ex) {
+//                    Logger.getLogger(FrmBaseConsulta.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
+//
+//            if (!edDestinatario.getText().equals("")) {
+//                transacao.setDestinatario(edDestinatario.getText());
+//            }
+//
+//            if (cbFormaPagamento.getSelectedIndex() == 0) {
+//                transacao.setFormaPagamento(null);
+//            } else {
+//                transacao.setFormaPagamento(FormaPagamento.getFormaPagamento(cbFormaPagamento.getSelectedIndex() - 1));
+//            }
+//
+//            if (!edLocal.getText().equals("")) {
+//                transacao.setLocalTransacao(edLocal.getText());
+//            }
+//            if (!edObservacao.getText().equals("")) {
+//                transacao.setObservacao(edObservacao.getText());
+//            }
+//
+//            if (cbTipoPagamento.getSelectedIndex() == 0) {
+//                transacao.setTipoPagamento(null);
+//            } else {
+//                transacao.setTipoPagamento(TipoPagamento.getTipoPagamento(cbTipoPagamento.getSelectedIndex() - 1));
+//            }
+//            transacao.setUsuario(usuario);
+//            if (!edValorInicial.getText().equals("")) {
+//                transacao.setValor(transacaoController.getRealDouble(edValorInicial.getText()));
+//            }
+//            try {
+//                listaTransacoesBuscadas = transacaoController.buscar(transacao, !edDataFinal.getText().equals("  /  /    ") ? format.parse(edDataFinal.getText()) : null,
+//                        !edValorFinal.getText().equals("") ? transacaoController.getRealDouble(edValorFinal.getText()) : null);
+//                carregarGrid();
+//            } catch (SQLException ex) {
+//                Logger.getLogger(FrmBaseConsulta.class.getName()).log(Level.SEVERE, null, ex);
+//            } catch (ParseException ex) {
+//                Logger.getLogger(FrmBaseConsulta.class.getName()).log(Level.SEVERE, null, ex);
+//            } finally {
+//                try {
+//                    if (ConnectionMySql.connection != null) {
+//                        ConnectionMySql.closeConnection();
+//                    }
+//                } catch (SQLException ex) {
+//                    Logger.getLogger(TelaLogin.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
+//
+//        }
+//    }
+//
+//    public void carregarGrid() {
+//        Vector<Vector> dados = new Vector<Vector>();
+//        valorTotalReceita = new Double(0);
+//        valorTotalDespesa = new Double(0);
+//        valorTotalSaldo = new Double(0);
+//
+//        for (Transacao tran : listaTransacoesBuscadas) {
+//            Vector registroDb = new Vector();
+//
+//            registroDb.add(tran.getTipoPagamento().getTipo());
+//            registroDb.add(tran.getFormaPagamento().getForma());
+//            registroDb.add(tran.getDestinatario());
+//
+//            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+//            registroDb.add(format.format(tran.getData()));
+//            registroDb.add(tran.getLocalTransacao());
+//            registroDb.add(tran.getObservacao());
+//            registroDb.add(dec.format(tran.getValor()));
+//
+//            if (tran.getTipoPagamento().ordinal() == 0) {
+//                valorTotalReceita += tran.getValor();
+//                valorTotalSaldo += tran.getValor();
+//            } else {
+//                valorTotalDespesa += tran.getValor();
+//                valorTotalSaldo -= tran.getValor();
+//            }
+//
+//            dados.add(registroDb);
+//        }
+//
+//        formatarLabels();
+//        dtm = (DefaultTableModel) tabelaConsulta.getModel();
+//        dtm.setRowCount(0);
+//
+//        for (Vector v : dados) {
+//            dtm.addRow(v);
+//        }
+//
+//    }
+//
+//    public void formatarLabels() {
+//        
+//        lbValorTotalReceitas.setText(String.valueOf(dec.format(valorTotalReceita)));
+//        lbValorTotaDespesas.setText(String.valueOf(dec.format(valorTotalDespesa)));
+//        lbValorSaldoTotal.setText(String.valueOf(dec.format(valorTotalSaldo)));
+//        if (valorTotalSaldo > 0) {
+//            lbValorSaldoTotal.setForeground(new Color(0, 102, 0));//verde
+//        } else if (valorTotalSaldo < 0) {
+//            lbValorSaldoTotal.setForeground(new Color(255, 0, 0));//vermelho
+//        } else {
+//            lbValorSaldoTotal.setForeground(new Color(0, 0, 0));//preto
+//        }
+//    }
+//
+//    private void limpar() {
+//        transacaoSelecionada = new Transacao();
+//
+//        cbFormaPagamento.setSelectedIndex(0);
+//        cbTipoPagamento.setSelectedIndex(0);
+//        edDataInicial.setText("");
+//        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+//        edDataFinal.setText(String.valueOf(format.format(new Date().getTime())));
+//        edDestinatario.setText("");
+//        lbDestinatario.setText("Quem:");
+//        edLocal.setText("");
+//        edValorInicial.setText("");
+//        edValorFinal.setText("");
+//        edObservacao.setText("");
+//
+//
+//        dtm = new DefaultTableModel();
+//        dtm = (DefaultTableModel) tabelaConsulta.getModel();
+//
+//        dtm.setRowCount(0);
+//
+//        valorTotalReceita = new Double(0);
+//        valorTotalDespesa = new Double(0);
+//        valorTotalSaldo = new Double(0);
+//        formatarLabels();
+//    }
+//
+//    public void carregarEdicao() {
+//        try {
+//            if (tabelaConsulta.getSelectedRow() != -1) {
+//                transacaoSelecionada = listaTransacoesBuscadas.get(tabelaConsulta.getSelectedRow());
+//                telaPrincipal.editarCampos(transacaoSelecionada);
+//                this.dispose();
+//            } else {
+//                throw new BussinessException("Favor selecionar uma linha da lista para editar.");
+//            }
+//        } catch (BussinessException ex) {
+//            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+//        }
+//    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -276,7 +276,11 @@ public class FrmBaseConsulta extends javax.swing.JDialog {
 
         jLabel11.setText("Valor Inicial:");
 
-        edDataInicial.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        try {
+            edDataInicial.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
         edDataInicial.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 edDataInicialActionPerformed(evt);
@@ -397,7 +401,11 @@ public class FrmBaseConsulta extends javax.swing.JDialog {
 
         jLabel10.setText("Observação:");
 
-        edDataFinal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        try {
+            edDataFinal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
         edDataFinal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 edDataFinalActionPerformed(evt);
@@ -615,7 +623,7 @@ public class FrmBaseConsulta extends javax.swing.JDialog {
 
     private void tabelaConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaConsultaMouseClicked
         if (evt.getClickCount() == 2) {
-            carregarEdicao();
+            //carregarEdicao();
         }
     }//GEN-LAST:event_tabelaConsultaMouseClicked
 
@@ -628,11 +636,11 @@ public class FrmBaseConsulta extends javax.swing.JDialog {
     }//GEN-LAST:event_btSairKeyPressed
 
     private void btPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPesquisarActionPerformed
-        carregarTransacao();
+//        carregarTransacao();
     }//GEN-LAST:event_btPesquisarActionPerformed
 
     private void btConfirmaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btConfirmaActionPerformed
-        carregarEdicao();
+//        carregarEdicao();
     }//GEN-LAST:event_btConfirmaActionPerformed
 
     private void edDataFinalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edDataFinalActionPerformed
@@ -640,7 +648,7 @@ public class FrmBaseConsulta extends javax.swing.JDialog {
     }//GEN-LAST:event_edDataFinalActionPerformed
 
     private void btLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLimparActionPerformed
-        limpar();
+//        limpar();
     }//GEN-LAST:event_btLimparActionPerformed
 
     private void edDataInicialFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edDataInicialFocusLost

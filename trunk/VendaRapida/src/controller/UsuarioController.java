@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.List;
 import model.Usuario;
 
 public interface UsuarioController {
@@ -13,5 +14,9 @@ public interface UsuarioController {
     void salvar(Usuario usuario, String confirmarSenha) throws Exception;
     
     Usuario buscar(String login) throws Exception;
+    
+    List<Usuario> listar() throws Exception;
+
+    List<Usuario> listar(Usuario usuario) throws Exception;
     
 }

@@ -90,7 +90,7 @@ public class ClienteDaoImpl implements ClienteDao {
             str.append(Cliente.CAMPO_EMAIL + ", ");
             str.append(Cliente.CAMPO_ENDERECO + ", ");
             str.append(Cliente.CAMPO_NOME + ", ");
-            str.append(Cliente.CAMPO_TELEFONE + ", ");
+            str.append(Cliente.CAMPO_TELEFONE + " ");
             str.append(" FROM " + Cliente.TABELA_CLIENTE);
             str.append(" WHERE ");
             str.append(Cliente.CAMPO_ID + " LIKE ? AND ");

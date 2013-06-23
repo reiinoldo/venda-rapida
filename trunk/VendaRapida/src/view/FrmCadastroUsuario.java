@@ -3,15 +3,14 @@ package view;
 import controller.UsuarioController;
 import controller.impl.RegraNegocioException;
 import controller.impl.UsuarioControllerImpl;
+import java.awt.Frame;
 import java.awt.event.KeyEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.Sessao;
 import model.Usuario;
 
 public class FrmCadastroUsuario extends javax.swing.JDialog {
-    
+   
     UsuarioController usuarioController = new UsuarioControllerImpl();
     Sessao sessao = Sessao.getInstance();
 
@@ -72,7 +71,7 @@ public class FrmCadastroUsuario extends javax.swing.JDialog {
 
         edNome.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
 
-        btPesquisar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/search-icon.png"))); // NOI18N
+        btPesquisar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/search_16.png"))); // NOI18N
         btPesquisar.setToolTipText("Pesquisar");
         btPesquisar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -234,30 +233,30 @@ public class FrmCadastroUsuario extends javax.swing.JDialog {
     }//GEN-LAST:event_btPesquisarActionPerformed
 
     private void pesquisar() {
-        if (edLogin.getText().trim().equals("")) {
-            JOptionPane.showMessageDialog(null, "Pesquisa específica em construção");
-        } else {
-            try {
-                Usuario usuario = usuarioController.buscar(edLogin.getText());
-                if (usuario != null) {
-                    edLogin.setText(usuario.getLogin());
-                    edLogin.setEditable(false);
-                    edNome.setText(usuario.getNome());
-                    edSenha.setText("");
-                    edConfirmarSenha.setText("");
-                    edComissao.setText(String.valueOf(usuario.getComissao()));
-                    if (sessao.getUsuario().getLogin().equals(usuario.getLogin()))
-                        cbAdministrador.setEnabled(false);
-                    cbAdministrador.setSelected(usuario.isAdministrador());
-                    cbCadastraProduto.setSelected(usuario.isCadastraProduto());
-                    cbVendeProduto.setSelected(usuario.isVendeProduto());
-                }
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            }
+        try {
+            Usuario usuario = new Usuario();
+            usuario.setLogin(edLogin.getText());
+            if (usuario.getLogin().trim().equals(""))
+                new FrmConsultaUsuario((Frame)this.getParent(), true, usuario).setVisible(true);
+            usuario = usuarioController.buscar(usuario.getLogin());
+            if (usuario != null) {
+                edLogin.setText(usuario.getLogin());
+                edLogin.setEditable(false);
+                edNome.setText(usuario.getNome());
+                edSenha.setText("");
+                edConfirmarSenha.setText("");
+                edComissao.setText(String.valueOf(usuario.getComissao()));
+                if (sessao.getUsuario().getLogin().equals(usuario.getLogin()))
+                    cbAdministrador.setEnabled(false);
+                cbAdministrador.setSelected(usuario.isAdministrador());
+                cbCadastraProduto.setSelected(usuario.isCadastraProduto());
+                cbVendeProduto.setSelected(usuario.isVendeProduto());
+            } 
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+   
     private void btOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btOkActionPerformed
         try {
             Usuario usuario = new Usuario();
@@ -270,11 +269,11 @@ public class FrmCadastroUsuario extends javax.swing.JDialog {
                 usuario.setComissao(0);
             else
                 usuario.setComissao(Double.parseDouble(edComissao.getText()));
-            
+           
             usuario.setAdministrador(cbAdministrador.isSelected());
             usuario.setVendeProduto(cbVendeProduto.isSelected());
             usuario.setCadastraProduto(cbCadastraProduto.isSelected());
-            
+           
             Usuario usuarioAux = usuarioController.buscar(edLogin.getText());
             if (usuarioAux == null) {
                 usuarioController.salvar(usuario, new String(edConfirmarSenha.getPassword()));
@@ -283,7 +282,7 @@ public class FrmCadastroUsuario extends javax.swing.JDialog {
                 usuarioController.editar(usuario, new String(edConfirmarSenha.getPassword()));
                 JOptionPane.showMessageDialog(null, "Usuário editado com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             }
-            
+           
             limpar();
             edNome.requestFocus();
         } catch (Exception ex) {
@@ -312,6 +311,8 @@ public class FrmCadastroUsuario extends javax.swing.JDialog {
 
     private void btExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExcluirActionPerformed
         try {
+            if (edLogin.getText().equals(sessao.getUsuario().getLogin()))
+                throw new RegraNegocioException("Você não pode excluir o seu próprio usuário.");
             int excluir = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir este usuário?", "Excluir", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
             if (excluir == JOptionPane.OK_OPTION) {
                 usuarioController.excluir(edLogin.getText());
@@ -340,7 +341,7 @@ public class FrmCadastroUsuario extends javax.swing.JDialog {
         cbAdministrador.setEnabled(true);
         edLogin.requestFocus();
     }
-    
+   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btExcluir;
     private javax.swing.JButton btLimpar;
@@ -362,3 +363,4 @@ public class FrmCadastroUsuario extends javax.swing.JDialog {
     private javax.swing.JLabel lbSenha;
     // End of variables declaration//GEN-END:variables
 }
+
