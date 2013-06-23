@@ -5,6 +5,8 @@ import controller.dao.util.ConnectionMySql;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import model.Usuario;
 
 public class UsuarioDaoImpl implements UsuarioDao {
@@ -59,7 +61,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
         sb.append(Usuario.CAMPO_COMISSAO + " = ?, ");
         sb.append(Usuario.CAMPO_ADMINISTRADOR + " = ?, ");
         sb.append(Usuario.CAMPO_CADASTRAPRODUTO + " = ?, ");
-        sb.append(Usuario.CAMPO_VENDEPRODUTO + " = ?, ");
+        sb.append(Usuario.CAMPO_VENDEPRODUTO + " = ? ");
         sb.append(" where ");
         sb.append(Usuario.CAMPO_LOGIN +  " = ?");
         
@@ -113,5 +115,117 @@ public class UsuarioDaoImpl implements UsuarioDao {
         }
         ConnectionMySql.closeConnection();
         return u;
+    }
+
+    @Override
+    public List<Usuario> listar() throws Exception {
+        ConnectionMySql.getConnection();
+        
+        ResultSet r = ConnectionMySql.connection.prepareStatement("select * from " + Usuario.TABELA_USUARIO).executeQuery();
+        List<Usuario> list = new ArrayList<Usuario>();
+
+        while (r.next()) {
+            Usuario u = new Usuario();
+            u.setAdministrador(r.getBoolean(Usuario.CAMPO_ADMINISTRADOR));
+            u.setCadastraProduto(r.getBoolean(Usuario.CAMPO_CADASTRAPRODUTO));
+            u.setVendeProduto(r.getBoolean(Usuario.CAMPO_VENDEPRODUTO));
+            u.setComissao(r.getDouble(Usuario.CAMPO_COMISSAO));
+            u.setLogin(r.getString(Usuario.CAMPO_LOGIN));
+            u.setNome(r.getString(Usuario.CAMPO_NOME));
+            u.setSenha(r.getString(Usuario.CAMPO_SENHA));
+            list.add(u);
+        }
+        ConnectionMySql.closeConnection();
+        return list;
+    }
+
+    @Override
+    public List<Usuario> listar(Usuario usuario) throws Exception {
+        if (usuario != null) {
+            StringBuilder str = new StringBuilder();
+            str.append("SELECT ");
+            str.append(Usuario.CAMPO_LOGIN + ", ");
+            str.append(Usuario.CAMPO_SENHA + ", ");
+            str.append(Usuario.CAMPO_NOME + ", ");
+            str.append(Usuario.CAMPO_COMISSAO + ", ");
+            str.append(Usuario.CAMPO_ADMINISTRADOR + ", ");
+            str.append(Usuario.CAMPO_CADASTRAPRODUTO + ", ");
+            str.append(Usuario.CAMPO_VENDEPRODUTO + " ");
+            str.append(" FROM " + Usuario.TABELA_USUARIO);
+            str.append(" WHERE ");
+            str.append(Usuario.CAMPO_LOGIN + " LIKE ? AND ");
+            str.append(Usuario.CAMPO_SENHA + " LIKE ? AND ");
+            str.append(Usuario.CAMPO_NOME + " LIKE ? AND ");
+            str.append(Usuario.CAMPO_COMISSAO + " LIKE ? ");
+            if (usuario.isAdministrador())
+                str.append(" AND " + Usuario.CAMPO_ADMINISTRADOR + " = ?");
+            if (usuario.isCadastraProduto())
+                str.append(" AND " + Usuario.CAMPO_CADASTRAPRODUTO + " = ?");
+            if (usuario.isVendeProduto())
+                str.append(" AND " + Usuario.CAMPO_VENDEPRODUTO + " = ?");
+
+            ConnectionMySql.getConnection();
+
+            PreparedStatement pr = ConnectionMySql.connection.prepareStatement(str.toString());
+
+            if (usuario.getLogin() != null) {
+                pr.setString(1, "%" + usuario.getLogin() + "%");
+            } else {
+                pr.setString(1, "%%");
+            }
+
+            if (usuario.getSenha() != null) {
+                pr.setString(2, "%" + usuario.getSenha() + "%");
+            } else {
+                pr.setString(2, "%%");
+            }
+
+            if (usuario.getNome() != null) {
+                pr.setString(3, "%" + usuario.getNome() + "%");
+            } else {
+                pr.setString(3, "%%");
+            }
+
+            if (usuario.getComissao() < 0) {
+                pr.setString(4, "%" + usuario.getComissao() + "%");
+            } else {
+                pr.setString(4, "%%");
+            }
+
+            int indice = 5;
+            if (usuario.isAdministrador()) {
+                pr.setBoolean(indice, true);
+                indice++;
+            }
+
+            if (usuario.isCadastraProduto()) {
+                pr.setBoolean(indice, true);
+                indice++;
+            }
+
+            if (usuario.isVendeProduto()) {
+                pr.setBoolean(indice, true);
+            }
+
+            ResultSet r = pr.executeQuery();
+
+            List<Usuario> list = new ArrayList<Usuario>();
+            while (r.next()) {
+                Usuario u = new Usuario();
+                u.setAdministrador(r.getBoolean(Usuario.CAMPO_ADMINISTRADOR));
+                u.setCadastraProduto(r.getBoolean(Usuario.CAMPO_CADASTRAPRODUTO));
+                u.setVendeProduto(r.getBoolean(Usuario.CAMPO_VENDEPRODUTO));
+                u.setComissao(r.getDouble(Usuario.CAMPO_COMISSAO));
+                u.setLogin(r.getString(Usuario.CAMPO_LOGIN));
+                u.setNome(r.getString(Usuario.CAMPO_NOME));
+                u.setSenha(r.getString(Usuario.CAMPO_SENHA));
+                list.add(u);
+            }
+
+            ConnectionMySql.closeConnection();
+            return list;
+
+        } else
+            return this.listar();
     }
 }

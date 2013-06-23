@@ -78,4 +78,14 @@ public class UsuarioControllerImpl implements UsuarioController {
     public Usuario buscar(String login) throws Exception {
         return usuarioDao.buscar(login);
     }
+
+    @Override
+    public List<Usuario> listar() throws Exception {
+        return usuarioDao.listar();
+    }
+
+    @Override
+    public List<Usuario> listar(Usuario usuario) throws Exception {
+        return usuarioDao.listar(usuario);
+    }
 }
