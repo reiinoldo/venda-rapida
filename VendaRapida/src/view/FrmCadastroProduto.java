@@ -5,9 +5,9 @@
 package view;
 
 import controller.ProdutoController;
+import controller.dao.util.StringUtil;
 import controller.impl.ProdutoControllerImpl;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.awt.Frame;
 import javax.swing.JOptionPane;
 import model.Produto;
 
@@ -16,7 +16,7 @@ import model.Produto;
  * @author Maicon
  */
 public class FrmCadastroProduto extends javax.swing.JDialog {
-
+    
     private ProdutoController produtoController = new ProdutoControllerImpl();
 
     /**
@@ -45,10 +45,10 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
         lbLogin = new javax.swing.JLabel();
         lbNovoUsuario = new javax.swing.JLabel();
         btPesquisar = new javax.swing.JButton();
-        edValor = new javax.swing.JTextField();
         edCodigoBarras = new javax.swing.JTextField();
         edDescricao = new javax.swing.JTextField();
         btExcluir = new javax.swing.JButton();
+        edValor = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -108,8 +108,6 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
             }
         });
 
-        edValor.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
-
         edCodigoBarras.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
 
         edDescricao.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
@@ -125,6 +123,8 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
                 btExcluirKeyPressed(evt);
             }
         });
+
+        edValor.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0.00"))));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -151,15 +151,14 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
                             .addComponent(lbNome)
                             .addComponent(lbLogin))
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(edValor, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addComponent(edReferencia)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(btPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(edCodigoBarras, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(edDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(edReferencia, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(edCodigoBarras)
+                            .addComponent(edDescricao)
+                            .addComponent(edValor))
                         .addGap(12, 12, 12)))
                 .addContainerGap())
         );
@@ -181,10 +180,13 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbSenha)
                     .addComponent(edDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lbConfirmarSenha)
-                    .addComponent(edValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(lbConfirmarSenha))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(edValor)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btOk)
@@ -201,7 +203,7 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
     private void btLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLimparActionPerformed
         limpar();
     }//GEN-LAST:event_btLimparActionPerformed
-
+    
     private void limpar() {
         this.edReferencia.setText("");
         this.edCodigoBarras.setText("");
@@ -209,16 +211,16 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
         this.edValor.setText("");
         this.edReferencia.setEnabled(true);
     }
-
+    
     private void btLimparKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btLimparKeyPressed
     }//GEN-LAST:event_btLimparKeyPressed
-
+    
     private void btOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btOkActionPerformed
         Produto produto = new Produto();
         produto.setCodigoBarrra(edCodigoBarras.getText());
         produto.setDescricao(edDescricao.getText());
         produto.setReferencia(edReferencia.getText());
-        produto.setValor(edValor.getText().isEmpty() ? 0d : Double.parseDouble(edValor.getText()));
+        produto.setValor(edValor.getText().isEmpty() ? 0d : StringUtil.getValorR$(edValor.getText()));
         try {
             if (produtoController.buscar(produto.getReferencia()) == null) {
                 produtoController.salvar(produto);
@@ -232,18 +234,20 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btOkActionPerformed
-
+    
     private void btOkKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btOkKeyPressed
     }//GEN-LAST:event_btOkKeyPressed
-
+    
     private void btPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPesquisarActionPerformed
         buscar();
     }//GEN-LAST:event_btPesquisarActionPerformed
-
+    
     private void edReferenciaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edReferenciaFocusLost
-        buscar();
+        if (!edReferencia.getText().trim().equals("")) {
+            buscar();
+        }
     }//GEN-LAST:event_edReferenciaFocusLost
-
+    
     private void btExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExcluirActionPerformed
         try {
             int excluir = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir este produto?", "Excluir", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
@@ -256,26 +260,28 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btExcluirActionPerformed
-
+    
     private void btExcluirKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btExcluirKeyPressed
         // TODO add your handling code here:
     }//GEN-LAST:event_btExcluirKeyPressed
-
+    
     private void buscar() {
-        if (!edReferencia.getText().isEmpty()) {
-            try {
-                Produto produto = produtoController.buscar(edReferencia.getText());
-                if (produto != null) {
-                    this.edReferencia.setText(produto.getReferencia());
-                    this.edCodigoBarras.setText(produto.getCodigoBarrra());
-                    this.edDescricao.setText(produto.getDescricao());
-                    this.edValor.setText(String.valueOf(produto.getValor()));
-
-                    this.edReferencia.setEnabled(false);
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(FrmCadastroProduto.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            Produto produto = new Produto();
+            produto.setReferencia(edReferencia.getText());
+            if (produto.getReferencia().trim().equals("")) {
+                new FrmConsultaProduto((Frame) this.getParent(), true, produto).setVisible(true);
             }
+            produto = produtoController.buscar(produto.getReferencia());
+            if (produto != null) {
+                edCodigoBarras.setText(produto.getCodigoBarrra());
+                edDescricao.setText(produto.getDescricao());
+                edReferencia.setText(produto.getReferencia());
+                edValor.setText(StringUtil.getR$FormmatedFromDouble(produto.getValor()));
+                edReferencia.setEnabled(false);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -286,7 +292,7 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
     private javax.swing.JTextField edCodigoBarras;
     private javax.swing.JTextField edDescricao;
     private javax.swing.JTextField edReferencia;
-    private javax.swing.JTextField edValor;
+    private javax.swing.JFormattedTextField edValor;
     private javax.swing.JLabel lbConfirmarSenha;
     private javax.swing.JLabel lbLogin;
     private javax.swing.JLabel lbNome;

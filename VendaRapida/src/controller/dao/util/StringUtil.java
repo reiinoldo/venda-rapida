@@ -1,5 +1,7 @@
 package controller.dao.util;
 
+import java.text.DecimalFormat;
+
 /**
  *
  * @author reinoldo
@@ -14,5 +16,16 @@ public class StringUtil {
             }
         }
         return aux;
+    }
+
+    public static Double getValorR$(String valor) {
+        valor = valor.replace(",", ".");
+
+        return Double.parseDouble(valor);
+    }
+
+    public static String getR$FormmatedFromDouble(Double valor) {
+        DecimalFormat df = new DecimalFormat("#0.00");
+        return df.format(valor);
     }
 }

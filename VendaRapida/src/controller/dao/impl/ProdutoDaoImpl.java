@@ -79,15 +79,15 @@ public class ProdutoDaoImpl implements ProdutoDao{
             str.append("SELECT ");
             str.append(Produto.CAMPO_REFERENCIA + ", ");
             str.append(Produto.CAMPO_CODIGOBARRA + ", ");
-            str.append(Produto.CAMPO_REFERENCIA + ", ");
-            str.append(Produto.CAMPO_VALOR + ", ");
+            str.append(Produto.CAMPO_DESCRICAO + ", ");
+            str.append(Produto.CAMPO_VALOR + " ");
             str.append(" FROM " + Produto.TABELA_PRODUTO);
             str.append(" WHERE ");
             str.append(Produto.CAMPO_REFERENCIA + " LIKE ? AND ");
-            str.append(Produto.CAMPO_CODIGOBARRA + "LIKE ? AND ");
+            str.append(Produto.CAMPO_CODIGOBARRA + " LIKE ? AND ");
             str.append(Produto.CAMPO_DESCRICAO + " LIKE ? AND ");
             str.append(Produto.CAMPO_VALOR + " >= ? AND ");
-            str.append(Produto.CAMPO_VALOR + " <= ? AND ");
+            str.append(Produto.CAMPO_VALOR + " <= ?");
 
             ConnectionMySql.getConnection();
 
