@@ -4,11 +4,17 @@ import controller.ProdutoController;
 import controller.dao.util.StringUtil;
 import controller.impl.ProdutoControllerImpl;
 import controller.impl.RegraNegocioException;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Produto;
+import net.sf.jasperreports.engine.JRException;
+import view.util.ViewUtil;
+import view.util.ViewUtil.GeradorNomePDF;
 
 public class FrmConsultaProduto extends javax.swing.JDialog {
 
@@ -21,6 +27,7 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
     public FrmConsultaProduto(java.awt.Frame parent, boolean modal, Produto usuarioSelecionado) {
         super(parent, modal);
         this.produtoSelecionado = usuarioSelecionado;
+        listaProdutosBuscados = new ArrayList<Produto>();
         initComponents();
     }
 
@@ -94,6 +101,7 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
         edDescricao.setText("");
         edValorFinal.setText("9999999999,99");
         edValorInicial.setText("0,00");
+        listaProdutosBuscados = new ArrayList<Produto>();
 
         dtm = new DefaultTableModel();
         dtm = (DefaultTableModel) tabelaConsulta.getModel();
@@ -125,6 +133,7 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         edValorInicial = new javax.swing.JFormattedTextField();
         edValorFinal = new javax.swing.JFormattedTextField();
+        btGerarPDF = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -161,13 +170,11 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 638, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 618, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE)
         );
 
         btConfirma.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/confirma.png"))); // NOI18N
@@ -231,24 +238,21 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
             }
         });
 
+        btGerarPDF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/pdf_file.png"))); // NOI18N
+        btGerarPDF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btGerarPDFActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(btSair)
-                                .addComponent(btPesquisar, javax.swing.GroupLayout.Alignment.TRAILING))
-                            .addComponent(btConfirma)
-                            .addComponent(btLimpar, javax.swing.GroupLayout.Alignment.TRAILING)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(5, 5, 5)
+                        .addGap(15, 15, 15)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(onibus)
@@ -268,7 +272,16 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(edDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btSair)
+                            .addComponent(btPesquisar)
+                            .addComponent(btConfirma)
+                            .addComponent(btLimpar)
+                            .addComponent(btGerarPDF))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -276,12 +289,12 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(onibus))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(29, 29, 29)
-                        .addComponent(cadastroAluno)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cadastroAluno))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(onibus)))
+                .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(edDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -293,27 +306,22 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
                     .addComponent(edValorFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
                         .addComponent(btPesquisar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btConfirma)
-                        .addGap(31, 31, 31)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btGerarPDF)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btLimpar)
-                        .addGap(27, 27, 27)
-                        .addComponent(btSair))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btSair)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void tabelaConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaConsultaMouseClicked
-        if (evt.getClickCount() == 2) {
-            carregarEdicao();
-        }
-    }//GEN-LAST:event_tabelaConsultaMouseClicked
 
     private void btConfirmaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btConfirmaActionPerformed
         carregarEdicao();
@@ -346,8 +354,41 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
             edValorInicial.setText("0,00");
         }
     }//GEN-LAST:event_edValorInicialFocusLost
+
+    private void btGerarPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGerarPDFActionPerformed
+        if (!listaProdutosBuscados.isEmpty()) {
+            try {
+                String path = null;
+                try {
+                    path = ViewUtil.createFileChooserToSavePDF(this, GeradorNomePDF.PRODUTO);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+                if (path != null) {
+                    produtoController.gerarRelatorio(listaProdutosBuscados, path);
+                    int abrir = JOptionPane.showConfirmDialog(null, "PDF Gerado Com Sucesso em '" + path + "'. \nDeseja abrí-lo?", "Sucesso", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                    if (abrir == JOptionPane.OK_OPTION) {
+                        java.awt.Desktop.getDesktop().open(new File(path));
+                    }
+                }
+            } catch (JRException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao gerar relatório, causa: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao abrir o arquivo, causa: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Necessita-se ao menos de um registro para gerar o PDF.", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btGerarPDFActionPerformed
+
+    private void tabelaConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaConsultaMouseClicked
+        if (evt.getClickCount() == 2) {
+            carregarEdicao();
+        }
+    }//GEN-LAST:event_tabelaConsultaMouseClicked
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btConfirma;
+    private javax.swing.JButton btGerarPDF;
     private javax.swing.JButton btLimpar;
     private javax.swing.JButton btPesquisar;
     private javax.swing.JButton btSair;

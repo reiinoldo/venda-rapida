@@ -9,11 +9,11 @@ import java.util.logging.Logger;
 
 public class ConnectionMySql {
 
-    private static String serverName = "MAICONM";//"localhost";    //caminho do servidor do BD
+    private static String serverName = "localhost";//"localhost";    //caminho do servidor do BD
     private static String mydatabase = "vendarapida";
     private static String url = "jdbc:mysql://" + serverName + "/" + mydatabase;
     private static String username = "root";        //nome de um usuário de seu BD      
-    private static String password = "1234";      //sua senha de acesso
+    private static String password = "123";      //sua senha de acesso
     
     public static Connection connection;
     

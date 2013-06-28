@@ -7,6 +7,13 @@ import controller.dao.impl.ItemDaoImpl;
 import controller.dao.impl.ProdutoDaoImpl;
 import java.util.List;
 import model.Produto;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 public class ProdutoControllerImpl implements ProdutoController {
 
@@ -76,5 +83,12 @@ public class ProdutoControllerImpl implements ProdutoController {
             throw new RegraNegocioException("Valor inicial maior que o valor final");
         }
         return produtoDao.listar(produto, valorFinal);
+    }
+
+    @Override
+    public void gerarRelatorio(List listaGerada, String path) throws JRException {
+        JasperReport report = JasperCompileManager.compileReport("src/relatorios/relProdutos.jrxml");
+        JasperPrint print = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(listaGerada));
+        JasperExportManager.exportReportToPdfFile(print, path);
     }
 }
