@@ -230,17 +230,24 @@ public class FrmCadastroUsuario extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPesquisarActionPerformed
-        pesquisar();
+        carregarTransacao();
     }//GEN-LAST:event_btPesquisarActionPerformed
 
-    private void pesquisar() {
+    private void carregarTransacao(){
         try {
-            Usuario usuario = new Usuario();
-            usuario.setLogin(edLogin.getText());
-            if (usuario.getLogin().trim().equals(""))
-                new FrmConsultaUsuario((Frame)this.getParent(), true, usuario).setVisible(true);
-            usuario = usuarioController.buscar(usuario.getLogin());
+            Usuario usuario = new Usuario();            
+            new FrmConsultaUsuario((Frame) this.getParent(), true, usuario).setVisible(true);                        
+            pesquisar(usuario.getLogin());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }        
+    }
+    
+    private void pesquisar(String login) {
+        try {
+            Usuario usuario = usuarioController.buscar(login);
             if (usuario != null) {
+                cbAdministrador.setEnabled(true);
                 edLogin.setText(usuario.getLogin());
                 edLogin.setEditable(false);
                 edNome.setText(usuario.getNome());
@@ -252,7 +259,7 @@ public class FrmCadastroUsuario extends javax.swing.JDialog {
                 cbAdministrador.setSelected(usuario.isAdministrador());
                 cbCadastraProduto.setSelected(usuario.isCadastraProduto());
                 cbVendeProduto.setSelected(usuario.isVendeProduto());
-            } 
+            }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
@@ -307,7 +314,7 @@ public class FrmCadastroUsuario extends javax.swing.JDialog {
 
     private void edLoginFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edLoginFocusLost
         if (!edLogin.getText().trim().equals(""))
-            pesquisar();
+            pesquisar(edLogin.getText());
     }//GEN-LAST:event_edLoginFocusLost
 
     private void btExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExcluirActionPerformed

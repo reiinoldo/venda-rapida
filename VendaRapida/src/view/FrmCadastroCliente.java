@@ -6,6 +6,7 @@ package view;
 
 import controller.ClienteController;
 import controller.impl.ClienteControllerImpl;
+import controller.impl.RegraNegocioException;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
@@ -270,7 +271,7 @@ public class FrmCadastroCliente extends javax.swing.JDialog {
             }
             edCodigo.setEnabled(false);
         } else {
-            pesquisar();
+            pesquisar(Integer.parseInt(edCodigo.getText()));
         }
     }//GEN-LAST:event_edCodigoFocusLost
 
@@ -298,23 +299,31 @@ public class FrmCadastroCliente extends javax.swing.JDialog {
     }//GEN-LAST:event_btLimparKeyPressed
 
     private void btPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPesquisarActionPerformed
-        pesquisar();
+        carregarTransacao();
     }//GEN-LAST:event_btPesquisarActionPerformed
 
-    private void pesquisar() {
+    private void carregarTransacao(){
         try {
-            Cliente cliente = new Cliente();
-            new FrmConsultaCliente((Frame)this.getParent(), true, cliente).setVisible(true);
-            cliente = clienteController.buscar(cliente.getId());
-            if (cliente != null) {
-                edCodigo.setText(cliente.getId() + "");
-                edNome.setText(cliente.getNome());
-                edCpfCnpj.setText(cliente.getCpfCnpj());
-                edEndereco.setText(cliente.getEndereco());
-                edEmail.setText(cliente.getEmail());
-                edTelefone.setText(cliente.getTelefone());
-                edCodigo.setEnabled(true);
-            } 
+            Cliente cliente = new Cliente();            
+            new FrmConsultaCliente((Frame) this.getParent(), true, cliente).setVisible(true);                        
+            pesquisar(cliente.getId());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }        
+    }
+    
+    private void pesquisar(int id) {
+        try {
+            Cliente cliente = clienteController.buscar(id);
+            if (cliente == null)
+                throw new RegraNegocioException("Cliente não encontrado");
+            edCodigo.setText(cliente.getId() + "");
+            edNome.setText(cliente.getNome());
+            edCpfCnpj.setText(cliente.getCpfCnpj());
+            edEndereco.setText(cliente.getEndereco());
+            edEmail.setText(cliente.getEmail());
+            edTelefone.setText(cliente.getTelefone());
+            edCodigo.setEnabled(true);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
