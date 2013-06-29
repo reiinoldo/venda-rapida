@@ -287,11 +287,11 @@ public class FrmCadastroFornecedor extends javax.swing.JDialog {
 
     private void btPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPesquisarActionPerformed
         //carregarTransacao();
-        if(edCodigo.getText().isEmpty()){
+        //if(edCodigo.getText().isEmpty()){
             JOptionPane.showMessageDialog(null, "Aguarde! Estamos mudando o Mundo!Nhác Nhác...", "Alerta", JOptionPane.WARNING_MESSAGE);
-        }else{
-            pesquisar();
-        }        
+        //}else{
+        //    pesquisar();
+        //}        
     }//GEN-LAST:event_btPesquisarActionPerformed
 
     private void btOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btOkActionPerformed
