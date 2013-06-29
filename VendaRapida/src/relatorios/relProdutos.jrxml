@@ -33,19 +33,15 @@
 	</background>
 	<title>
 		<band height="79" splitType="Stretch">
-			<image>
-				<reportElement uuid="da35f48c-768e-4cd1-8501-b26266621316" x="15" y="20" width="45" height="45"/>
-				<imageExpression><![CDATA["C:\\Users\\Maicon\\Documents\\NetBeansProjects\\trunk\\VendaRapida\\src\\img\\product-icon.png"]]></imageExpression>
-			</image>
 			<staticText>
-				<reportElement uuid="fa2a3e2a-9700-4673-98e0-c1437454b430" x="60" y="32" width="187" height="33"/>
+				<reportElement uuid="fa2a3e2a-9700-4673-98e0-c1437454b430" x="60" y="32" width="203" height="33"/>
 				<textElement>
 					<font size="18"/>
 				</textElement>
 				<text><![CDATA[Relatório de Produtos]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="63c315fb-c268-40ad-9055-eb97c1fdf0a7" x="430" y="52" width="125" height="13"/>
+				<reportElement uuid="63c315fb-c268-40ad-9055-eb97c1fdf0a7" x="403" y="52" width="152" height="13"/>
 				<textElement/>
 				<text><![CDATA[Sistema de Venda Rápida]]></text>
 			</staticText>
