@@ -1,7 +1,7 @@
 package model;
 
 public class Item {
-    
+
     public static final String TABELA_ITEM = "vendarapida.item";
     
     public static final String CAMPO_CODIGOVENDA = "item.codigovenda";
@@ -15,6 +15,18 @@ public class Item {
     
     public static final String CAMPO_VALOR = "item.valor";
     private double valor;
+    
+    private Produto produto;
+
+    public Item() {
+    }
+
+    public Item(Produto produto, int quantidade) {
+        this.produto = produto;
+        this.referenciaProduto = produto.getReferencia();
+        this.valor = produto.getValor();
+        this.quantidade = quantidade;
+    }
 
     public int getCodigoVenda() {
         return codigoVenda;
@@ -47,5 +59,12 @@ public class Item {
     public void setValor(double valor) {
         this.valor = valor;
     }
-    
+
+    public Produto getProduto() {
+        return produto;
+    }
+
+    public void setProduto(Produto produto) {
+        this.produto = produto;
+    }
 }
