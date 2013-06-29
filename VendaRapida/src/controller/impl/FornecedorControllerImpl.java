@@ -5,6 +5,13 @@ import controller.dao.FornecedorDao;
 import controller.dao.impl.FornecedorDaoImpl;
 import java.util.List;
 import model.Fornecedor;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 public class FornecedorControllerImpl implements FornecedorController {
     
@@ -66,5 +73,12 @@ public class FornecedorControllerImpl implements FornecedorController {
     @Override
     public int incrementar() throws Exception {
         return fornecedorDao.incrementar();
+    }
+
+    @Override
+    public void gerarRelatorio(List listaGerada, String path) throws JRException {
+        JasperReport report = JasperCompileManager.compileReport("src/relatorios/relFornecedores.jrxml");
+        JasperPrint print = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(listaGerada));
+        JasperExportManager.exportReportToPdfFile(print, path);
     }
 }

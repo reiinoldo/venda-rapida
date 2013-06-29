@@ -2,6 +2,7 @@ package controller;
 
 import java.util.List;
 import model.Fornecedor;
+import net.sf.jasperreports.engine.JRException;
 
 public interface FornecedorController {
 
@@ -18,5 +19,7 @@ public interface FornecedorController {
     void salvar(Fornecedor fornecedor) throws Exception;
     
     int incrementar()throws Exception;
+    
+    void gerarRelatorio(List listaGerada, String path) throws JRException;
     
 }
