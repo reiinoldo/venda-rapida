@@ -6,6 +6,7 @@ package view;
 
 import controller.ClienteController;
 import controller.impl.ClienteControllerImpl;
+import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import model.Cliente;
@@ -24,6 +25,7 @@ public class FrmCadastroCliente extends javax.swing.JDialog {
     public FrmCadastroCliente(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -268,28 +270,10 @@ public class FrmCadastroCliente extends javax.swing.JDialog {
             }
             edCodigo.setEnabled(false);
         } else {
-            buscar();
+            pesquisar();
         }
     }//GEN-LAST:event_edCodigoFocusLost
-    private void buscar() {
-        if (!edCodigo.getText().isEmpty()) {
-            try {
-                Cliente cliente = clienteController.buscar(Integer.parseInt(edCodigo.getText()));
-                if (cliente != null) {
-                    edCodigo.setText(cliente.getId() + "");
-                    edNome.setText(cliente.getNome());
-                    edCpfCnpj.setText(cliente.getCpfCnpj());
-                    edEndereco.setText(cliente.getEndereco());
-                    edEmail.setText(cliente.getEmail());
-                    edTelefone.setText(cliente.getTelefone());
-                    edCodigo.setEnabled(true);
-                }
-            } catch (Exception ex) {
-                edCodigo.requestFocus();
-                JOptionPane.showMessageDialog(null, "Código do cliente não encontrado", "Erro", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
+
     private void edTelefoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edTelefoneActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_edTelefoneActionPerformed
@@ -314,14 +298,28 @@ public class FrmCadastroCliente extends javax.swing.JDialog {
     }//GEN-LAST:event_btLimparKeyPressed
 
     private void btPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPesquisarActionPerformed
-        //carregarTransacao();
-//        if(edCodigo.getText().isEmpty()){
-//            JOptionPane.showMessageDialog(null, "Aguarde! Estamos mudando o Mundo!Nhác Nhác...", "Alerta", JOptionPane.WARNING_MESSAGE);
-//        }else{
-//            pesquisar();
-//        }
+        pesquisar();
     }//GEN-LAST:event_btPesquisarActionPerformed
 
+    private void pesquisar() {
+        try {
+            Cliente cliente = new Cliente();
+            new FrmConsultaCliente((Frame)this.getParent(), true, cliente).setVisible(true);
+            cliente = clienteController.buscar(cliente.getId());
+            if (cliente != null) {
+                edCodigo.setText(cliente.getId() + "");
+                edNome.setText(cliente.getNome());
+                edCpfCnpj.setText(cliente.getCpfCnpj());
+                edEndereco.setText(cliente.getEndereco());
+                edEmail.setText(cliente.getEmail());
+                edTelefone.setText(cliente.getTelefone());
+                edCodigo.setEnabled(true);
+            } 
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
     private void btOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btOkActionPerformed
         try {
             int id = Integer.parseInt(edCodigo.getText());

@@ -94,11 +94,11 @@ public class ClienteDaoImpl implements ClienteDao {
             str.append(" FROM " + Cliente.TABELA_CLIENTE);
             str.append(" WHERE ");
             str.append(Cliente.CAMPO_ID + " LIKE ? AND ");
-            str.append(Cliente.CAMPO_CPFCNPJ + "LIKE ? AND ");
+            str.append(Cliente.CAMPO_CPFCNPJ + " LIKE ? AND ");
             str.append(Cliente.CAMPO_EMAIL + " LIKE ? AND ");
             str.append(Cliente.CAMPO_ENDERECO + " LIKE ? AND ");
-            str.append(Cliente.CAMPO_NOME + "LIKE ? AND ");
-            str.append(Cliente.CAMPO_TELEFONE + " LIKE ? AND ");
+            str.append(Cliente.CAMPO_NOME + " LIKE ? AND ");
+            str.append(Cliente.CAMPO_TELEFONE + " LIKE ?");
 
             ConnectionMySql.getConnection();
 

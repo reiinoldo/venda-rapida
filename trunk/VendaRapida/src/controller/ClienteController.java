@@ -2,6 +2,7 @@ package controller;
 
 import java.util.List;
 import model.Cliente;
+import net.sf.jasperreports.engine.JRException;
 
 public interface ClienteController {
 
@@ -18,4 +19,6 @@ public interface ClienteController {
     void salvar(Cliente cliente) throws Exception;
 
     int incrementar() throws Exception;
+    
+    void gerarRelatorio(List listaGerada, String path) throws JRException;
 }

@@ -68,8 +68,7 @@ public class ProdutoControllerImpl implements ProdutoController {
 
     @Override
     public Produto buscar(String referencia) throws Exception {
-        Produto produto = produtoDao.buscar(referencia);
-        return produto;
+        return produtoDao.buscar(referencia);
     }
 
     @Override
