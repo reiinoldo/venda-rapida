@@ -25,6 +25,7 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
     public FrmCadastroProduto(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**

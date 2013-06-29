@@ -24,14 +24,14 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
     private List<Produto> listaProdutosBuscados;
     private ProdutoController produtoController = new ProdutoControllerImpl();
 
-    public FrmConsultaProduto(java.awt.Frame parent, boolean modal, Produto usuarioSelecionado) {
+    public FrmConsultaProduto(java.awt.Frame parent, boolean modal, Produto produtoSelecionado) {
         super(parent, modal);
-        this.produtoSelecionado = usuarioSelecionado;
+        this.produtoSelecionado = produtoSelecionado;
         listaProdutosBuscados = new ArrayList<Produto>();
         initComponents();
     }
 
-    public void carregarUsuario() {
+    public void carregarProduto() {
         produto = new Produto();
         if (!edDescricao.getText().isEmpty()) {
             produto.setDescricao(edDescricao.getText());
@@ -340,7 +340,7 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
     }//GEN-LAST:event_btLimparActionPerformed
 
     private void btPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPesquisarActionPerformed
-        carregarUsuario();
+        carregarProduto();
     }//GEN-LAST:event_btPesquisarActionPerformed
 
     private void edValorFinalFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edValorFinalFocusLost
@@ -360,7 +360,7 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
             try {
                 String path = null;
                 try {
-                    path = ViewUtil.createFileChooserToSavePDF(this, GeradorNomePDF.PRODUTO);
+                    path = ViewUtil.createFileChooserToSavePDF(this, GeradorNomePDF.PRODUTOS);
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                 }
