@@ -90,4 +90,10 @@ public class ProdutoControllerImpl implements ProdutoController {
         JasperPrint print = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(listaGerada));
         JasperExportManager.exportReportToPdfFile(print, path);
     }
+
+    @Override
+    public Produto buscarCodigoBarras(String codigoBarras) throws Exception {
+        Produto produto = produtoDao.buscarCodigoBarras(codigoBarras);
+        return produto;
+    }
 }

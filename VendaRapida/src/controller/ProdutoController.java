@@ -7,6 +7,8 @@ import net.sf.jasperreports.engine.JRException;
 public interface ProdutoController {
 
     Produto buscar(String referencia) throws Exception;
+    
+    Produto buscarCodigoBarras(String codigoBarras) throws Exception;
 
     void editar(Produto produto) throws Exception;
 
