@@ -7,10 +7,9 @@ package view;
 import controller.FornecedorController;
 import controller.impl.FornecedorControllerImpl;
 import controller.impl.RegraNegocioException;
+import java.awt.Frame;
 import javax.swing.JOptionPane;
 import java.awt.event.KeyEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import model.Fornecedor;
 
 /**
@@ -28,11 +27,11 @@ public class FrmCadastroFornecedor extends javax.swing.JDialog {
     public FrmCadastroFornecedor(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setLocationRelativeTo(null);
     }
     
-    private void pesquisar(){
-        try {
-            int id = Integer.parseInt(edCodigo.getText());            
+    private void pesquisar(int id){
+        try {                
             Fornecedor fornecedor = fornecedorController.buscar(id);
             if (fornecedor == null)
                 throw new RegraNegocioException("Fornecedor não encontrado");
@@ -42,12 +41,20 @@ public class FrmCadastroFornecedor extends javax.swing.JDialog {
             edEndereco.setText(fornecedor.getEndereco());            
             edEmail.setText(fornecedor.getEmail());
             edTelefone.setText(fornecedor.getTelefone());
-            edCodigo.setEnabled(false);
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(null, "Código do Fornecedor inválido!", "Erro", JOptionPane.ERROR_MESSAGE);
+            edCodigo.setEnabled(false);        
         } catch (Exception ex){
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);         
         } 
+    }
+    
+    private void carregarTransacao(){
+        try {
+            Fornecedor fornecedor = new Fornecedor();            
+            new FrmConsultaForncedor((Frame) this.getParent(), true, fornecedor).setVisible(true);                        
+            pesquisar(fornecedor.getId());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }        
     }
 
     /**
@@ -286,9 +293,9 @@ public class FrmCadastroFornecedor extends javax.swing.JDialog {
     }//GEN-LAST:event_btLimparKeyPressed
 
     private void btPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPesquisarActionPerformed
-        //carregarTransacao();
+        carregarTransacao();
         //if(edCodigo.getText().isEmpty()){
-            JOptionPane.showMessageDialog(null, "Aguarde! Estamos mudando o Mundo!Nhác Nhác...", "Alerta", JOptionPane.WARNING_MESSAGE);
+        //    JOptionPane.showMessageDialog(null, "Aguarde! Estamos mudando o Mundo!Nhác Nhác...", "Alerta", JOptionPane.WARNING_MESSAGE);
         //}else{
         //    pesquisar();
         //}        
@@ -335,7 +342,8 @@ public class FrmCadastroFornecedor extends javax.swing.JDialog {
             }
             edCodigo.setEnabled(false);
         }else{
-            pesquisar();
+            int id = Integer.parseInt(edCodigo.getText());                    
+            pesquisar(id);
         }
     }//GEN-LAST:event_edCodigoFocusLost
 

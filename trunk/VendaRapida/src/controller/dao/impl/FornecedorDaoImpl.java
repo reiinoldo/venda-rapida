@@ -90,15 +90,15 @@ public class FornecedorDaoImpl implements FornecedorDao{
             str.append(Fornecedor.CAMPO_EMAIL + ", ");
             str.append(Fornecedor.CAMPO_ENDERECO + ", ");
             str.append(Fornecedor.CAMPO_NOME + ", ");
-            str.append(Fornecedor.CAMPO_TELEFONE + ", ");
+            str.append(Fornecedor.CAMPO_TELEFONE + " ");
             str.append(" FROM " + Fornecedor.TABELA_FORNECEDOR);
             str.append(" WHERE ");
             str.append(Fornecedor.CAMPO_ID + " LIKE ? AND ");
-            str.append(Fornecedor.CAMPO_CPFCNPJ + "LIKE ? AND ");
+            str.append(Fornecedor.CAMPO_CPFCNPJ + " LIKE ? AND ");
             str.append(Fornecedor.CAMPO_EMAIL + " LIKE ? AND ");
             str.append(Fornecedor.CAMPO_ENDERECO + " LIKE ? AND ");
-            str.append(Fornecedor.CAMPO_NOME + "LIKE ? AND ");
-            str.append(Fornecedor.CAMPO_TELEFONE + " LIKE ? AND ");
+            str.append(Fornecedor.CAMPO_NOME + " LIKE ? AND ");
+            str.append(Fornecedor.CAMPO_TELEFONE + " LIKE ? ");
 
             ConnectionMySql.getConnection();
 

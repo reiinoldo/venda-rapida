@@ -24,47 +24,26 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
+              <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+              <Component id="lbImg" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="cadastroAluno" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="574" max="32767" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="lbImg" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cadastroAluno" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="29" pref="29" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lbCodigoIni" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lbNome" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="edNome" max="32767" attributes="0"/>
-                                  <Group type="102" attributes="0">
-                                      <Component id="edCodigoIni" min="-2" pref="120" max="-2" attributes="0"/>
-                                      <EmptySpace min="0" pref="202" max="32767" attributes="0"/>
-                                  </Group>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="lbCPFCNPJ" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lbCodigoFin" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="edCPFCNPJ" min="-2" pref="300" max="-2" attributes="0"/>
-                                  <Component id="edCodigoFin" min="-2" pref="120" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                      </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
+                      <Component id="lbNome" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="edNome" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                      <Component id="lbCPFCNPJ" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="edCPFCNPJ" min="-2" pref="300" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="jPanel1" alignment="1" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -91,14 +70,7 @@
                       <Component id="lbImg" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lbCodigoIni" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="edCodigoIni" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="lbCodigoFin" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="edCodigoFin" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="lbNome" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="edNome" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -107,7 +79,7 @@
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <Component id="btPesquisar" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btConfirma" min="-2" max="-2" attributes="0"/>
@@ -118,9 +90,9 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btSair" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jPanel1" pref="0" max="32767" attributes="1"/>
+                  <Component id="jPanel1" min="-2" pref="324" max="-2" attributes="1"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace pref="68" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -278,13 +250,6 @@
         </Property>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="lbCodigoIni">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="C&#xf3;digo Inicial:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="edCodigoIni">
-    </Component>
     <Component class="javax.swing.JButton" name="btGerarPDF">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
@@ -308,13 +273,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="edCPFCNPJ">
-    </Component>
-    <Component class="javax.swing.JLabel" name="lbCodigoFin">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="C&#xf3;digo Final:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="edCodigoFin">
     </Component>
   </SubComponents>
 </Form>

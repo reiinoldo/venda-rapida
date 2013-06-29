@@ -1,8 +1,7 @@
 package view;
 
-import controller.ProdutoController;
-import controller.dao.util.StringUtil;
-import controller.impl.ProdutoControllerImpl;
+import controller.FornecedorController;
+import controller.impl.FornecedorControllerImpl;
 import controller.impl.RegraNegocioException;
 import java.io.File;
 import java.io.IOException;
@@ -11,59 +10,51 @@ import java.util.List;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import model.Produto;
+import model.Fornecedor;
 import net.sf.jasperreports.engine.JRException;
 import view.util.ViewUtil;
 import view.util.ViewUtil.GeradorNomePDF;
 
-public class FrmConsultaProduto extends javax.swing.JDialog {
+public class FrmConsultaForncedor extends javax.swing.JDialog {
 
     private DefaultTableModel dtm;
-    private Produto produto;
-    private Produto produtoSelecionado;
-    private List<Produto> listaProdutosBuscados;
-    private ProdutoController produtoController = new ProdutoControllerImpl();
+    private Fornecedor fornecedor;
+    private Fornecedor fornecedorSelecionado;
+    private List<Fornecedor> listaFornecedoresBuscados;
+    private FornecedorController fornecedorController = new FornecedorControllerImpl();
 
-    public FrmConsultaProduto(java.awt.Frame parent, boolean modal, Produto usuarioSelecionado) {
+    public FrmConsultaForncedor(java.awt.Frame parent, boolean modal, Fornecedor fornecedorSelecionado) {
         super(parent, modal);
-        this.produtoSelecionado = usuarioSelecionado;
-        listaProdutosBuscados = new ArrayList<Produto>();
+        this.fornecedorSelecionado = fornecedorSelecionado;
+        listaFornecedoresBuscados = new ArrayList<Fornecedor>();
         initComponents();
+        setLocationRelativeTo(null);
     }
 
-    public void carregarUsuario() {
-        produto = new Produto();
-        if (!edDescricao.getText().isEmpty()) {
-            produto.setDescricao(edDescricao.getText());
-        }
+    public void carregarFornecedor() {
+        fornecedor = new Fornecedor();
+        if (!edNome.getText().isEmpty()) {
+            fornecedor.setNome(edNome.getText());
+        }        
         try {
-            double valorInicial = StringUtil.getValorR$(edValorInicial.getText());
-            double valorFinal = StringUtil.getValorR$(edValorFinal.getText());
-            if (!edValorInicial.getText().isEmpty()) {
-                produto.setValor(valorInicial);
-            }
-            try {
-                listaProdutosBuscados = produtoController.listar(produto, valorFinal);
-                carregarGrid();
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            listaFornecedoresBuscados = fornecedorController.listar(fornecedor);
+            carregarGrid();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
-
     }
 
     public void carregarGrid() {
         Vector<Vector> dados = new Vector<Vector>();
 
-        for (Produto produto : listaProdutosBuscados) {
+        for (Fornecedor fornecedor : listaFornecedoresBuscados) {
             Vector registroDb = new Vector();
 
-            registroDb.add(produto.getReferencia());
-            registroDb.add(produto.getCodigoBarrra());
-            registroDb.add(produto.getDescricao());
-            registroDb.add(StringUtil.getR$FormmatedFromDouble(produto.getValor()));
+            registroDb.add(fornecedor.getId());
+            registroDb.add(fornecedor.getNome());
+            registroDb.add(fornecedor.getCpfCnpj());
+            registroDb.add(fornecedor.getTelefone());
+            registroDb.add(fornecedor.getEmail());            
 
             dados.add(registroDb);
         }
@@ -79,29 +70,29 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
     public void carregarEdicao() {
         try {
             if (tabelaConsulta.getSelectedRow() != -1) {
-                setProdutoRetorno(listaProdutosBuscados.get(tabelaConsulta.getSelectedRow()));
+                setProdutoRetorno(listaFornecedoresBuscados.get(tabelaConsulta.getSelectedRow()));
                 //telaPrincipal.editarCampos(transacaoSelecionada);
                 this.dispose();
             } else {
-                throw new RegraNegocioException("Favor selecionar um Produto.");
+                throw new RegraNegocioException("Favor selecionar um Fornecedor.");
             }
         } catch (RegraNegocioException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    private void setProdutoRetorno(Produto produto) {
-        produtoSelecionado.setCodigoBarrra(produto.getCodigoBarrra());
-        produtoSelecionado.setDescricao(produto.getDescricao());
-        produtoSelecionado.setReferencia(produto.getReferencia());
-        produtoSelecionado.setValor(produto.getValor());
+    private void setProdutoRetorno(Fornecedor fornecedor) {
+        fornecedorSelecionado.setId(fornecedor.getId());
+        fornecedorSelecionado.setNome(fornecedor.getNome());
+        fornecedorSelecionado.setCpfCnpj(fornecedor.getCpfCnpj());
+        fornecedorSelecionado.setTelefone(fornecedor.getTelefone());
+        fornecedorSelecionado.setEmail(fornecedor.getEmail());
     }
 
     private void limpar() {
-        edDescricao.setText("");
-        edValorFinal.setText("9999999999,99");
-        edValorInicial.setText("0,00");
-        listaProdutosBuscados = new ArrayList<Produto>();
+        edNome.setText("");
+        edCPFCNPJ.setText("");        
+        listaFornecedoresBuscados = new ArrayList<Fornecedor>();
 
         dtm = new DefaultTableModel();
         dtm = (DefaultTableModel) tabelaConsulta.getModel();
@@ -127,15 +118,11 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
         btLimpar = new javax.swing.JButton();
         btPesquisar = new javax.swing.JButton();
         lbImg = new javax.swing.JLabel();
-        lbCodigoIni = new javax.swing.JLabel();
-        edCodigoIni = new javax.swing.JTextField();
         btGerarPDF = new javax.swing.JButton();
         lbNome = new javax.swing.JLabel();
         edNome = new javax.swing.JTextField();
         lbCPFCNPJ = new javax.swing.JLabel();
         edCPFCNPJ = new javax.swing.JTextField();
-        lbCodigoFin = new javax.swing.JLabel();
-        edCodigoFin = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -226,8 +213,6 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
         lbImg.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         lbImg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/motorista.png"))); // NOI18N
 
-        lbCodigoIni.setText("Código Inicial:");
-
         btGerarPDF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/pdf_file.png"))); // NOI18N
         btGerarPDF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -239,44 +224,29 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
 
         lbCPFCNPJ.setText("CPF/CNPJ:");
 
-        lbCodigoFin.setText("Código Final:");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(lbImg)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cadastroAluno)
+                .addContainerGap(574, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lbImg)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cadastroAluno)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(29, 29, 29)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lbCodigoIni)
-                                    .addComponent(lbNome))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(edNome)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(edCodigoIni, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 202, Short.MAX_VALUE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(lbCPFCNPJ)
-                                    .addComponent(lbCodigoFin))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(edCPFCNPJ, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(edCodigoFin, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(52, 52, 52)
+                        .addComponent(lbNome)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(edNome)
+                        .addGap(25, 25, 25)
+                        .addComponent(lbCPFCNPJ)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(edCPFCNPJ, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btSair)
@@ -296,13 +266,7 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(lbImg)))
-                .addGap(17, 17, 17)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbCodigoIni)
-                    .addComponent(edCodigoIni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbCodigoFin)
-                    .addComponent(edCodigoFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(17, 17, 17)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbNome)
                     .addComponent(edNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -320,8 +284,8 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
                         .addComponent(btLimpar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btSair))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(68, Short.MAX_VALUE))
         );
 
         pack();
@@ -344,20 +308,20 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
     }//GEN-LAST:event_btLimparActionPerformed
 
     private void btPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPesquisarActionPerformed
-        carregarUsuario();
+        carregarFornecedor();
     }//GEN-LAST:event_btPesquisarActionPerformed
 
     private void btGerarPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGerarPDFActionPerformed
-        if (!listaProdutosBuscados.isEmpty()) {
+        if (!listaFornecedoresBuscados.isEmpty()) {
             try {
                 String path = null;
                 try {
-                    path = ViewUtil.createFileChooserToSavePDF(this, GeradorNomePDF.PRODUTO);
+                    path = ViewUtil.createFileChooserToSavePDF(this, GeradorNomePDF.FORNECEDOR);
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                 }
                 if (path != null) {
-                    produtoController.gerarRelatorio(listaProdutosBuscados, path);
+                    fornecedorController.gerarRelatorio(listaFornecedoresBuscados, path);
                     int abrir = JOptionPane.showConfirmDialog(null, "PDF Gerado Com Sucesso em '" + path + "'. \nDeseja abrí-lo?", "Sucesso", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
                     if (abrir == JOptionPane.OK_OPTION) {
                         java.awt.Desktop.getDesktop().open(new File(path));
@@ -386,14 +350,10 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
     private javax.swing.JButton btSair;
     private javax.swing.JLabel cadastroAluno;
     private javax.swing.JTextField edCPFCNPJ;
-    private javax.swing.JTextField edCodigoFin;
-    private javax.swing.JTextField edCodigoIni;
     private javax.swing.JTextField edNome;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbCPFCNPJ;
-    private javax.swing.JLabel lbCodigoFin;
-    private javax.swing.JLabel lbCodigoIni;
     private javax.swing.JLabel lbImg;
     private javax.swing.JLabel lbNome;
     private javax.swing.JTable tabelaConsulta;
