@@ -316,7 +316,7 @@ public class FrmConsultaForncedor extends javax.swing.JDialog {
             try {
                 String path = null;
                 try {
-                    path = ViewUtil.createFileChooserToSavePDF(this, GeradorNomePDF.FORNECEDOR);
+                    path = ViewUtil.createFileChooserToSavePDF(this, GeradorNomePDF.FORNECEDORES);
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                 }
