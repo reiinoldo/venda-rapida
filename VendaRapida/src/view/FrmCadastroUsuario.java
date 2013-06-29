@@ -20,6 +20,7 @@ public class FrmCadastroUsuario extends javax.swing.JDialog {
     public FrmCadastroUsuario(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -306,7 +307,7 @@ public class FrmCadastroUsuario extends javax.swing.JDialog {
 
     private void edLoginFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edLoginFocusLost
         if (!edLogin.getText().trim().equals(""))
-        pesquisar();
+            pesquisar();
     }//GEN-LAST:event_edLoginFocusLost
 
     private void btExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExcluirActionPerformed

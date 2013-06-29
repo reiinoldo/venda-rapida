@@ -7,6 +7,13 @@ import controller.dao.impl.ClienteDaoImpl;
 import java.util.List;
 import model.Cliente;
 import model.Venda;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 public class ClienteControllerImpl implements ClienteController {
 
@@ -68,11 +75,7 @@ public class ClienteControllerImpl implements ClienteController {
 
     @Override
     public Cliente buscar(int id) throws Exception {
-        Cliente cliente = clienteDao.buscar(id);
-        if (cliente == null) {
-            throw new RegraNegocioException("Cliente não encontrado");
-        }
-        return cliente;
+        return clienteDao.buscar(id);
     }
 
     @Override
@@ -88,5 +91,12 @@ public class ClienteControllerImpl implements ClienteController {
     @Override
     public int incrementar() throws Exception {
         return clienteDao.incrementar();
+    }
+    
+    @Override
+    public void gerarRelatorio(List listaGerada, String path) throws JRException {
+        JasperReport report = JasperCompileManager.compileReport("src/relatorios/relClientes.jrxml");
+        JasperPrint print = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(listaGerada));
+        JasperExportManager.exportReportToPdfFile(print, path);
     }
 }

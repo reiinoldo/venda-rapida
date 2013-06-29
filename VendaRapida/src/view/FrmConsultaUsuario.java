@@ -24,6 +24,7 @@ public class FrmConsultaUsuario extends javax.swing.JDialog {
         super(parent, modal);
         this.usuarioSelecionado = usuarioSelecionado;
         initComponents();
+        setLocationRelativeTo(null);
     }
     
     public void carregarUsuario() {
