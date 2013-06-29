@@ -300,6 +300,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private void btnConsultaPrecosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultaPrecosActionPerformed
         // TODO add your handling code here:
+        new FrmConsultaPreco(this, true).setVisible(true);
     }//GEN-LAST:event_btnConsultaPrecosActionPerformed
 
     private void btnGerarRelatoriosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerarRelatoriosActionPerformed

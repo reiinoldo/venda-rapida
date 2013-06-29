@@ -191,4 +191,24 @@ public class ProdutoDaoImpl implements ProdutoDao{
         return p;
     }
 
+    @Override
+    public Produto buscarCodigoBarras(String codigoBarras) throws Exception {
+        ConnectionMySql.getConnection();
+        
+        PreparedStatement ps = ConnectionMySql.connection.prepareStatement("select * from " + Produto.TABELA_PRODUTO + " where " + Produto.CAMPO_CODIGOBARRA + " = ?");
+        ps.setString(1, codigoBarras);
+        ResultSet r = ps.executeQuery();
+
+        Produto p = null; 
+        if (r.next()) {
+            p = new Produto();
+            p.setReferencia(r.getString(Produto.CAMPO_REFERENCIA));
+            p.setCodigoBarrra(r.getString(Produto.CAMPO_CODIGOBARRA));
+            p.setDescricao(r.getString(Produto.CAMPO_DESCRICAO));
+            p.setValor(r.getDouble(Produto.CAMPO_VALOR));
+        }
+        ConnectionMySql.closeConnection();
+        return p;
+    }
+
 }
