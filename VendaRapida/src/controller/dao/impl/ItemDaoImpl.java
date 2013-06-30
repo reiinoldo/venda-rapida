@@ -75,7 +75,7 @@ public class ItemDaoImpl implements ItemDao {
         try {
             conexao = ConnectionMySql.getConnection();
 
-            PreparedStatement p = conexao.prepareStatement("select * from " + Item.TABELA_ITEM + "where " + Item.CAMPO_CODIGOVENDA + " = ?");
+            PreparedStatement p = conexao.prepareStatement("select * from " + Item.TABELA_ITEM + " where " + Item.CAMPO_CODIGOVENDA + " = ?");
             p.setInt(1, codigoVenda);
             ResultSet r = p.executeQuery();
 
