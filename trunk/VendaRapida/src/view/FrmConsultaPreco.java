@@ -13,6 +13,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+import model.Item;
 import model.Produto;
 
 /**
@@ -23,7 +24,7 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
 
     private ProdutoController produtoController = new ProdutoControllerImpl();
     private Produto produto;
-    
+
     /**
      * Creates new form FrmConsultaPreco
      */
@@ -31,37 +32,44 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
+
+        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F10"), "checkout");
+        getRootPane().getActionMap().put("checkout", new AbstractAction("checkout") {
+            // The next two lines should be in one line              
+            public void actionPerformed(ActionEvent evt) {
+                btSimulaActionPerformed(evt);
+            }
+        });
         
-        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('+'), "plussCount");  
-        getRootPane().getActionMap().put("plussCount", new AbstractAction("plussCount") {     
+        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F11"), "plussCount");
+        getRootPane().getActionMap().put("plussCount", new AbstractAction("plussCount") {
             // The next two lines should be in one line              
             public void actionPerformed(ActionEvent evt) {
                 btMaisActionPerformed(evt);
-            }  
-        }  
-        );
-        
-        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('-'), "plussCount");  
-        getRootPane().getActionMap().put("plussCount", new AbstractAction("plussCount") {     
+            }
+        });
+
+        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F12"), "minusCount");
+        getRootPane().getActionMap().put("minusCount", new AbstractAction("minusCount") {
             // The next two lines should be in one line              
             public void actionPerformed(ActionEvent evt) {
                 btMenosActionPerformed(evt);
-            }  
-        }  
-        );
+            }
+        });        
+        
     }
-    
+
     private void buscar() {
         try {
             produto = new Produto();
-            produto.setCodigoBarrra(edCodigoBarras.getText());            
+            produto.setCodigoBarrra(edCodigoBarras.getText());
             produto = produtoController.buscarCodigoBarras(produto.getCodigoBarrra());
             if (produto != null) {
                 edCodigoBarras.setText(produto.getCodigoBarrra());
                 lbDescricao.setText(produto.getDescricao());
-                calcular(0);                                
-            }else{
-                lbDescricao.setText("Produto não encontrado!");                
+                calcular(0);
+            } else {
+                lbDescricao.setText("Produto não encontrado!");
                 edCodigoBarras.setText("");
                 edPrecoTotal.setText("");
                 edCodigoBarras.requestFocus(true);
@@ -70,20 +78,21 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    private void calcular(int quantidade){
+
+    private void calcular(int quantidade) {
         int i = Integer.parseInt(edQuantidade.getText()) + quantidade;
-        if(i > 0){
+        if (i > 0) {
             edQuantidade.setText(String.valueOf(i));
             double valor = 0;
-            if(produto.getValor()>0)
+            if (produto.getValor() > 0) {
                 valor = (i * produto.getValor());
-            
+            }
+
             edPrecoTotal.setText(StringUtil.getR$FormmatedFromDouble(valor));
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "A Quantidade não pode ser menor que 1(um)!", "Erro", JOptionPane.ERROR_MESSAGE);
             edQuantidade.setText("1");
-        }        
+        }
     }
 
     /**
@@ -120,7 +129,15 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
 
         lbCodigoBarras.setText("Código de barras");
 
-        btSimula.setText("Simular compra");
+        btSimula.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/shopping_cart.png"))); // NOI18N
+        btSimula.setText("Simulação de Venda");
+        btSimula.setAlignmentY(0.0F);
+        btSimula.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        btSimula.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSimulaActionPerformed(evt);
+            }
+        });
 
         lbDescricao.setBackground(java.awt.SystemColor.activeCaption);
         lbDescricao.setFont(new java.awt.Font("Ubuntu", 0, 16)); // NOI18N
@@ -181,28 +198,26 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
                         .addComponent(lbHeader, javax.swing.GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(27, 27, 27)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(edPrecoTotal)
+                            .addComponent(lbPrecoTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lbDescricao, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
+                            .addComponent(lbCodigoBarras, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(edCodigoBarras))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lbQuantidade, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(edPrecoTotal)
-                                    .addComponent(lbPrecoTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lbDescricao, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
-                                    .addComponent(lbCodigoBarras, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(edCodigoBarras))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lbQuantidade, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(edQuantidade, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(edQuantidade, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(btMais, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(btMenos, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                        .addGap(0, 0, Short.MAX_VALUE))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(btSimula)))))
+                                        .addComponent(btMais, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btMenos, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btSimula, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -225,13 +240,13 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btMenos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btMais, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lbPrecoTotal)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(edPrecoTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(11, 11, 11)
-                .addComponent(btSimula, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btSimula, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20))
         );
 
         pack();
@@ -239,7 +254,7 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
 
     private void btMaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btMaisActionPerformed
         // TODO add your handling code here:        
-        calcular(1);        
+        calcular(1);
     }//GEN-LAST:event_btMaisActionPerformed
 
     private void btMenosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btMenosActionPerformed
@@ -254,19 +269,24 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
 
     private void edQuantidadeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edQuantidadeFocusLost
         // TODO add your handling code here:
-        if(edQuantidade.getText().isEmpty())
+        if (edQuantidade.getText().isEmpty()) {
             edQuantidade.setText("1");
+        }
         calcular(0);
     }//GEN-LAST:event_edQuantidadeFocusLost
 
     private void lbHeaderKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lbHeaderKeyTyped
-        
     }//GEN-LAST:event_lbHeaderKeyTyped
 
     private void btMaisKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btMaisKeyTyped
- 
     }//GEN-LAST:event_btMaisKeyTyped
 
+    private void btSimulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSimulaActionPerformed
+        // TODO add your handling code here:
+        int qtd = Integer.parseInt(edQuantidade.getText());
+        Item item = new Item(produto, qtd);
+        new FrmSimulacaoVenda((Frame) getParent(), true, item).setVisible(true);
+    }//GEN-LAST:event_btSimulaActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btMais;
     private javax.swing.JButton btMenos;

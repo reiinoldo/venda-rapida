@@ -31,36 +31,32 @@
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="edPrecoTotal" max="32767" attributes="0"/>
-                                  <Component id="lbPrecoTotal" alignment="0" min="-2" pref="116" max="-2" attributes="0"/>
-                                  <Component id="lbDescricao" alignment="0" pref="249" max="32767" attributes="0"/>
-                                  <Component id="lbCodigoBarras" alignment="0" min="-2" pref="145" max="-2" attributes="0"/>
-                                  <Component id="edCodigoBarras" max="32767" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lbQuantidade" alignment="0" max="32767" attributes="0"/>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                          <Component id="edQuantidade" alignment="0" max="32767" attributes="0"/>
-                                          <Group type="102" alignment="1" attributes="0">
-                                              <Component id="btMais" min="-2" pref="50" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="btMenos" min="-2" pref="50" max="-2" attributes="0"/>
-                                          </Group>
-                                      </Group>
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="edPrecoTotal" max="32767" attributes="0"/>
+                          <Component id="lbPrecoTotal" alignment="0" min="-2" pref="116" max="-2" attributes="0"/>
+                          <Component id="lbDescricao" alignment="0" pref="249" max="32767" attributes="0"/>
+                          <Component id="lbCodigoBarras" alignment="0" min="-2" pref="145" max="-2" attributes="0"/>
+                          <Component id="edCodigoBarras" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="lbQuantidade" alignment="0" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                  <Component id="edQuantidade" alignment="0" max="32767" attributes="0"/>
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <Component id="btMais" min="-2" pref="50" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="btMenos" min="-2" pref="50" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                          </Group>
-                          <Group type="102" alignment="1" attributes="0">
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                              <Component id="btSimula" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="btSimula" min="-2" pref="196" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -91,13 +87,13 @@
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace pref="7" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
               <Component id="lbPrecoTotal" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="edPrecoTotal" min="-2" pref="37" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-              <Component id="btSimula" pref="31" max="32767" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="btSimula" min="-2" pref="50" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -124,8 +120,16 @@
     </Component>
     <Component class="javax.swing.JButton" name="btSimula">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Simular compra"/>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/img/shopping_cart.png"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Simula&#xe7;&#xe3;o de Venda"/>
+        <Property name="alignmentY" type="float" value="0.0"/>
+        <Property name="horizontalAlignment" type="int" value="11"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btSimulaActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="lbDescricao">
       <Properties>
