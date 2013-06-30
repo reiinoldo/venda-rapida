@@ -3,6 +3,7 @@ package controller;
 import java.util.Date;
 import java.util.List;
 import model.Venda;
+import net.sf.jasperreports.engine.JRException;
 
 public interface VendaController {
 
@@ -15,4 +16,6 @@ public interface VendaController {
     void salvar(Venda venda) throws Exception;
 
     int incrementar() throws Exception;
+    
+    public void gerarRelatorio(List listaGerada, String path) throws JRException;
 }

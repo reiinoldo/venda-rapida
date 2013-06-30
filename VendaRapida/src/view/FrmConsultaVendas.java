@@ -4,6 +4,8 @@ import controller.VendaController;
 import controller.dao.util.StringUtil;
 import controller.impl.VendaControllerImpl;
 import java.awt.Frame;
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,6 +20,8 @@ import javax.swing.table.DefaultTableModel;
 import model.Cliente;
 import model.Usuario;
 import model.Venda;
+import net.sf.jasperreports.engine.JRException;
+import view.util.ViewUtil;
 
 public class FrmConsultaVendas extends javax.swing.JDialog {
 
@@ -82,15 +86,15 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
     public void carregarGrid() {
         Vector<Vector> dados = new Vector<Vector>();
 
-        for (Venda venda : listaVendasBuscadas) {
+        for (Venda v : listaVendasBuscadas) {
             Vector registroDb = new Vector();
 
-            registroDb.add(venda.getCodigoVenda());
-            registroDb.add(venda.getIdCliente());
-            registroDb.add(venda.getDataVenda());
-            registroDb.add(venda.getLoginUsuario());
-            registroDb.add(StringUtil.getR$FormmatedFromDouble(venda.getDesconto()));
-            registroDb.add(StringUtil.getR$FormmatedFromDouble(venda.getValorTotalComDesconto()));
+            registroDb.add(v.getCodigoVenda());
+            registroDb.add(v.getIdCliente());
+            registroDb.add(v.getDataVenda());
+            registroDb.add(v.getLoginUsuario());
+            registroDb.add(StringUtil.getR$FormmatedFromDouble(v.getDesconto()));
+            registroDb.add(StringUtil.getR$FormmatedFromDouble(v.getValorTotalComDesconto()));
 
             dados.add(registroDb);
         }
@@ -460,29 +464,29 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
     }//GEN-LAST:event_edValorInicialFocusLost
 
     private void btGerarPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGerarPDFActionPerformed
-        /*if (!listaVendasBuscadas.isEmpty()) {
-         try {
-         String path = null;
-         try {
-         path = ViewUtil.createFileChooserToSavePDF(this, GeradorNomePDF.VENDAS);
-         } catch (Exception e) {
-         JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-         }
-         if (path != null) {
-         vendaController.gerarRelatorio(listaVendasBuscadas, path);
-         int abrir = JOptionPane.showConfirmDialog(null, "PDF Gerado Com Sucesso em '" + path + "'. \nDeseja abrí-lo?", "Sucesso", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
-         if (abrir == JOptionPane.OK_OPTION) {
-         java.awt.Desktop.getDesktop().open(new File(path));
-         }
-         }
-         } catch (JRException ex) {
-         JOptionPane.showMessageDialog(null, "Erro ao gerar relatório, causa: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-         } catch (IOException ex) {
-         JOptionPane.showMessageDialog(null, "Erro ao abrir o arquivo, causa: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-         }
+        if (!listaVendasBuscadas.isEmpty()) {
+            try {
+                String path = null;
+                try {
+                    path = ViewUtil.createFileChooserToSavePDF(this, ViewUtil.GeradorNomePDF.VENDAS);
+                } catch (Exception e) {
+                 JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+                if (path != null) {
+                    vendaController.gerarRelatorio(listaVendasBuscadas, path);
+                    int abrir = JOptionPane.showConfirmDialog(null, "PDF Gerado Com Sucesso em '" + path + "'. \nDeseja abrí-lo?", "Sucesso", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                    if (abrir == JOptionPane.OK_OPTION) {
+                        java.awt.Desktop.getDesktop().open(new File(path));
+                    }
+                }
+            } catch (JRException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao gerar relatório, causa: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao abrir o arquivo, causa: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
          } else {
-         JOptionPane.showMessageDialog(null, "Necessita-se ao menos de um registro para gerar o PDF.", "Erro", JOptionPane.ERROR_MESSAGE);
-         }*/
+            JOptionPane.showMessageDialog(null, "Necessita-se ao menos de um registro para gerar o PDF.", "Erro", JOptionPane.ERROR_MESSAGE);
+         }
     }//GEN-LAST:event_btGerarPDFActionPerformed
 
     private void tabelaConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaConsultaMouseClicked
@@ -501,7 +505,7 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
         try {
             Usuario usuario = new Usuario();
             new FrmConsultaUsuario((Frame) this.getParent(), true, usuario).setVisible(true);
-            if (usuario != null) {
+            if (!usuario.getLogin().isEmpty()) {
                 edLoginUsuario.setText(usuario.getLogin());
             }
         } catch (Exception ex) {
@@ -519,7 +523,7 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
         try {
             Cliente cliente = new Cliente();
             new FrmConsultaCliente((Frame) this.getParent(), true, cliente).setVisible(true);
-            if (cliente != null) {
+            if (cliente.getId() != 0) {
                 edCodigoCliente.setText(String.valueOf(cliente.getId()));
             }
         } catch (Exception ex) {
