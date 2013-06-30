@@ -217,6 +217,9 @@
           <Font name="Verdana" size="15" style="1"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="edCodigoBarrasFocusLost"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="edDescricao">
       <Properties>
