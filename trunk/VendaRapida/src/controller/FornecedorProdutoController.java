@@ -10,6 +10,8 @@ public interface FornecedorProdutoController {
     FornecedorProduto buscar(int idFornecedor, String referenciaProduto) throws Exception;
 
     void excluir(int idFornecedor, String referenciaProduto) throws Exception;
+    
+    public boolean excluirFornecedoresDoProduto(String referenciaProduto) throws Exception;
 
     List<Fornecedor> listarFornecedores(String referenciaProduto) throws Exception;
 
