@@ -80,7 +80,7 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
             registroDb.add(venda.getDataVenda());
             registroDb.add(venda.getLoginUsuario());
             registroDb.add(StringUtil.getR$FormmatedFromDouble(venda.getDesconto()));
-            registroDb.add(StringUtil.getR$FormmatedFromDouble(venda.getValorTotal()));
+//            registroDb.add(StringUtil.getR$FormmatedFromDouble(venda.getValorTotal()));
 
             dados.add(registroDb);
         }

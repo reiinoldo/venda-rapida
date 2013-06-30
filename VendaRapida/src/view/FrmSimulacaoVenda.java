@@ -47,6 +47,11 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
         initComponents();
         setLocationRelativeTo(null);
         venda = new Venda();
+        try {
+            venda.setCodigoVenda(vendaController.incrementar());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
         produtoSelecionado = new Produto();
         lbDescricaoItem.setText(" ");
         lbNomeCliente.setText(" ");
@@ -59,6 +64,11 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
         initComponents();
         setLocationRelativeTo(null);
         venda = new Venda();
+        try {
+            venda.setCodigoVenda(vendaController.incrementar());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
         produtoSelecionado = new Produto();
         lbDescricaoItem.setText(" ");
         lbNomeCliente.setText(" ");
@@ -496,7 +506,7 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
     }//GEN-LAST:event_btnConsultaProdutosActionPerformed
 
     private void btnAdicionarItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarItemActionPerformed
-        if (!txtCodigoBarras.getText().isEmpty()) {
+        if (!txtCodigoBarras.getText().trim().isEmpty()) {
             venda.addItem(new Item(produtoSelecionado, Integer.parseInt(txtQuantidadeItem.getText())));
             txtQuantidadeItem.setText("");
             txtCodigoBarras.setText("");
@@ -565,7 +575,6 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
 
     private void btnFinalizarVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarVendaActionPerformed
         try {
-            venda.setCodigoVenda(vendaController.incrementar());
             venda.setDataVenda(new Date());
             venda.setCodigoPagSeguro("");
             venda.setLoginUsuario(Sessao.getInstance().getUsuario().getLogin());

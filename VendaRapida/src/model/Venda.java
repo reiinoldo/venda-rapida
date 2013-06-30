@@ -39,6 +39,7 @@ public class Venda {
     }
 
     public void addItem(Item item) {
+        item.setCodigoVenda(codigoVenda);
         this.items.add(item);
     }
 
