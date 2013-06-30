@@ -4,7 +4,10 @@
  */
 package view;
 
+import controller.ProdutoController;
+import controller.impl.ProdutoControllerImpl;
 import model.Item;
+import model.Produto;
 import model.Venda;
 
 /**
@@ -12,8 +15,10 @@ import model.Venda;
  * @author Maicon
  */
 public class FrmSimulacaoVenda extends javax.swing.JDialog {
-
+    
+    private ProdutoController produtoController = new ProdutoControllerImpl();
     private Venda venda;
+    private Produto produtoSelecionado;
 
     /**
      * Creates new form FrmSimulacaoVenda
@@ -22,7 +27,15 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         venda = new Venda();
+        produtoSelecionado = new Produto();
         venda.addItem(item);
+    }
+    
+    public FrmSimulacaoVenda(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
+        initComponents();
+        venda = new Venda();
+        produtoSelecionado = new Produto();
     }
 
     /**
@@ -45,9 +58,7 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
         btnAdicionarItem = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        txtQuantidade = new javax.swing.JTextPane();
-        jLabel2 = new javax.swing.JLabel();
+        lbDescricaoItem = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
         txtQtdeItens = new javax.swing.JTextPane();
         btnAddItem = new javax.swing.JButton();
@@ -61,6 +72,7 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
         txtTotalVenda = new javax.swing.JTextPane();
         jLabel7 = new javax.swing.JLabel();
         cbTipoDesconto = new javax.swing.JComboBox();
+        txtQuantidadeItem = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -100,11 +112,7 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
 
         jLabel5.setText("Qtde. Itens");
 
-        txtQuantidade.setFont(new java.awt.Font("DejaVu Sans", 0, 14)); // NOI18N
-        txtQuantidade.setText("1");
-        jScrollPane3.setViewportView(txtQuantidade);
-
-        jLabel2.setText("Descricao Produto");
+        lbDescricaoItem.setText("Descricao Produto");
 
         txtQtdeItens.setFont(new java.awt.Font("DejaVu Sans", 0, 14)); // NOI18N
         txtQtdeItens.setText("1");
@@ -127,6 +135,11 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
 
         txtCodigoBarras.setFont(new java.awt.Font("DejaVu Sans", 0, 14)); // NOI18N
         txtCodigoBarras.setText("7891234567890");
+        txtCodigoBarras.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtCodigoBarrasFocusLost(evt);
+            }
+        });
         jScrollPane2.setViewportView(txtCodigoBarras);
 
         jLabel1.setText("Código de barras");
@@ -168,6 +181,14 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
             }
         });
 
+        txtQuantidadeItem.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
+        txtQuantidadeItem.setText("1");
+        txtQuantidadeItem.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtQuantidadeItemFocusLost(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -202,7 +223,7 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
                                         .addComponent(btnLimparVenda, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                                         .addComponent(btnRemoverItem, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                                         .addComponent(btnSubItem, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addComponent(jLabel2))
+                            .addComponent(lbDescricaoItem))
                         .addGap(0, 11, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -222,7 +243,7 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(txtQuantidadeItem, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(18, 18, 18)
                                         .addComponent(btnAdicionarItem)))
                                 .addGap(0, 0, Short.MAX_VALUE)))
@@ -241,12 +262,12 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
                             .addComponent(jLabel3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jScrollPane2)
+                            .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtQuantidadeItem)))
                     .addComponent(btnAdicionarItem))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
+                .addComponent(lbDescricaoItem)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -294,6 +315,24 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
     private void cbTipoDescontoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTipoDescontoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cbTipoDescontoActionPerformed
+    
+    private void txtCodigoBarrasFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCodigoBarrasFocusLost
+        Produto produto = null;
+        //        if(produtoController.buscar()){
+        //            
+        //        }
+        
+        if (produto != null) {
+            lbDescricaoItem.setText(produto.getDescricao());
+        }
+    }//GEN-LAST:event_txtCodigoBarrasFocusLost
+
+    private void txtQuantidadeItemFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtQuantidadeItemFocusLost
+//        if(txt){
+//            
+//        }
+    }//GEN-LAST:event_txtQuantidadeItemFocusLost
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddItem;
     private javax.swing.JButton btnAdicionarItem;
@@ -304,7 +343,6 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -312,15 +350,15 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lbDescricaoItem;
     private javax.swing.JTextPane txtCodigoBarras;
     private javax.swing.JTextPane txtDesconto;
     private javax.swing.JTextPane txtQtdeItens;
-    private javax.swing.JTextPane txtQuantidade;
+    private javax.swing.JFormattedTextField txtQuantidadeItem;
     private javax.swing.JTextPane txtTotalVenda;
     // End of variables declaration//GEN-END:variables
 }

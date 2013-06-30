@@ -308,9 +308,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGerarRelatoriosActionPerformed
 
     private void btnEfetuarVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEfetuarVendaActionPerformed
-        // TODO add your handling code here:
+        new FrmSimulacaoVenda(this, true).setVisible(true);
     }//GEN-LAST:event_btnEfetuarVendaActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btCadastroFornecedor;
     private javax.swing.JButton btCadastroFornecedor1;
