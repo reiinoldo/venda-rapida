@@ -20,8 +20,11 @@ public class StringUtil {
 
     public static Double getValorR$(String valor) {
         valor = valor.replace(",", ".");
-
-        return Double.parseDouble(valor);
+        try {
+            return Double.parseDouble(valor);
+        } catch (NumberFormatException ex) {
+            throw ex;
+        }
     }
 
     public static String getR$FormmatedFromDouble(Double valor) {

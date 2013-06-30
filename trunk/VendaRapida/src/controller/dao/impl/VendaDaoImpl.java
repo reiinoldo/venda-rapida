@@ -18,13 +18,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Fornecedor;
 import model.Venda;
 
 /**
  *
  * @author andrebampi
  */
-public class VendaDaoImpl implements VendaDao{
+public class VendaDaoImpl implements VendaDao {
 
     @Override
     public boolean salvar(Venda venda) throws Exception {
@@ -97,7 +98,7 @@ public class VendaDaoImpl implements VendaDao{
     }
 
     @Override
-    public List<Venda> listar(Venda venda, Date dataFinal, Double valorInicial, Double valorFinal) throws Exception {
+    public List<Venda> listar(Venda venda, Date dataFinal) throws Exception {
         if (venda != null) {
             Connection conexao = null;
             try {
@@ -135,11 +136,11 @@ public class VendaDaoImpl implements VendaDao{
                     pr.setString(2, "%" + venda.getCodigoPagSeguro() + "%");
                 } else {
                     pr.setString(2, "%%");
-                }            
+                }
 
                 if (venda.getDataVenda() != null) {
                     pr.setTimestamp(3, new Timestamp(venda.getDataVenda().getTime()));
-                } else {                
+                } else {
                     try {
                         pr.setTimestamp(3, new Timestamp(format.parse("01/01/1910").getTime()));
                     } catch (ParseException ex) {
@@ -161,7 +162,7 @@ public class VendaDaoImpl implements VendaDao{
                 }
 
                 if (venda.getIdCliente() != 0) {
-                    pr.setString(6, "%" + venda.getIdCliente() + "%");
+                    pr.setString(6, venda.getIdCliente() + "");
                 } else {
                     pr.setString(6, "%%");
                 }
@@ -183,10 +184,7 @@ public class VendaDaoImpl implements VendaDao{
                     v.setDesconto(r.getDouble(Venda.CAMPO_DESCONTO));
                     v.setIdCliente(r.getInt(Venda.CAMPO_IDCLIENTE));
                     v.setLoginUsuario(r.getString(Venda.CAMPO_LOGINUSUARIO));
-                    v.setItems(null);
-
-                    if (((valorInicial == 0) || (v.getValor() >= valorInicial)) && ((valorFinal == 0) || (v.getValor() <= valorFinal)))
-                        list.add(v);
+                    list.add(v);
                 }
 
                 return list;
@@ -196,8 +194,9 @@ public class VendaDaoImpl implements VendaDao{
                 ConnectionMySql.closeConnection(conexao);
             }
 
-        } else
+        } else {
             return this.listar();
+        }
     }
 
     @Override
@@ -210,7 +209,7 @@ public class VendaDaoImpl implements VendaDao{
             p.setInt(1, codigoVenda);
             ResultSet r = p.executeQuery();
 
-            Venda v = null; 
+            Venda v = null;
             if (r.next()) {
                 v = new Venda();
                 v.setCodigoVenda(r.getInt(Venda.CAMPO_CODIGOVENDA));
@@ -228,5 +227,18 @@ public class VendaDaoImpl implements VendaDao{
             ConnectionMySql.closeConnection(conexao);
         }
     }
-    
+
+    @Override
+    public int incrementar() throws Exception {
+        Connection conexao = null;
+        try {
+            conexao = ConnectionMySql.getConnection();
+            int r = ConnectionMySql.nextId(Venda.TABELA_VENDA, Venda.CAMPO_CODIGOVENDA, conexao);
+            return r;
+        } catch (SQLException ex) {
+            throw ex;
+        } finally {
+            ConnectionMySql.closeConnection(conexao);
+        }
+    }
 }
