@@ -55,4 +55,9 @@ public class FornecedorProdutoControllerImpl implements FornecedorProdutoControl
     public List<Fornecedor> listarFornecedores(String referenciaProduto) throws Exception {
         return fornecedorProdutoDao.listarFornecedores(referenciaProduto);
     }
+
+    @Override
+    public boolean excluirFornecedoresDoProduto(String referenciaProduto) throws Exception {
+        return fornecedorProdutoDao.excluirFornecedoresDoProduto(referenciaProduto);
+    }
 }

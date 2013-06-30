@@ -4,11 +4,20 @@
  */
 package view;
 
+import controller.FornecedorProdutoController;
 import controller.ProdutoController;
 import controller.dao.util.StringUtil;
+import controller.impl.FornecedorProdutoControllerImpl;
 import controller.impl.ProdutoControllerImpl;
+import controller.impl.RegraNegocioException;
 import java.awt.Frame;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.Fornecedor;
+import model.FornecedorProduto;
 import model.Produto;
 
 /**
@@ -18,12 +27,17 @@ import model.Produto;
 public class FrmCadastroProduto extends javax.swing.JDialog {
     
     private ProdutoController produtoController = new ProdutoControllerImpl();
+    private List<Fornecedor> listaFornecedoresProduto;
+    private DefaultTableModel dtm;
+    FornecedorProdutoController fornecedorProdutoController;
 
     /**
      * Creates new form FrmCadastroProduto
      */
     public FrmCadastroProduto(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+        listaFornecedoresProduto = new ArrayList<Fornecedor>();
+        fornecedorProdutoController = new FornecedorProdutoControllerImpl();
         initComponents();
         setLocationRelativeTo(null);
     }
@@ -50,6 +64,10 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
         edDescricao = new javax.swing.JTextField();
         btExcluir = new javax.swing.JButton();
         edValor = new javax.swing.JFormattedTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tabelaConsulta = new javax.swing.JTable();
+        btAdicionarFornecedor = new javax.swing.JButton();
+        btRemoverFornecedor = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -127,40 +145,79 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
 
         edValor.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0.00"))));
 
+        tabelaConsulta.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Código", "Nome", "CPF/CNPJ", "Telefone", "E-mail"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tabelaConsulta.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane1.setViewportView(tabelaConsulta);
+
+        btAdicionarFornecedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/mais_icon.png"))); // NOI18N
+        btAdicionarFornecedor.setToolTipText("Confirma");
+        btAdicionarFornecedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btAdicionarFornecedorActionPerformed(evt);
+            }
+        });
+
+        btRemoverFornecedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/menos_icon.png"))); // NOI18N
+        btRemoverFornecedor.setToolTipText("Confirma");
+        btRemoverFornecedor.setPreferredSize(new java.awt.Dimension(60, 60));
+        btRemoverFornecedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btRemoverFornecedorActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbNovoUsuario)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(lbNovoUsuario)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lbSenha)
+                                    .addComponent(lbConfirmarSenha)
+                                    .addComponent(lbNome)
+                                    .addComponent(lbLogin))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(edDescricao)
+                                    .addComponent(edValor)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(edReferencia)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(edCodigoBarras)))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btRemoverFornecedor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btAdicionarFornecedor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btOk, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lbSenha)
-                            .addComponent(lbConfirmarSenha)
-                            .addComponent(lbNome)
-                            .addComponent(lbLogin))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(edReferencia, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(edCodigoBarras)
-                            .addComponent(edDescricao)
-                            .addComponent(edValor))
-                        .addGap(12, 12, 12)))
+                        .addComponent(btOk)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -188,12 +245,19 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(edValor)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btOk)
-                    .addComponent(btLimpar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btAdicionarFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btRemoverFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btOk, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btLimpar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btExcluir))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         getRootPane().setDefaultButton(btOk);
@@ -211,6 +275,13 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
         this.edDescricao.setText("");
         this.edValor.setText("");
         this.edReferencia.setEnabled(true);
+        
+        listaFornecedoresProduto = new ArrayList<Fornecedor>();
+
+        dtm = new DefaultTableModel();
+        dtm = (DefaultTableModel) tabelaConsulta.getModel();
+
+        dtm.setRowCount(0);
     }
     
     private void btLimparKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btLimparKeyPressed
@@ -228,7 +299,15 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(null, "Produto Salvo Com Sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 produtoController.editar(produto);
+                fornecedorProdutoController.excluirFornecedoresDoProduto(produto.getReferencia());
                 JOptionPane.showMessageDialog(null, "Produto Editado Com Sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            }
+            FornecedorProduto fornecedorProduto;
+            for (Fornecedor fornecedor : listaFornecedoresProduto) {
+                fornecedorProduto = new FornecedorProduto();
+                fornecedorProduto.setIdFornecdor(fornecedor.getId());
+                fornecedorProduto.setReferenciaProduto(produto.getReferencia());
+                fornecedorProdutoController.salvar(fornecedorProduto);
             }
             limpar();
         } catch (Exception ex) {
@@ -254,6 +333,7 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
             int excluir = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir este produto?", "Excluir", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
             if (excluir == JOptionPane.OK_OPTION) {
                 produtoController.excluir(edReferencia.getText());
+                fornecedorProdutoController.excluirFornecedoresDoProduto(edReferencia.getText());
                 JOptionPane.showMessageDialog(null, "Produto excluído com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                 limpar();
             }
@@ -262,9 +342,64 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btExcluirActionPerformed
     
+    public void carregarGrid() {
+        Vector<Vector> dados = new Vector<Vector>();
+
+        for (Fornecedor fornecedor : listaFornecedoresProduto) {
+            Vector registroDb = new Vector();
+
+            registroDb.add(fornecedor.getId());
+            registroDb.add(fornecedor.getNome());
+            registroDb.add(fornecedor.getCpfCnpj());
+            registroDb.add(fornecedor.getTelefone());
+            registroDb.add(fornecedor.getEmail());            
+
+            dados.add(registroDb);
+        }
+
+        dtm = (DefaultTableModel) tabelaConsulta.getModel();
+        dtm.setRowCount(0);
+
+        for (Vector v : dados) {
+            dtm.addRow(v);
+        }
+    }
+    
     private void btExcluirKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btExcluirKeyPressed
         // TODO add your handling code here:
     }//GEN-LAST:event_btExcluirKeyPressed
+
+    private void btAdicionarFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAdicionarFornecedorActionPerformed
+        Fornecedor fornecedor = new Fornecedor();
+        new FrmConsultaForncedor((Frame) this.getParent(), true, fornecedor).setVisible(true);  
+        if (fornecedor.getId() != 0) {
+            if (!temFornecedorNaLista(fornecedor)) {
+                listaFornecedoresProduto.add(fornecedor);
+                carregarGrid();
+            }
+        }
+    }//GEN-LAST:event_btAdicionarFornecedorActionPerformed
+
+    private boolean temFornecedorNaLista(Fornecedor fornecedor) {
+        for (Fornecedor fornecedorAux : listaFornecedoresProduto) {
+            if (fornecedorAux.getId() == fornecedor.getId())
+                return true;
+        }
+        return false;
+    }
+    
+    private void btRemoverFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRemoverFornecedorActionPerformed
+        try {
+            if (tabelaConsulta.getSelectedRow() != -1) {
+                listaFornecedoresProduto.remove(tabelaConsulta.getSelectedRow());
+                carregarGrid();
+            } else {
+                throw new RegraNegocioException("Nenhum fornecedor selecionado para excluir.");
+            }
+        } catch (RegraNegocioException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btRemoverFornecedorActionPerformed
     
     private void buscar() {
         try {
@@ -280,24 +415,30 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
                 edReferencia.setText(produto.getReferencia());
                 edValor.setText(StringUtil.getR$FormmatedFromDouble(produto.getValor()));
                 edReferencia.setEnabled(false);
+                listaFornecedoresProduto = fornecedorProdutoController.listarFornecedores(produto.getReferencia());
+                carregarGrid();
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btAdicionarFornecedor;
     private javax.swing.JButton btExcluir;
     private javax.swing.JButton btLimpar;
     private javax.swing.JButton btOk;
     private javax.swing.JButton btPesquisar;
+    private javax.swing.JButton btRemoverFornecedor;
     private javax.swing.JTextField edCodigoBarras;
     private javax.swing.JTextField edDescricao;
     private javax.swing.JTextField edReferencia;
     private javax.swing.JFormattedTextField edValor;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbConfirmarSenha;
     private javax.swing.JLabel lbLogin;
     private javax.swing.JLabel lbNome;
     private javax.swing.JLabel lbNovoUsuario;
     private javax.swing.JLabel lbSenha;
+    private javax.swing.JTable tabelaConsulta;
     // End of variables declaration//GEN-END:variables
 }
