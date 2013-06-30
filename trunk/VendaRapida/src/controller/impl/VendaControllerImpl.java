@@ -10,6 +10,13 @@ import java.util.Date;
 import java.util.List;
 import model.Item;
 import model.Venda;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 public class VendaControllerImpl implements VendaController {
 
@@ -114,5 +121,12 @@ public class VendaControllerImpl implements VendaController {
     @Override
     public int incrementar() throws Exception {
         return vendaDao.incrementar();
+    }
+    
+    @Override
+    public void gerarRelatorio(List listaGerada, String path) throws JRException {
+        JasperReport report = JasperCompileManager.compileReport("src/relatorios/relVendas.jrxml");
+        JasperPrint print = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(listaGerada));
+        JasperExportManager.exportReportToPdfFile(print, path);
     }
 }
