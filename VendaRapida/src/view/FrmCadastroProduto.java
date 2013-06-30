@@ -128,6 +128,11 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
         });
 
         edCodigoBarras.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
+        edCodigoBarras.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                edCodigoBarrasFocusLost(evt);
+            }
+        });
 
         edDescricao.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
 
@@ -400,6 +405,12 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btRemoverFornecedorActionPerformed
+
+    private void edCodigoBarrasFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edCodigoBarrasFocusLost
+        edCodigoBarras.setText(edCodigoBarras.getText().trim());
+        while (edCodigoBarras.getText().length() < 13)
+            edCodigoBarras.setText('0' + edCodigoBarras.getText());
+    }//GEN-LAST:event_edCodigoBarrasFocusLost
     
     private void buscar() {
         try {

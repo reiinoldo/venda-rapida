@@ -44,7 +44,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         tabs = new javax.swing.JTabbedPane();
         pnVendas = new javax.swing.JPanel();
         btnConsultaPrecos = new javax.swing.JButton();
-        btnGerarRelatorios = new javax.swing.JButton();
         btnEfetuarVenda = new javax.swing.JButton();
         pnCadastros = new javax.swing.JPanel();
         btCadastroFornecedor = new javax.swing.JButton();
@@ -82,17 +81,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
 
-        btnGerarRelatorios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/pdf_file.png"))); // NOI18N
-        btnGerarRelatorios.setText("Gerar Relatórios");
-        btnGerarRelatorios.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnGerarRelatorios.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        btnGerarRelatorios.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnGerarRelatorios.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGerarRelatoriosActionPerformed(evt);
-            }
-        });
-
         btnEfetuarVenda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/venda.png"))); // NOI18N
         btnEfetuarVenda.setText("Efetuar Vendas");
         btnEfetuarVenda.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -110,12 +98,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
             pnVendasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnVendasLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(pnVendasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnVendasLayout.createSequentialGroup()
-                        .addComponent(btnConsultaPrecos, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnEfetuarVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnGerarRelatorios, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnConsultaPrecos, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnEfetuarVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnVendasLayout.setVerticalGroup(
@@ -125,9 +110,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addGroup(pnVendasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnEfetuarVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnConsultaPrecos, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(btnGerarRelatorios, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(108, Short.MAX_VALUE))
         );
 
         tabs.addTab("Vendas", pnVendas);
@@ -364,10 +347,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         new FrmSimulacaoVenda(this, true).setVisible(true);
     }//GEN-LAST:event_btnEfetuarVendaActionPerformed
 
-    private void btnGerarRelatoriosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerarRelatoriosActionPerformed
-        new FrmConsultaVendas(this, true).setVisible(true);
-    }//GEN-LAST:event_btnGerarRelatoriosActionPerformed
-
     private void btnConsultaPrecosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultaPrecosActionPerformed
         new FrmConsultaPreco(this, true).setVisible(true);
     }//GEN-LAST:event_btnConsultaPrecosActionPerformed
@@ -400,7 +379,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnConsultarVendas;
     private javax.swing.JButton btnConsultasClientes;
     private javax.swing.JButton btnEfetuarVenda;
-    private javax.swing.JButton btnGerarRelatorios;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lbUsuario;
     private javax.swing.JPanel pnAdministracao;
