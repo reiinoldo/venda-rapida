@@ -105,7 +105,7 @@
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{idCliente}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="dd/MM/yyyy HH.mm.ss">
 				<reportElement uuid="791e09db-6a95-4cb9-8ff9-73b68f77700f" x="112" y="0" width="99" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{dataVenda}]]></textFieldExpression>

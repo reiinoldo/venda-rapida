@@ -2,6 +2,7 @@ package view;
 
 import controller.VendaController;
 import controller.dao.util.StringUtil;
+import controller.impl.RegraNegocioException;
 import controller.impl.VendaControllerImpl;
 import java.awt.Frame;
 import java.io.File;
@@ -164,6 +165,7 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
         edLoginUsuario = new javax.swing.JTextField();
         btPesquisarUsuario = new javax.swing.JButton();
         btPesquisarCliente = new javax.swing.JButton();
+        btVerItens = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -204,7 +206,7 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
         );
 
         btSair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/sair.png"))); // NOI18N
@@ -315,6 +317,19 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
             }
         });
 
+        btVerItens.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/shopping_cart.png"))); // NOI18N
+        btVerItens.setToolTipText("Cancelar");
+        btVerItens.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btVerItensActionPerformed(evt);
+            }
+        });
+        btVerItens.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btVerItensKeyPressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -328,14 +343,6 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btSair)
-                            .addComponent(btPesquisar)
-                            .addComponent(btLimpar)
-                            .addComponent(btGerarPDF)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(36, 36, 36)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -372,7 +379,16 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
                             .addComponent(edValorFinal, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
                             .addComponent(edCodVenFinal, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(edDataFinal, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE))
-                        .addGap(223, 223, 223)))
+                        .addGap(223, 223, 223))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btPesquisar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btSair, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btLimpar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btGerarPDF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btVerItens, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -385,7 +401,7 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(lbImgHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbCodVenInicial)
                     .addComponent(edCodVenInicial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -420,12 +436,14 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btPesquisar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btVerItens, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btGerarPDF)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btLimpar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btSair)))
-                .addGap(71, 71, 71))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         pack();
@@ -490,8 +508,16 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
     }//GEN-LAST:event_btGerarPDFActionPerformed
 
     private void tabelaConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaConsultaMouseClicked
+        if (evt.getClickCount() == 2) {
+            carregarFormItens();
+        }
     }//GEN-LAST:event_tabelaConsultaMouseClicked
 
+    public void carregarFormItens() {
+        if (tabelaConsulta.getSelectedRow() > -1)
+            new FrmConsultaItensVenda((Frame)this.getParent(), true, listaVendasBuscadas.get(tabelaConsulta.getSelectedRow())).setVisible(true);
+    }
+    
     private void edDataInicialFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edDataInicialFocusLost
         // TODO add your handling code here:
     }//GEN-LAST:event_edDataInicialFocusLost
@@ -530,6 +556,15 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btPesquisarClienteActionPerformed
+
+    private void btVerItensActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btVerItensActionPerformed
+        carregarFormItens();
+    }//GEN-LAST:event_btVerItensActionPerformed
+
+    private void btVerItensKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btVerItensKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btVerItensKeyPressed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btGerarPDF;
     private javax.swing.JButton btLimpar;
@@ -537,6 +572,7 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
     private javax.swing.JButton btPesquisarCliente;
     private javax.swing.JButton btPesquisarUsuario;
     private javax.swing.JButton btSair;
+    private javax.swing.JButton btVerItens;
     private javax.swing.JTextField edCodVenFinal;
     private javax.swing.JTextField edCodVenInicial;
     private javax.swing.JTextField edCodigoCliente;

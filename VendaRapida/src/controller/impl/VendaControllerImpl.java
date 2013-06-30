@@ -8,7 +8,6 @@ import controller.dao.impl.VendaDaoImpl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import model.Item;
 import model.Venda;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -104,10 +103,11 @@ public class VendaControllerImpl implements VendaController {
         List<Venda> listaVendasAux = new ArrayList<Venda>();
         for (Venda vend : listaVendas) {
             double valorSemDesconto = 0;
-            for (Item item : vend.getItems()) {
+            /*for (Item item : vend.getItems()) {
                 valorSemDesconto += item.getValor();
             }
-            double valorTotal = valorSemDesconto - vend.getDesconto();
+            double valorTotal = valorSemDesconto - vend.getDesconto();*/
+            double valorTotal = vend.getValorTotalComDesconto();
 
             //if (valorTotal >= valorFinal || valorTotal <= valorInicial) {
             if (valorTotal <= valorFinal && valorTotal >= valorInicial) {
