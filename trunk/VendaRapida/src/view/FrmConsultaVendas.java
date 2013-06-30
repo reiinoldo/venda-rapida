@@ -7,6 +7,7 @@ import java.awt.Frame;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
@@ -54,7 +55,16 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
         try {
             double valorInicial = StringUtil.getValorR$(edValorInicial.getText());
             double valorFinal = StringUtil.getValorR$(edValorFinal.getText());
-            Date dataFinal = format.parse(edDataInicial.getText());
+            String dataAux = edDataInicial.getText().replace('/', ' ');
+            if (dataAux.trim().equals(""))
+                venda.setDataVenda(null);
+            else
+                venda.setDataVenda(format.parse(edDataInicial.getText()));
+            
+            Date dataFinal = null;
+            dataAux = edDataFinal.getText().replace('/', ' ');
+            if (!dataAux.trim().equals(""))
+                dataFinal = format.parse(edDataFinal.getText());
             try {
                 listaVendasBuscadas = vendaController.listar(venda, dataFinal, valorInicial, valorFinal);
                 carregarGrid();
@@ -64,7 +74,7 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Valor inválido.\n" + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
 
     }
@@ -80,7 +90,7 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
             registroDb.add(venda.getDataVenda());
             registroDb.add(venda.getLoginUsuario());
             registroDb.add(StringUtil.getR$FormmatedFromDouble(venda.getDesconto()));
-//            registroDb.add(StringUtil.getR$FormmatedFromDouble(venda.getValorTotal()));
+            registroDb.add(StringUtil.getR$FormmatedFromDouble(venda.getValorTotalComDesconto()));
 
             dados.add(registroDb);
         }
@@ -102,7 +112,10 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
         edValorInicial.setText("0,00");
         edValorInicial.setText("0,00");
         edDataInicial.setText("");
-        edDataFinal.setText(String.valueOf(format.format(new Date().getTime())));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.set(Calendar.DATE, calendar.get(Calendar.DATE)+1);
+        edDataFinal.setText(String.valueOf(format.format(calendar.getTime())));
         listaVendasBuscadas = new ArrayList<Venda>();
 
         dtm = new DefaultTableModel();
@@ -280,7 +293,7 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
 
         lbDataFinal.setText("Data Final:");
 
-        lbCodigoUsuario.setText("Login Usuário:");
+        lbCodigoUsuario.setText("Login Vendedor:");
 
         btPesquisarUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/search_16.png"))); // NOI18N
         btPesquisarUsuario.setToolTipText("Pesquisar");

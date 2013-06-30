@@ -5,6 +5,7 @@ import controller.dao.ItemDao;
 import controller.dao.VendaDao;
 import controller.dao.impl.ItemDaoImpl;
 import controller.dao.impl.VendaDaoImpl;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import model.Item;
@@ -43,7 +44,7 @@ public class VendaControllerImpl implements VendaController {
             if (valorInicial > valorFinal) {
                 throw new RegraNegocioException("Valor inicial maior que o valor final");
             }
-            if (dataFinal.before(venda.getDataVenda())) {
+            if ((venda.getDataVenda() != null) && (dataFinal.before(venda.getDataVenda()))) {
                 throw new RegraNegocioException("Data inicial maior que a data final");
             }
         }
@@ -91,7 +92,9 @@ public class VendaControllerImpl implements VendaController {
         List<Venda> listaVendas = vendaDao.listar(venda, dataFinal);
         listaVendas = adicionarItensNaListaDeVendas(listaVendas);
 
-        // filta por valor
+        // filtra por valor
+        
+        List<Venda> listaVendasAux = new ArrayList<Venda>();
         for (Venda vend : listaVendas) {
             double valorSemDesconto = 0;
             for (Item item : vend.getItems()) {
@@ -99,12 +102,13 @@ public class VendaControllerImpl implements VendaController {
             }
             double valorTotal = valorSemDesconto - vend.getDesconto();
 
-            if (valorTotal >= valorFinal || valorTotal <= valorInicial) {
-                listaVendas.remove(vend);
+            //if (valorTotal >= valorFinal || valorTotal <= valorInicial) {
+            if (valorTotal <= valorFinal && valorTotal >= valorInicial) {
+                listaVendasAux.add(vend);
             }
         }
 
-        return listaVendas;
+        return listaVendasAux;
     }
 
     @Override
