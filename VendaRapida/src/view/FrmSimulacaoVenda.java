@@ -31,7 +31,7 @@ import model.Venda.TipoDesconto;
  * @author Maicon
  */
 public class FrmSimulacaoVenda extends javax.swing.JDialog {
-    
+
     private DefaultTableModel dtm;
     private ProdutoController produtoController = new ProdutoControllerImpl();
     private ClienteController clienteController = new ClienteControllerImpl();
@@ -53,7 +53,7 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
         venda.addItem(item);
         atualizaTela();
     }
-    
+
     public FrmSimulacaoVenda(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -64,29 +64,31 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
         lbNomeCliente.setText(" ");
         atualizaTela();
     }
-    
+
     private void atualizaTela() {
         carregarGrid();
         txtQtdeItens.setText(venda.getQuantidadeItens() + "");
         try {
             atualizaValorTotal();
         } catch (RegraNegocioException ex) {
+            txtDesconto.setText("0,00");
+            venda.setDesconto(0);
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     private void atualizaValorTotal() throws RegraNegocioException {
         TipoDesconto tipo = cbTipoDesconto.getSelectedIndex() == 0 ? TipoDesconto.PORCENTAGEM : TipoDesconto.DINHEIRO;
-        venda.setDesconto(StringUtil.getValorR$(txtDesconto.getText()));
-        txtValorTotal.setText(StringUtil.getR$FormmatedFromDouble(venda.getValorTotal(tipo)));
+        venda.setDesconto(tipo, StringUtil.getValorR$(txtDesconto.getText()));
+        txtValorTotal.setText(StringUtil.getR$FormmatedFromDouble(venda.getValorTotalComDesconto()));
     }
-    
+
     public void atualizaItem(Produto produto) {
         produtoSelecionado = produto;
         lbDescricaoItem.setText(produtoSelecionado.getDescricao());
         txtCodigoBarras.setText(produtoSelecionado.getCodigoBarrra());
     }
-    
+
     public void limparTudo() {
         venda = new Venda();
         produtoSelecionado = new Produto();
@@ -99,7 +101,7 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
         atualizaItem(produtoSelecionado);
         atualizaTela();
     }
-    
+
     private void carregarGrid() {
         Vector<Vector> dados = new Vector<Vector>();
         for (Item item : venda.getItems()) {
@@ -111,10 +113,10 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
             registroDb.add(item.getQuantidade());
             dados.add(registroDb);
         }
-        
+
         dtm = (DefaultTableModel) tabela.getModel();
         dtm.setRowCount(0);
-        
+
         for (Vector v : dados) {
             dtm.addRow(v);
         }
@@ -441,11 +443,11 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
             tabela.setRowSelectionInterval(itemSelecionado, itemSelecionado);
         }
     }//GEN-LAST:event_btnSubItemActionPerformed
-    
+
     private void btnLimparVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparVendaActionPerformed
         limparTudo();
     }//GEN-LAST:event_btnLimparVendaActionPerformed
-    
+
     private void btnAddItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddItemActionPerformed
         int itemSelecionado = tabela.getSelectedRow();
         if (itemSelecionado != -1) {
@@ -455,7 +457,7 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
             tabela.setRowSelectionInterval(itemSelecionado, itemSelecionado);
         }
     }//GEN-LAST:event_btnAddItemActionPerformed
-    
+
     private void btnRemoverItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverItemActionPerformed
         int itemSelecionado = tabela.getSelectedRow();
         if (itemSelecionado != -1) {
@@ -463,7 +465,7 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
             atualizaTela();
         }
     }//GEN-LAST:event_btnRemoverItemActionPerformed
-    
+
     private void cbTipoDescontoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTipoDescontoActionPerformed
         int indexAtual = cbTipoDesconto.getSelectedIndex() == 1 ? 0 : 1;
         try {
@@ -473,7 +475,7 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_cbTipoDescontoActionPerformed
-    
+
     private void txtQuantidadeItemFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtQuantidadeItemFocusLost
         try {
             if (Integer.parseInt(txtQuantidadeItem.getText()) < 1) {
@@ -483,7 +485,7 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
             txtQuantidadeItem.setText("1");
         }
     }//GEN-LAST:event_txtQuantidadeItemFocusLost
-    
+
     private void btnConsultaProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultaProdutosActionPerformed
         Produto produto = new Produto();
         produto.setReferencia("");
@@ -492,28 +494,30 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
             atualizaItem(produto);
         }
     }//GEN-LAST:event_btnConsultaProdutosActionPerformed
-    
+
     private void btnAdicionarItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarItemActionPerformed
         if (!txtCodigoBarras.getText().isEmpty()) {
             venda.addItem(new Item(produtoSelecionado, Integer.parseInt(txtQuantidadeItem.getText())));
+            txtQuantidadeItem.setText("");
+            txtCodigoBarras.setText("");
+            lbDescricaoItem.setText("");
             atualizaTela();
         }
-        
+
     }//GEN-LAST:event_btnAdicionarItemActionPerformed
-    
+
     private void txtDescontoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDescontoFocusLost
-        String valorAtual = txtDesconto.getText();
         try {
-            double desconto = StringUtil.getValorR$(valorAtual);
+            double desconto = StringUtil.getValorR$(txtDesconto.getText());
             atualizaValorTotal();
         } catch (NumberFormatException ex) {
             txtDesconto.setText("0,00");
         } catch (RegraNegocioException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            txtDesconto.setText(valorAtual);
+            txtDesconto.setText("0,00");
         }
     }//GEN-LAST:event_txtDescontoFocusLost
-    
+
     private void txtCodigoBarrasFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCodigoBarrasFocusLost
         try {
             Produto prod = produtoController.buscarCodigoBarras(txtCodigoBarras.getText());
@@ -526,7 +530,7 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_txtCodigoBarrasFocusLost
-    
+
     private void btnConsultaClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultaClientesActionPerformed
         Cliente cliente = new Cliente();
         cliente.setId(0);
@@ -541,7 +545,7 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
             lbNomeCliente.setText(" ");
         }
     }//GEN-LAST:event_btnConsultaClientesActionPerformed
-    
+
     private void txtCodigoClienteFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCodigoClienteFocusLost
         try {
             int codigoCliente = Integer.parseInt(txtCodigoCliente.getText());
@@ -558,7 +562,7 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_txtCodigoClienteFocusLost
-    
+
     private void btnFinalizarVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarVendaActionPerformed
         try {
             venda.setCodigoVenda(vendaController.incrementar());
@@ -566,7 +570,7 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
             venda.setCodigoPagSeguro("");
             venda.setLoginUsuario(Sessao.getInstance().getUsuario().getLogin());
             vendaController.salvar(venda);
-            JOptionPane.showMessageDialog(null, "Venda realizada com sucesso.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Venda realizada com sucesso.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             limparTudo();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);

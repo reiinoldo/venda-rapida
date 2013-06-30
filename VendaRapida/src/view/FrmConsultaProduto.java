@@ -17,20 +17,21 @@ import view.util.ViewUtil;
 import view.util.ViewUtil.GeradorNomePDF;
 
 public class FrmConsultaProduto extends javax.swing.JDialog {
-
+    
     private DefaultTableModel dtm;
     private Produto produto;
     private Produto produtoSelecionado;
     private List<Produto> listaProdutosBuscados;
     private ProdutoController produtoController = new ProdutoControllerImpl();
-
+    
     public FrmConsultaProduto(java.awt.Frame parent, boolean modal, Produto produtoSelecionado) {
         super(parent, modal);
         this.produtoSelecionado = produtoSelecionado;
         listaProdutosBuscados = new ArrayList<Produto>();
         initComponents();
+        setLocationRelativeTo(null);
     }
-
+    
     public void carregarProduto() {
         produto = new Produto();
         if (!edDescricao.getText().isEmpty()) {
@@ -51,31 +52,31 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
-
+        
     }
-
+    
     public void carregarGrid() {
         Vector<Vector> dados = new Vector<Vector>();
-
+        
         for (Produto produto : listaProdutosBuscados) {
             Vector registroDb = new Vector();
-
+            
             registroDb.add(produto.getReferencia());
             registroDb.add(produto.getCodigoBarrra());
             registroDb.add(produto.getDescricao());
             registroDb.add(StringUtil.getR$FormmatedFromDouble(produto.getValor()));
-
+            
             dados.add(registroDb);
         }
-
+        
         dtm = (DefaultTableModel) tabelaConsulta.getModel();
         dtm.setRowCount(0);
-
+        
         for (Vector v : dados) {
             dtm.addRow(v);
         }
     }
-
+    
     public void carregarEdicao() {
         try {
             if (tabelaConsulta.getSelectedRow() != -1) {
@@ -89,7 +90,7 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
-
+    
     private void setProdutoRetorno(Produto produto) {
         if (produtoSelecionado != null) {
             produtoSelecionado.setCodigoBarrra(produto.getCodigoBarrra());
@@ -98,16 +99,16 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
             produtoSelecionado.setValor(produto.getValor());
         }
     }
-
+    
     private void limpar() {
         edDescricao.setText("");
         edValorFinal.setText("9999999999,99");
         edValorInicial.setText("0,00");
         listaProdutosBuscados = new ArrayList<Produto>();
-
+        
         dtm = new DefaultTableModel();
         dtm = (DefaultTableModel) tabelaConsulta.getModel();
-
+        
         dtm.setRowCount(0);
     }
 
@@ -328,35 +329,35 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
     private void btConfirmaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btConfirmaActionPerformed
         carregarEdicao();
     }//GEN-LAST:event_btConfirmaActionPerformed
-
+    
     private void btSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSairActionPerformed
         this.dispose();
     }//GEN-LAST:event_btSairActionPerformed
-
+    
     private void btSairKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btSairKeyPressed
         // TODO add your handling code here:
     }//GEN-LAST:event_btSairKeyPressed
-
+    
     private void btLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLimparActionPerformed
         limpar();
     }//GEN-LAST:event_btLimparActionPerformed
-
+    
     private void btPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPesquisarActionPerformed
         carregarProduto();
     }//GEN-LAST:event_btPesquisarActionPerformed
-
+    
     private void edValorFinalFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edValorFinalFocusLost
         if (edValorFinal.getText().equals("")) {
             edValorFinal.setText("9999999999,99");
         }
     }//GEN-LAST:event_edValorFinalFocusLost
-
+    
     private void edValorInicialFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edValorInicialFocusLost
         if (edValorInicial.getText().equals("")) {
             edValorInicial.setText("0,00");
         }
     }//GEN-LAST:event_edValorInicialFocusLost
-
+    
     private void btGerarPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGerarPDFActionPerformed
         if (!listaProdutosBuscados.isEmpty()) {
             try {
@@ -382,7 +383,7 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "Necessita-se ao menos de um registro para gerar o PDF.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btGerarPDFActionPerformed
-
+    
     private void tabelaConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaConsultaMouseClicked
         if (evt.getClickCount() == 2) {
             carregarEdicao();
