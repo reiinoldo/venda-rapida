@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import model.Item;
 import model.Produto;
+import model.Sessao;
 
 /**
  *
@@ -31,6 +32,9 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
     public FrmConsultaPreco(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        btSimula.setEnabled(Sessao.getInstance().getUsuario().isVendeProduto());
+        
         setLocationRelativeTo(null);
 
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F10"), "checkout");
@@ -132,6 +136,7 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
         btSimula.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/shopping_cart.png"))); // NOI18N
         btSimula.setText("Simulação de Venda");
         btSimula.setAlignmentY(0.0F);
+        btSimula.setEnabled(false);
         btSimula.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         btSimula.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
