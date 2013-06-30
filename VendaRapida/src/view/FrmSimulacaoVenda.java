@@ -101,6 +101,11 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
 
     public void limparTudo() {
         venda = new Venda();
+         try {
+            venda.setCodigoVenda(vendaController.incrementar());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
         produtoSelecionado = new Produto();
         lbDescricaoItem.setText(" ");
         lbNomeCliente.setText(" ");
