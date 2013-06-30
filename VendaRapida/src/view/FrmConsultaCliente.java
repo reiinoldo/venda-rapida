@@ -82,12 +82,14 @@ public class FrmConsultaCliente extends javax.swing.JDialog {
     }
 
     private void setProdutoRetorno(Cliente cliente) {
-        clienteSelecionado.setId(cliente.getId());
-        clienteSelecionado.setNome(cliente.getNome());
-        clienteSelecionado.setCpfCnpj(cliente.getCpfCnpj());
-        clienteSelecionado.setEndereco(cliente.getEndereco());
-        clienteSelecionado.setTelefone(cliente.getTelefone());
-        clienteSelecionado.setEmail(cliente.getEmail());
+        if (clienteSelecionado != null) {
+            clienteSelecionado.setId(cliente.getId());
+            clienteSelecionado.setNome(cliente.getNome());
+            clienteSelecionado.setCpfCnpj(cliente.getCpfCnpj());
+            clienteSelecionado.setEndereco(cliente.getEndereco());
+            clienteSelecionado.setTelefone(cliente.getTelefone());
+            clienteSelecionado.setEmail(cliente.getEmail());
+        }
     }
 
     private void limpar() {

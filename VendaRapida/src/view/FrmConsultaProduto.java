@@ -91,10 +91,12 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
     }
 
     private void setProdutoRetorno(Produto produto) {
-        produtoSelecionado.setCodigoBarrra(produto.getCodigoBarrra());
-        produtoSelecionado.setDescricao(produto.getDescricao());
-        produtoSelecionado.setReferencia(produto.getReferencia());
-        produtoSelecionado.setValor(produto.getValor());
+        if (produtoSelecionado != null) {
+            produtoSelecionado.setCodigoBarrra(produto.getCodigoBarrra());
+            produtoSelecionado.setDescricao(produto.getDescricao());
+            produtoSelecionado.setReferencia(produto.getReferencia());
+            produtoSelecionado.setValor(produto.getValor());
+        }
     }
 
     private void limpar() {
