@@ -82,11 +82,13 @@ public class FrmConsultaForncedor extends javax.swing.JDialog {
     }
 
     private void setProdutoRetorno(Fornecedor fornecedor) {
-        fornecedorSelecionado.setId(fornecedor.getId());
-        fornecedorSelecionado.setNome(fornecedor.getNome());
-        fornecedorSelecionado.setCpfCnpj(fornecedor.getCpfCnpj());
-        fornecedorSelecionado.setTelefone(fornecedor.getTelefone());
-        fornecedorSelecionado.setEmail(fornecedor.getEmail());
+        if (fornecedorSelecionado != null) {
+            fornecedorSelecionado.setId(fornecedor.getId());
+            fornecedorSelecionado.setNome(fornecedor.getNome());
+            fornecedorSelecionado.setCpfCnpj(fornecedor.getCpfCnpj());
+            fornecedorSelecionado.setTelefone(fornecedor.getTelefone());
+            fornecedorSelecionado.setEmail(fornecedor.getEmail());
+        }
     }
 
     private void limpar() {

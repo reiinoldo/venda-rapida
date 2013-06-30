@@ -37,7 +37,7 @@ public class FrmTelaLogin extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
 
-        Image image = Toolkit.getDefaultToolkit().getImage("src/img/dinheiro.png");
+        Image image = Toolkit.getDefaultToolkit().getImage("src/img/vendaRapida02.png");
         setIconImage(image);
         
         usuarioController = new UsuarioControllerImpl();
