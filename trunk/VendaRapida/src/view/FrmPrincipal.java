@@ -385,7 +385,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEfetuarVendaActionPerformed
 
     private void btnGerarRelatoriosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerarRelatoriosActionPerformed
-        // TODO add your handling code here:
+        new FrmConsultaVendas(this, true).setVisible(true);
     }//GEN-LAST:event_btnGerarRelatoriosActionPerformed
 
     private void btnConsultaPrecosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultaPrecosActionPerformed
