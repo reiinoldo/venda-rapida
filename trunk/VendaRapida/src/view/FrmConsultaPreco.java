@@ -31,20 +31,18 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
      */
     public FrmConsultaPreco(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        initComponents();
-        
-        btSimula.setEnabled(Sessao.getInstance().getUsuario().isVendeProduto());
-        
+        initComponents();       
         setLocationRelativeTo(null);
 
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F10"), "checkout");
         getRootPane().getActionMap().put("checkout", new AbstractAction("checkout") {
             // The next two lines should be in one line              
             public void actionPerformed(ActionEvent evt) {
-                btSimulaActionPerformed(evt);
+                if(btSimula.isEnabled())
+                    btSimulaActionPerformed(evt);
             }
         });
-        
+
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F11"), "plussCount");
         getRootPane().getActionMap().put("plussCount", new AbstractAction("plussCount") {
             // The next two lines should be in one line              
@@ -59,8 +57,8 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
             public void actionPerformed(ActionEvent evt) {
                 btMenosActionPerformed(evt);
             }
-        });        
-        
+        });
+
     }
 
     private void buscar() {
@@ -271,6 +269,10 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
     private void edCodigoBarrasFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edCodigoBarrasFocusLost
         // TODO add your handling code here:
         buscar();
+        if(produto != null)
+            btSimula.setEnabled(Sessao.getInstance().getUsuario().isVendeProduto());
+        else 
+            btSimula.setEnabled(false);
     }//GEN-LAST:event_edCodigoBarrasFocusLost
 
     private void edQuantidadeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edQuantidadeFocusLost
@@ -288,7 +290,6 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
     }//GEN-LAST:event_btMaisKeyTyped
 
     private void btSimulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSimulaActionPerformed
-        // TODO add your handling code here:
         int qtd = Integer.parseInt(edQuantidade.getText());
         Item item = new Item(produto, qtd);
         new FrmSimulacaoVenda((Frame) getParent(), true, item).setVisible(true);
