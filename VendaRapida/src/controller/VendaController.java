@@ -13,5 +13,6 @@ public interface VendaController {
     List<Venda> listar(Venda venda, Date dataFinal, Double valorInicial, Double valorFinal) throws Exception;
 
     void salvar(Venda venda) throws Exception;
-    
+
+    int incrementar() throws Exception;
 }

@@ -26,12 +26,12 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
     private List<Venda> listaVendasBuscadas;
     private VendaController vendaController = new VendaControllerImpl();
     private SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-    
+
     public FrmConsultaVendas(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);        
+        super(parent, modal);
         listaVendasBuscadas = new ArrayList<Venda>();
         initComponents();
-        setLocationRelativeTo(null);                
+        setLocationRelativeTo(null);
         limpar();
     }
 
@@ -42,7 +42,7 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
         }
         if (!edLoginUsuario.getText().isEmpty()) {
             venda.setLoginUsuario(edLoginUsuario.getText());
-        }        
+        }
         if (!edDataInicial.getText().equals("  /  /    ")) {
             try {
                 venda.setDataVenda(format.parse(edDataInicial.getText()));
@@ -80,7 +80,7 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
             registroDb.add(venda.getDataVenda());
             registroDb.add(venda.getLoginUsuario());
             registroDb.add(StringUtil.getR$FormmatedFromDouble(venda.getDesconto()));
-            registroDb.add(StringUtil.getR$FormmatedFromDouble(venda.getValor()));
+            registroDb.add(StringUtil.getR$FormmatedFromDouble(venda.getValorTotal()));
 
             dados.add(registroDb);
         }
@@ -447,33 +447,32 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
     }//GEN-LAST:event_edValorInicialFocusLost
 
     private void btGerarPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGerarPDFActionPerformed
-       /*if (!listaVendasBuscadas.isEmpty()) {
-            try {
-                String path = null;
-                try {
-                    path = ViewUtil.createFileChooserToSavePDF(this, GeradorNomePDF.VENDAS);
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-                }
-                if (path != null) {
-                    vendaController.gerarRelatorio(listaVendasBuscadas, path);
-                    int abrir = JOptionPane.showConfirmDialog(null, "PDF Gerado Com Sucesso em '" + path + "'. \nDeseja abrí-lo?", "Sucesso", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
-                    if (abrir == JOptionPane.OK_OPTION) {
-                        java.awt.Desktop.getDesktop().open(new File(path));
-                    }
-                }
-            } catch (JRException ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao gerar relatório, causa: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao abrir o arquivo, causa: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Necessita-se ao menos de um registro para gerar o PDF.", "Erro", JOptionPane.ERROR_MESSAGE);
-        }*/
+        /*if (!listaVendasBuscadas.isEmpty()) {
+         try {
+         String path = null;
+         try {
+         path = ViewUtil.createFileChooserToSavePDF(this, GeradorNomePDF.VENDAS);
+         } catch (Exception e) {
+         JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+         }
+         if (path != null) {
+         vendaController.gerarRelatorio(listaVendasBuscadas, path);
+         int abrir = JOptionPane.showConfirmDialog(null, "PDF Gerado Com Sucesso em '" + path + "'. \nDeseja abrí-lo?", "Sucesso", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+         if (abrir == JOptionPane.OK_OPTION) {
+         java.awt.Desktop.getDesktop().open(new File(path));
+         }
+         }
+         } catch (JRException ex) {
+         JOptionPane.showMessageDialog(null, "Erro ao gerar relatório, causa: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+         } catch (IOException ex) {
+         JOptionPane.showMessageDialog(null, "Erro ao abrir o arquivo, causa: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+         }
+         } else {
+         JOptionPane.showMessageDialog(null, "Necessita-se ao menos de um registro para gerar o PDF.", "Erro", JOptionPane.ERROR_MESSAGE);
+         }*/
     }//GEN-LAST:event_btGerarPDFActionPerformed
 
     private void tabelaConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaConsultaMouseClicked
-        
     }//GEN-LAST:event_tabelaConsultaMouseClicked
 
     private void edDataInicialFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edDataInicialFocusLost
@@ -485,16 +484,17 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
     }//GEN-LAST:event_edDataFinalFocusLost
 
     private void btPesquisarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPesquisarUsuarioActionPerformed
-        
+
         try {
-            Usuario usuario = new Usuario();            
-            new FrmConsultaUsuario((Frame) this.getParent(), true, usuario).setVisible(true);                                                
-            if(usuario != null)
+            Usuario usuario = new Usuario();
+            new FrmConsultaUsuario((Frame) this.getParent(), true, usuario).setVisible(true);
+            if (usuario != null) {
                 edLoginUsuario.setText(usuario.getLogin());
+            }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-        }                
-        
+        }
+
         //if(edCodigo.getText().isEmpty()){
         //    JOptionPane.showMessageDialog(null, "Aguarde! Estamos mudando o Mundo!Nhác Nhác...", "Alerta", JOptionPane.WARNING_MESSAGE);
         //}else{
@@ -504,10 +504,11 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
 
     private void btPesquisarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPesquisarClienteActionPerformed
         try {
-            Cliente cliente = new Cliente();            
-            new FrmConsultaCliente((Frame) this.getParent(), true, cliente).setVisible(true);                                                
-            if(cliente != null)
+            Cliente cliente = new Cliente();
+            new FrmConsultaCliente((Frame) this.getParent(), true, cliente).setVisible(true);
+            if (cliente != null) {
                 edCodigoCliente.setText(String.valueOf(cliente.getId()));
+            }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
@@ -516,8 +517,6 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
     private javax.swing.JButton btGerarPDF;
     private javax.swing.JButton btLimpar;
     private javax.swing.JButton btPesquisar;
-    private javax.swing.JButton btPesquisar1;
-    private javax.swing.JButton btPesquisar2;
     private javax.swing.JButton btPesquisarCliente;
     private javax.swing.JButton btPesquisarUsuario;
     private javax.swing.JButton btSair;
