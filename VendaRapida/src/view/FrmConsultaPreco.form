@@ -125,6 +125,7 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Simula&#xe7;&#xe3;o de Venda"/>
         <Property name="alignmentY" type="float" value="0.0"/>
+        <Property name="enabled" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="11"/>
       </Properties>
       <Events>

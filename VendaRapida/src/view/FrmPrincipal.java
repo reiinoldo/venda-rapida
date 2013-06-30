@@ -389,7 +389,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGerarRelatoriosActionPerformed
 
     private void btnConsultaPrecosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultaPrecosActionPerformed
-        // TODO add your handling code here:
         new FrmConsultaPreco(this, true).setVisible(true);
     }//GEN-LAST:event_btnConsultaPrecosActionPerformed
 
@@ -406,7 +405,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnConsultaProdutosActionPerformed
 
     private void btnConsultarVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarVendasActionPerformed
-        // TODO add your handling code here:
+        new FrmConsultaVendas(this, true).setVisible(true);        
     }//GEN-LAST:event_btnConsultarVendasActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
