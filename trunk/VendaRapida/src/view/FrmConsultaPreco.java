@@ -71,7 +71,7 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
             } else {
                 lbDescricao.setText("Produto não encontrado!");
                 edCodigoBarras.setText("");
-                edPrecoTotal.setText("");
+                edPrecoTotal.setText(StringUtil.getR$FormmatedFromDouble(0.0));
                 edCodigoBarras.requestFocus(true);
             }
         } catch (Exception ex) {
@@ -84,7 +84,7 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
         if (i > 0) {
             edQuantidade.setText(String.valueOf(i));
             double valor = 0;
-            if (produto.getValor() > 0) {
+            if (produto != null) {
                 valor = (i * produto.getValor());
             }
 
@@ -178,6 +178,7 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
 
         edPrecoTotal.setEditable(false);
         edPrecoTotal.setFont(new java.awt.Font("Ubuntu", 1, 16)); // NOI18N
+        edPrecoTotal.setText("0,00");
 
         edQuantidade.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
         edQuantidade.setText("1");
