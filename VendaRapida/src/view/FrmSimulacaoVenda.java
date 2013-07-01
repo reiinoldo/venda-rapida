@@ -13,10 +13,12 @@ import controller.impl.ProdutoControllerImpl;
 import controller.impl.RegraNegocioException;
 import controller.impl.VendaControllerImpl;
 import java.awt.Frame;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Cliente;
@@ -25,6 +27,8 @@ import model.Produto;
 import model.Sessao;
 import model.Venda;
 import model.Venda.TipoDesconto;
+import net.sf.jasperreports.engine.JRException;
+import view.util.ViewUtil;
 
 /**
  *
@@ -101,7 +105,7 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
 
     public void limparTudo() {
         venda = new Venda();
-         try {
+        try {
             venda.setCodigoVenda(vendaController.incrementar());
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -134,6 +138,34 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
 
         for (Vector v : dados) {
             dtm.addRow(v);
+        }
+    }
+
+    public void perguntarGerarPDFVenda() {
+        int gerarPDF = JOptionPane.showConfirmDialog(null, "Venda realizada com sucesso.\nDeseja gerar um PDF da Venda?", "Sucesso", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+        if (gerarPDF == JOptionPane.OK_OPTION) {
+            try {
+                String path = null;
+                try {
+                    path = ViewUtil.createFileChooserToSavePDF(this, ViewUtil.GeradorNomePDF.VENDA);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+                if (path != null) {
+                    List listaVendas = new ArrayList();
+                    listaVendas.add(venda);
+                    vendaController.gerarRelatorio(listaVendas, path, true);
+                    int abrir = JOptionPane.showConfirmDialog(null, "PDF Gerado Com Sucesso em '" + path + "'. \nDeseja abrí-lo?", "Sucesso", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                    if (abrir == JOptionPane.OK_OPTION) {
+                        java.awt.Desktop.getDesktop().open(new File(path));
+                    }
+                }
+            } catch (JRException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao gerar relatório, causa: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao abrir o arquivo, causa: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
@@ -584,7 +616,7 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
             venda.setCodigoPagSeguro("");
             venda.setLoginUsuario(Sessao.getInstance().getUsuario().getLogin());
             vendaController.salvar(venda);
-            JOptionPane.showMessageDialog(null, "Venda realizada com sucesso.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            perguntarGerarPDFVenda();
             limparTudo();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);

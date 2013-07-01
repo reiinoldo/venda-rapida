@@ -70,7 +70,7 @@ public class Venda {
         }
         return valorTotalSemDesconto - desconto;
     }
-    
+
     public double getValor() {
         return getValorTotalComDesconto();
     }

@@ -17,5 +17,5 @@ public interface VendaController {
 
     int incrementar() throws Exception;
     
-    public void gerarRelatorio(List listaGerada, String path) throws JRException;
+    public void gerarRelatorio(List listaGerada, String path, boolean comItens) throws JRException;
 }
