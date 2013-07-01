@@ -76,6 +76,7 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
                 edPrecoTotal.setText(StringUtil.getR$FormmatedFromDouble(0.0));
                 edCodigoBarras.requestFocus(true);
             }
+            
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
@@ -134,7 +135,6 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
         btSimula.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/shopping_cart.png"))); // NOI18N
         btSimula.setText("Simulação de Venda");
         btSimula.setAlignmentY(0.0F);
-        btSimula.setEnabled(false);
         btSimula.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         btSimula.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -176,6 +176,11 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
         edCodigoBarras.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 edCodigoBarrasFocusLost(evt);
+            }
+        });
+        edCodigoBarras.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                edCodigoBarrasKeyPressed(evt);
             }
         });
 
@@ -269,10 +274,6 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
     private void edCodigoBarrasFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edCodigoBarrasFocusLost
         // TODO add your handling code here:
         buscar();
-        if(produto != null)
-            btSimula.setEnabled(Sessao.getInstance().getUsuario().isVendeProduto());
-        else 
-            btSimula.setEnabled(false);
     }//GEN-LAST:event_edCodigoBarrasFocusLost
 
     private void edQuantidadeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edQuantidadeFocusLost
@@ -294,6 +295,13 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
         Item item = new Item(produto, qtd);
         new FrmSimulacaoVenda((Frame) getParent(), true, item).setVisible(true);
     }//GEN-LAST:event_btSimulaActionPerformed
+
+    private void edCodigoBarrasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_edCodigoBarrasKeyPressed
+        if (edCodigoBarras.getText().length() == 13) {
+            buscar();
+        }
+    }//GEN-LAST:event_edCodigoBarrasKeyPressed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btMais;
     private javax.swing.JButton btMenos;
