@@ -1,13 +1,24 @@
 package controller.impl;
 
+import VO.ItemVO;
+import VO.VendaVO;
 import controller.VendaController;
+import controller.dao.ClienteDao;
 import controller.dao.ItemDao;
+import controller.dao.ProdutoDao;
 import controller.dao.VendaDao;
+import controller.dao.impl.ClienteDaoImpl;
 import controller.dao.impl.ItemDaoImpl;
+import controller.dao.impl.ProdutoDaoImpl;
 import controller.dao.impl.VendaDaoImpl;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import model.Cliente;
+import model.Item;
+import model.Produto;
 import model.Venda;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -99,7 +110,7 @@ public class VendaControllerImpl implements VendaController {
         listaVendas = adicionarItensNaListaDeVendas(listaVendas);
 
         // filtra por valor
-        
+
         List<Venda> listaVendasAux = new ArrayList<Venda>();
         for (Venda vend : listaVendas) {
             double valorSemDesconto = 0;
@@ -122,11 +133,42 @@ public class VendaControllerImpl implements VendaController {
     public int incrementar() throws Exception {
         return vendaDao.incrementar();
     }
-    
+
     @Override
-    public void gerarRelatorio(List listaGerada, String path) throws JRException {
-        JasperReport report = JasperCompileManager.compileReport("src/relatorios/relVendas.jrxml");
-        JasperPrint print = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(listaGerada));
-        JasperExportManager.exportReportToPdfFile(print, path);
+    public void gerarRelatorio(List listaGerada, String path, boolean comItens) throws JRException {
+        if (comItens) {
+            List listaVenda = new ArrayList();
+            for (Venda venda : (List<Venda>) listaGerada) {
+                List<ItemVO> itensVO = new ArrayList<ItemVO>();
+                for (Item item : venda.getItems()) {
+                    ProdutoDao produtoDao = new ProdutoDaoImpl();
+                    Produto produto = null;
+                    try {
+                        produto = produtoDao.buscar(item.getReferenciaProduto());
+                    } catch (Exception ex) {
+                        throw new JRException(ex);
+                    }
+                    ItemVO itemVO = new ItemVO(item.getReferenciaProduto(), item.getQuantidade(), item.getValor(), produto.getReferencia());
+                    itensVO.add(itemVO);
+                }
+                ClienteDao clienteDao = new ClienteDaoImpl();
+                Cliente cli = null;
+                try {
+                    cli = clienteDao.buscar(venda.getIdCliente());
+                } catch (Exception ex) {
+                    throw new JRException(ex);
+                }
+                
+                VendaVO vendaVO = new VendaVO(venda.getCodigoVenda(), venda.getIdCliente(), cli.getNome(), venda.getLoginUsuario(), venda.getDataVenda(), venda.getDesconto(), venda.getValor(), itensVO);
+                listaVenda.add(vendaVO);
+            }
+            JasperReport report = JasperCompileManager.compileReport("src/relatorios/relVendasComItens.jrxml");
+            JasperPrint print = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(listaVenda));
+            JasperExportManager.exportReportToPdfFile(print, path);
+        } else {
+            JasperReport report = JasperCompileManager.compileReport("src/relatorios/relVendas.jrxml");
+            JasperPrint print = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(listaGerada));
+            JasperExportManager.exportReportToPdfFile(print, path);
+        }
     }
 }

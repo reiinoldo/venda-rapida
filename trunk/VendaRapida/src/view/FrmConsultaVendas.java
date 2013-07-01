@@ -61,15 +61,17 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
             double valorInicial = StringUtil.getValorR$(edValorInicial.getText());
             double valorFinal = StringUtil.getValorR$(edValorFinal.getText());
             String dataAux = edDataInicial.getText().replace('/', ' ');
-            if (dataAux.trim().equals(""))
+            if (dataAux.trim().equals("")) {
                 venda.setDataVenda(null);
-            else
+            } else {
                 venda.setDataVenda(format.parse(edDataInicial.getText()));
-            
+            }
+
             Date dataFinal = null;
             dataAux = edDataFinal.getText().replace('/', ' ');
-            if (!dataAux.trim().equals(""))
+            if (!dataAux.trim().equals("")) {
                 dataFinal = format.parse(edDataFinal.getText());
+            }
             try {
                 listaVendasBuscadas = vendaController.listar(venda, dataFinal, valorInicial, valorFinal);
                 carregarGrid();
@@ -119,7 +121,7 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
         edDataInicial.setText("");
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
-        calendar.set(Calendar.DATE, calendar.get(Calendar.DATE)+1);
+        calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) + 1);
         edDataFinal.setText(String.valueOf(format.format(calendar.getTime())));
         listaVendasBuscadas = new ArrayList<Venda>();
 
@@ -202,11 +204,11 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 637, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
 
         btSair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/sair.png"))); // NOI18N
@@ -401,7 +403,7 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(lbImgHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbCodVenInicial)
                     .addComponent(edCodVenInicial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -431,8 +433,7 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
                     .addComponent(edDataInicial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(edDataFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btPesquisar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -442,8 +443,9 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btLimpar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btSair)))
-                .addContainerGap(28, Short.MAX_VALUE))
+                        .addComponent(btSair))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -488,10 +490,10 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
                 try {
                     path = ViewUtil.createFileChooserToSavePDF(this, ViewUtil.GeradorNomePDF.VENDAS);
                 } catch (Exception e) {
-                 JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                 }
                 if (path != null) {
-                    vendaController.gerarRelatorio(listaVendasBuscadas, path);
+                    vendaController.gerarRelatorio(listaVendasBuscadas, path, true);
                     int abrir = JOptionPane.showConfirmDialog(null, "PDF Gerado Com Sucesso em '" + path + "'. \nDeseja abrí-lo?", "Sucesso", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
                     if (abrir == JOptionPane.OK_OPTION) {
                         java.awt.Desktop.getDesktop().open(new File(path));
@@ -502,9 +504,9 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao abrir o arquivo, causa: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
-         } else {
+        } else {
             JOptionPane.showMessageDialog(null, "Necessita-se ao menos de um registro para gerar o PDF.", "Erro", JOptionPane.ERROR_MESSAGE);
-         }
+        }
     }//GEN-LAST:event_btGerarPDFActionPerformed
 
     private void tabelaConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaConsultaMouseClicked
@@ -514,10 +516,11 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
     }//GEN-LAST:event_tabelaConsultaMouseClicked
 
     public void carregarFormItens() {
-        if (tabelaConsulta.getSelectedRow() > -1)
-            new FrmConsultaItensVenda((Frame)this.getParent(), true, listaVendasBuscadas.get(tabelaConsulta.getSelectedRow())).setVisible(true);
+        if (tabelaConsulta.getSelectedRow() > -1) {
+            new FrmConsultaItensVenda((Frame) this.getParent(), true, listaVendasBuscadas.get(tabelaConsulta.getSelectedRow())).setVisible(true);
+        }
     }
-    
+
     private void edDataInicialFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edDataInicialFocusLost
         // TODO add your handling code here:
     }//GEN-LAST:event_edDataInicialFocusLost
@@ -564,7 +567,6 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
     private void btVerItensKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btVerItensKeyPressed
         // TODO add your handling code here:
     }//GEN-LAST:event_btVerItensKeyPressed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btGerarPDF;
     private javax.swing.JButton btLimpar;

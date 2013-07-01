@@ -23,7 +23,7 @@ public class ViewUtil {
 
     public enum GeradorNomePDF {
 
-        PRODUTOS("Produtos"), VENDAS("Vendas"), CLIENTES("Clientes"), FORNECEDORES("Fornecedores");
+        PRODUTOS("Produtos"), VENDAS("Vendas"), CLIENTES("Clientes"), FORNECEDORES("Fornecedores"), VENDA("Venda");
         private String nomeRel;
         private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss");
 

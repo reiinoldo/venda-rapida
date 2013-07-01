@@ -4,12 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ConnectionMySql {
 
-    private static String serverName = "192.168.25.2";//"localhost";    //caminho do servidor do BD
+    private static String serverName = "localhost";//"localhost";    //caminho do servidor do BD
     private static String mydatabase = "vendarapida";
     private static String url = "jdbc:mysql://" + serverName + "/" + mydatabase;
     private static String username = "root";        //nome de um usuário de seu BD      
