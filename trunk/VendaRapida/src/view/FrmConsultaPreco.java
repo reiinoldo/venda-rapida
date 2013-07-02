@@ -9,13 +9,14 @@ import controller.dao.util.StringUtil;
 import controller.impl.ProdutoControllerImpl;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import model.Item;
 import model.Produto;
-import model.Sessao;
+import view.util.ThreadLimpaComponentesFrmConsultaPreco;
 
 /**
  *
@@ -25,6 +26,7 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
 
     private ProdutoController produtoController = new ProdutoControllerImpl();
     private Produto produto;
+    ThreadLimpaComponentesFrmConsultaPreco threadLimpaComponentesFrmConsultaPreco;
 
     /**
      * Creates new form FrmConsultaPreco
@@ -58,6 +60,7 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
                 btMenosActionPerformed(evt);
             }
         });
+        threadLimpaComponentesFrmConsultaPreco = new ThreadLimpaComponentesFrmConsultaPreco(this);
 
     }
 
@@ -76,10 +79,16 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
                 edPrecoTotal.setText(StringUtil.getR$FormmatedFromDouble(0.0));
                 edCodigoBarras.requestFocus(true);
             }
-            
+            contarTempoLimpar();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    private void contarTempoLimpar() {
+        threadLimpaComponentesFrmConsultaPreco.interrupt();
+        threadLimpaComponentesFrmConsultaPreco = new ThreadLimpaComponentesFrmConsultaPreco(this);
+        threadLimpaComponentesFrmConsultaPreco.start();
     }
 
     private void calcular(int quantidade) {
@@ -204,13 +213,13 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(lbHeader, javax.swing.GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE))
+                        .addComponent(lbHeader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(edPrecoTotal)
                             .addComponent(lbPrecoTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lbDescricao, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
+                            .addComponent(lbDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lbCodigoBarras, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(edCodigoBarras))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -297,7 +306,7 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
     }//GEN-LAST:event_btSimulaActionPerformed
 
     private void edCodigoBarrasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_edCodigoBarrasKeyPressed
-        if (edCodigoBarras.getText().length() == 13) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             buscar();
         }
     }//GEN-LAST:event_edCodigoBarrasKeyPressed
@@ -306,11 +315,11 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
     private javax.swing.JButton btMais;
     private javax.swing.JButton btMenos;
     private javax.swing.JButton btSimula;
-    private javax.swing.JTextField edCodigoBarras;
-    private javax.swing.JTextField edPrecoTotal;
-    private javax.swing.JFormattedTextField edQuantidade;
+    public javax.swing.JTextField edCodigoBarras;
+    public javax.swing.JTextField edPrecoTotal;
+    public javax.swing.JFormattedTextField edQuantidade;
     private javax.swing.JLabel lbCodigoBarras;
-    private javax.swing.JLabel lbDescricao;
+    public javax.swing.JLabel lbDescricao;
     private javax.swing.JLabel lbHeader;
     private javax.swing.JLabel lbPrecoTotal;
     private javax.swing.JLabel lbQuantidade;

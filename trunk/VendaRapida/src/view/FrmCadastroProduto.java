@@ -407,9 +407,6 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
     }//GEN-LAST:event_btRemoverFornecedorActionPerformed
 
     private void edCodigoBarrasFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edCodigoBarrasFocusLost
-        edCodigoBarras.setText(edCodigoBarras.getText().trim());
-        while (edCodigoBarras.getText().length() < 13)
-            edCodigoBarras.setText('0' + edCodigoBarras.getText());
     }//GEN-LAST:event_edCodigoBarrasFocusLost
     
     private void buscar() {

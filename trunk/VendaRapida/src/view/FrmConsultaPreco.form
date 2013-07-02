@@ -27,14 +27,14 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="lbHeader" pref="382" max="32767" attributes="0"/>
+                      <Component id="lbHeader" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="edPrecoTotal" max="32767" attributes="0"/>
                           <Component id="lbPrecoTotal" alignment="0" min="-2" pref="116" max="-2" attributes="0"/>
-                          <Component id="lbDescricao" alignment="0" pref="249" max="32767" attributes="0"/>
+                          <Component id="lbDescricao" alignment="0" min="-2" pref="249" max="-2" attributes="0"/>
                           <Component id="lbCodigoBarras" alignment="0" min="-2" pref="145" max="-2" attributes="0"/>
                           <Component id="edCodigoBarras" max="32767" attributes="0"/>
                       </Group>
@@ -144,6 +144,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Descri&#xe7;&#xe3;o do produto"/>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="lbQuantidade">
       <Properties>
@@ -188,6 +191,9 @@
         <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="edCodigoBarrasFocusLost"/>
         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="edCodigoBarrasKeyPressed"/>
       </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JTextField" name="edPrecoTotal">
       <Properties>
@@ -197,6 +203,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="0,00"/>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JFormattedTextField" name="edQuantidade">
       <Properties>
@@ -208,6 +217,9 @@
       <Events>
         <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="edQuantidadeFocusLost"/>
       </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>
