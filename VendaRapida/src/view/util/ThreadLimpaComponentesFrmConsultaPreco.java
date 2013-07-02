@@ -24,10 +24,7 @@ public class ThreadLimpaComponentesFrmConsultaPreco extends Thread{
     public void run() {
         try {
             Thread.sleep(5000);
-            frmConsultaPreco.edCodigoBarras.setText("");
-            frmConsultaPreco.edPrecoTotal.setText("0,00");
-            frmConsultaPreco.edQuantidade.setText("1");
-            frmConsultaPreco.lbDescricao.setText("Descrição do produto");
+            frmConsultaPreco.limpar();
         } catch (InterruptedException ex) {
             interrupt();
         }

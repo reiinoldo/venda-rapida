@@ -13,6 +13,7 @@ import controller.impl.ProdutoControllerImpl;
 import controller.impl.RegraNegocioException;
 import controller.impl.VendaControllerImpl;
 import java.awt.Frame;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -333,6 +334,11 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
                 txtCodigoBarrasFocusLost(evt);
             }
         });
+        txtCodigoBarras.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtCodigoBarrasKeyPressed(evt);
+            }
+        });
 
         txtValorTotal.setEditable(false);
         txtValorTotal.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -375,19 +381,21 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(btnConsultaClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(txtCodigoBarras, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(txtCodigoBarras, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(btnConsultaProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btnConsultaProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txtQuantidadeItem, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnAdicionarItem))
                                     .addComponent(lbDescricaoItem))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtQuantidadeItem, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addComponent(btnAdicionarItem)
                                 .addGap(6, 6, 6))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 668, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -545,7 +553,7 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
     private void btnAdicionarItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarItemActionPerformed
         if (!txtCodigoBarras.getText().trim().isEmpty()) {
             venda.addItem(new Item(produtoSelecionado, Integer.parseInt(txtQuantidadeItem.getText())));
-            txtQuantidadeItem.setText("");
+            txtQuantidadeItem.setText("1");
             txtCodigoBarras.setText("");
             lbDescricaoItem.setText("");
             atualizaTela();
@@ -565,7 +573,7 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_txtDescontoFocusLost
 
-    private void txtCodigoBarrasFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCodigoBarrasFocusLost
+    private void buscarProdutoPeloCodigoBarra() {
         try {
             Produto prod = produtoController.buscarCodigoBarras(txtCodigoBarras.getText());
             if (prod != null) {
@@ -576,6 +584,10 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    private void txtCodigoBarrasFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCodigoBarrasFocusLost
+        buscarProdutoPeloCodigoBarra();
     }//GEN-LAST:event_txtCodigoBarrasFocusLost
 
     private void btnConsultaClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultaClientesActionPerformed
@@ -622,6 +634,14 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnFinalizarVendaActionPerformed
+
+    private void txtCodigoBarrasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoBarrasKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            buscarProdutoPeloCodigoBarra();
+            btnAdicionarItemActionPerformed(null);
+        }
+    }//GEN-LAST:event_txtCodigoBarrasKeyPressed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddItem;
     private javax.swing.JButton btnAdicionarItem;

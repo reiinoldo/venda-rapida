@@ -148,7 +148,7 @@ public class VendaControllerImpl implements VendaController {
                     } catch (Exception ex) {
                         throw new JRException(ex);
                     }
-                    ItemVO itemVO = new ItemVO(item.getReferenciaProduto(), item.getQuantidade(), item.getValor(), produto.getReferencia());
+                    ItemVO itemVO = new ItemVO(item.getReferenciaProduto(), item.getQuantidade(), item.getValor(), produto.getDescricao());
                     itensVO.add(itemVO);
                 }
                 ClienteDao clienteDao = new ClienteDaoImpl();
