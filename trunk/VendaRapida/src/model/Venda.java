@@ -39,6 +39,12 @@ public class Venda {
     }
 
     public void addItem(Item item) {
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).getReferenciaProduto().equals(item.getReferenciaProduto())) {
+                items.get(i).setQuantidade(items.get(i).getQuantidade() + item.getQuantidade());
+                return;
+            }
+        }
         item.setCodigoVenda(codigoVenda);
         this.items.add(item);
     }

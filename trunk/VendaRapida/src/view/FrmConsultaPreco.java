@@ -101,10 +101,18 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
             }
 
             edPrecoTotal.setText(StringUtil.getR$FormmatedFromDouble(valor));
-        } else {
+        } /*else {
             JOptionPane.showMessageDialog(null, "A Quantidade não pode ser menor que 1(um)!", "Erro", JOptionPane.ERROR_MESSAGE);
             edQuantidade.setText("1");
-        }
+        }*/
+    }
+    
+    public void limpar() {
+        edCodigoBarras.setText("");
+        edPrecoTotal.setText("0,00");
+        edQuantidade.setText("1");
+        lbDescricao.setText("Descrição do produto");
+        produto = null;
     }
 
     /**
@@ -204,6 +212,23 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
                 edQuantidadeFocusLost(evt);
             }
         });
+        edQuantidade.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                edQuantidadePropertyChange(evt);
+            }
+        });
+        edQuantidade.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                edQuantidadeInputMethodTextChanged(evt);
+            }
+        });
+        edQuantidade.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                edQuantidadeKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -271,22 +296,20 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btMaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btMaisActionPerformed
-        // TODO add your handling code here:        
         calcular(1);
+        contarTempoLimpar();
     }//GEN-LAST:event_btMaisActionPerformed
 
     private void btMenosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btMenosActionPerformed
-        // TODO add your handling code here:
         calcular(-1);
+        contarTempoLimpar();
     }//GEN-LAST:event_btMenosActionPerformed
 
     private void edCodigoBarrasFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edCodigoBarrasFocusLost
-        // TODO add your handling code here:
         buscar();
     }//GEN-LAST:event_edCodigoBarrasFocusLost
 
     private void edQuantidadeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edQuantidadeFocusLost
-        // TODO add your handling code here:
         if (edQuantidade.getText().isEmpty()) {
             edQuantidade.setText("1");
         }
@@ -301,25 +324,40 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
 
     private void btSimulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSimulaActionPerformed
         int qtd = Integer.parseInt(edQuantidade.getText());
-        Item item = new Item(produto, qtd);
-        new FrmSimulacaoVenda((Frame) getParent(), true, item).setVisible(true);
+        if (produto == null)
+            new FrmSimulacaoVenda((Frame) getParent(), true).setVisible(true);
+        else {
+            Item item = new Item(produto, qtd);
+            new FrmSimulacaoVenda((Frame) getParent(), true, item).setVisible(true);
+        }
     }//GEN-LAST:event_btSimulaActionPerformed
 
     private void edCodigoBarrasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_edCodigoBarrasKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            edQuantidade.setText("1");
             buscar();
         }
     }//GEN-LAST:event_edCodigoBarrasKeyPressed
+
+    private void edQuantidadeInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_edQuantidadeInputMethodTextChanged
+    }//GEN-LAST:event_edQuantidadeInputMethodTextChanged
+
+    private void edQuantidadePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_edQuantidadePropertyChange
+    }//GEN-LAST:event_edQuantidadePropertyChange
+
+    private void edQuantidadeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_edQuantidadeKeyPressed
+        contarTempoLimpar();
+    }//GEN-LAST:event_edQuantidadeKeyPressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btMais;
     private javax.swing.JButton btMenos;
     private javax.swing.JButton btSimula;
-    public javax.swing.JTextField edCodigoBarras;
-    public javax.swing.JTextField edPrecoTotal;
-    public javax.swing.JFormattedTextField edQuantidade;
+    private javax.swing.JTextField edCodigoBarras;
+    private javax.swing.JTextField edPrecoTotal;
+    private javax.swing.JFormattedTextField edQuantidade;
     private javax.swing.JLabel lbCodigoBarras;
-    public javax.swing.JLabel lbDescricao;
+    private javax.swing.JLabel lbDescricao;
     private javax.swing.JLabel lbHeader;
     private javax.swing.JLabel lbPrecoTotal;
     private javax.swing.JLabel lbQuantidade;
