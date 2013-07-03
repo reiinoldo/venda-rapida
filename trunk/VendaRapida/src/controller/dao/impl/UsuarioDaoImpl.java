@@ -1,6 +1,6 @@
 package controller.dao.impl;
 
-import controller.dao.UsuarioDao;
+import controller.dao.DAO;
 import controller.dao.util.ConnectionMySql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Usuario;
 
-public class UsuarioDaoImpl implements UsuarioDao {
+public class UsuarioDaoImpl implements DAO<Usuario> {
 
     @Override
     public boolean salvar(Usuario usuario) throws SQLException {
@@ -95,13 +95,13 @@ public class UsuarioDaoImpl implements UsuarioDao {
     }
 
     @Override
-    public boolean excluir(String login) throws Exception {
+    public boolean excluir(Usuario usuario) throws Exception {
         Connection conexao = null;
         try {
             conexao = ConnectionMySql.getConnection();
 
             PreparedStatement p = conexao.prepareStatement("delete from " + Usuario.TABELA_USUARIO + " where " + Usuario.CAMPO_LOGIN + " = ?");
-            p.setString(1, login);
+            p.setString(1, usuario.getLogin());
 
             boolean execution = p.execute();
 
@@ -114,13 +114,13 @@ public class UsuarioDaoImpl implements UsuarioDao {
     }
 
     @Override
-    public Usuario buscar(String login) throws Exception {
+    public Usuario buscar(Usuario usuario) throws Exception {
         Connection conexao = null;
         try {
             conexao = ConnectionMySql.getConnection();
 
             PreparedStatement p = conexao.prepareStatement("select * from " + Usuario.TABELA_USUARIO + " where " + Usuario.CAMPO_LOGIN + " = ?");
-            p.setString(1, login);
+            p.setString(1, usuario.getLogin());
             ResultSet r = p.executeQuery();
 
             Usuario u = null; 
@@ -171,8 +171,8 @@ public class UsuarioDaoImpl implements UsuarioDao {
     }
 
     @Override
-    public List<Usuario> listar(Usuario usuario) throws Exception {
-        if (usuario != null) {
+    public List<Usuario> listar(Usuario usuarioInicial, Usuario usuarioFinal) throws Exception {
+        if (usuarioInicial != null) {
             Connection conexao = null;
             try {
                 conexao = ConnectionMySql.getConnection();
@@ -192,51 +192,51 @@ public class UsuarioDaoImpl implements UsuarioDao {
                 str.append(Usuario.CAMPO_SENHA + " LIKE ? AND ");
                 str.append(Usuario.CAMPO_NOME + " LIKE ? AND ");
                 str.append(Usuario.CAMPO_COMISSAO + " LIKE ? ");
-                if (usuario.isAdministrador())
+                if (usuarioInicial.isAdministrador())
                     str.append(" AND " + Usuario.CAMPO_ADMINISTRADOR + " = ?");
-                if (usuario.isCadastraProduto())
+                if (usuarioInicial.isCadastraProduto())
                     str.append(" AND " + Usuario.CAMPO_CADASTRAPRODUTO + " = ?");
-                if (usuario.isVendeProduto())
+                if (usuarioInicial.isVendeProduto())
                     str.append(" AND " + Usuario.CAMPO_VENDEPRODUTO + " = ?");
 
                 PreparedStatement pr = conexao.prepareStatement(str.toString());
 
-                if (usuario.getLogin() != null) {
-                    pr.setString(1, "%" + usuario.getLogin() + "%");
+                if (usuarioInicial.getLogin() != null) {
+                    pr.setString(1, "%" + usuarioInicial.getLogin() + "%");
                 } else {
                     pr.setString(1, "%%");
                 }
 
-                if (usuario.getSenha() != null) {
-                    pr.setString(2, "%" + usuario.getSenha() + "%");
+                if (usuarioInicial.getSenha() != null) {
+                    pr.setString(2, "%" + usuarioInicial.getSenha() + "%");
                 } else {
                     pr.setString(2, "%%");
                 }
 
-                if (usuario.getNome() != null) {
-                    pr.setString(3, "%" + usuario.getNome() + "%");
+                if (usuarioInicial.getNome() != null) {
+                    pr.setString(3, "%" + usuarioInicial.getNome() + "%");
                 } else {
                     pr.setString(3, "%%");
                 }
 
-                if (usuario.getComissao() < 0) {
-                    pr.setString(4, "%" + usuario.getComissao() + "%");
+                if (usuarioInicial.getComissao() < 0) {
+                    pr.setString(4, "%" + usuarioInicial.getComissao() + "%");
                 } else {
                     pr.setString(4, "%%");
                 }
 
                 int indice = 5;
-                if (usuario.isAdministrador()) {
+                if (usuarioInicial.isAdministrador()) {
                     pr.setBoolean(indice, true);
                     indice++;
                 }
 
-                if (usuario.isCadastraProduto()) {
+                if (usuarioInicial.isCadastraProduto()) {
                     pr.setBoolean(indice, true);
                     indice++;
                 }
 
-                if (usuario.isVendeProduto()) {
+                if (usuarioInicial.isVendeProduto()) {
                     pr.setBoolean(indice, true);
                 }
 
@@ -264,5 +264,10 @@ public class UsuarioDaoImpl implements UsuarioDao {
 
         } else
             return this.listar();
+    }
+
+    @Override
+    public int incrementar() throws Exception {
+        return 0;
     }
 }

@@ -3,7 +3,7 @@ package controller.impl;
 import VO.ItemVO;
 import VO.VendaVO;
 import controller.VendaController;
-import controller.dao.ClienteDao;
+import controller.dao.DAO;
 import controller.dao.ItemDao;
 import controller.dao.ProdutoDao;
 import controller.dao.VendaDao;
@@ -12,8 +12,6 @@ import controller.dao.impl.ItemDaoImpl;
 import controller.dao.impl.ProdutoDaoImpl;
 import controller.dao.impl.VendaDaoImpl;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import model.Cliente;
@@ -151,10 +149,11 @@ public class VendaControllerImpl implements VendaController {
                     ItemVO itemVO = new ItemVO(item.getReferenciaProduto(), item.getQuantidade(), item.getValor(), produto.getDescricao());
                     itensVO.add(itemVO);
                 }
-                ClienteDao clienteDao = new ClienteDaoImpl();
-                Cliente cli = null;
+                DAO clienteDao = new ClienteDaoImpl();
+                Cliente cli = new Cliente();
                 try {
-                    cli = clienteDao.buscar(venda.getIdCliente());
+                    cli.setId(venda.getIdCliente());
+                    cli = (Cliente)clienteDao.buscar(cli.getId());
                 } catch (Exception ex) {
                     throw new JRException(ex);
                 }

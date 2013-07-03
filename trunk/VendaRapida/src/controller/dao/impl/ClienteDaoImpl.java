@@ -1,6 +1,6 @@
 package controller.dao.impl;
 
-import controller.dao.ClienteDao;
+import controller.dao.DAO;
 import controller.dao.util.ConnectionMySql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Cliente;
 
-public class ClienteDaoImpl implements ClienteDao {
+public class ClienteDaoImpl implements DAO<Cliente> {
 
     @Override
     public boolean salvar(Cliente cliente) throws Exception {
@@ -54,13 +54,13 @@ public class ClienteDaoImpl implements ClienteDao {
     }
 
     @Override
-    public boolean excluir(int id) throws Exception {
+    public boolean excluir(Cliente cliente) throws Exception {
         Connection conexao = null;
         try {
             conexao = ConnectionMySql.getConnection();
 
             PreparedStatement p = conexao.prepareStatement("delete from " + Cliente.TABELA_CLIENTE + " where " + Cliente.CAMPO_ID + " = ?");
-            p.setInt(1, id);
+            p.setInt(1, cliente.getId());
 
             boolean execution = p.execute();
 
@@ -100,8 +100,8 @@ public class ClienteDaoImpl implements ClienteDao {
     }
 
     @Override
-    public List<Cliente> listar(Cliente cliente) throws Exception {
-        if (cliente != null) {
+    public List<Cliente> listar(Cliente clienteInicial, Cliente clienteFinal) throws Exception {
+        if (clienteInicial != null) {
             Connection conexao = null;
             try {
                 conexao = ConnectionMySql.getConnection();
@@ -125,38 +125,38 @@ public class ClienteDaoImpl implements ClienteDao {
 
                 PreparedStatement pr = conexao.prepareStatement(str.toString());
 
-                if (cliente.getId() != 0) {
-                    pr.setString(1, "%" + cliente.getId() + "%");
+                if (clienteInicial.getId() != 0) {
+                    pr.setString(1, "%" + clienteInicial.getId() + "%");
                 } else {
                     pr.setString(1, "%%");
                 }
 
-                if (cliente.getCpfCnpj() != null) {
-                    pr.setString(2, "%" + cliente.getCpfCnpj() + "%");
+                if (clienteInicial.getCpfCnpj() != null) {
+                    pr.setString(2, "%" + clienteInicial.getCpfCnpj() + "%");
                 } else {
                     pr.setString(2, "%%");
                 }
 
-                if (cliente.getEmail() != null) {
-                    pr.setString(3, "%" + cliente.getEmail() + "%");
+                if (clienteInicial.getEmail() != null) {
+                    pr.setString(3, "%" + clienteInicial.getEmail() + "%");
                 } else {
                     pr.setString(3, "%%");
                 }
 
-                if (cliente.getEndereco() != null) {
-                    pr.setString(4, "%" + cliente.getEndereco() + "%");
+                if (clienteInicial.getEndereco() != null) {
+                    pr.setString(4, "%" + clienteInicial.getEndereco() + "%");
                 } else {
                     pr.setString(4, "%%");
                 }
 
-                if (cliente.getNome() != null) {
-                    pr.setString(5, "%" + cliente.getNome() + "%");
+                if (clienteInicial.getNome() != null) {
+                    pr.setString(5, "%" + clienteInicial.getNome() + "%");
                 } else {
                     pr.setString(5, "%%");
                 }
 
-                if (cliente.getTelefone() != null) {
-                    pr.setString(6, "%" + cliente.getTelefone() + "%");
+                if (clienteInicial.getTelefone() != null) {
+                    pr.setString(6, "%" + clienteInicial.getTelefone() + "%");
                 } else {
                     pr.setString(6, "%%");
                 }
@@ -226,13 +226,13 @@ public class ClienteDaoImpl implements ClienteDao {
     }
 
     @Override
-    public Cliente buscar(int id) throws Exception {
+    public Cliente buscar(Cliente cliente) throws Exception {
         Connection conexao = null;
         try {
             conexao = ConnectionMySql.getConnection();
 
             PreparedStatement p = conexao.prepareStatement("select * from " + Cliente.TABELA_CLIENTE + " where " + Cliente.CAMPO_ID + " = ?");
-            p.setInt(1, id);
+            p.setInt(1, cliente.getId());
             ResultSet r = p.executeQuery();
 
             Cliente c = null;

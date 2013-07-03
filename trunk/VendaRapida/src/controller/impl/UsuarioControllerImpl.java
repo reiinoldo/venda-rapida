@@ -2,7 +2,7 @@ package controller.impl;
 
 import controller.UsuarioController;
 import controller.VendaController;
-import controller.dao.UsuarioDao;
+import controller.dao.DAO;
 import controller.dao.impl.UsuarioDaoImpl;
 import java.util.List;
 import model.Usuario;
@@ -10,7 +10,7 @@ import model.Venda;
 
 public class UsuarioControllerImpl implements UsuarioController {
 
-    public UsuarioDao usuarioDao;
+    public DAO usuarioDao;
     
     public UsuarioControllerImpl() {
         usuarioDao = new UsuarioDaoImpl();
@@ -33,7 +33,9 @@ public class UsuarioControllerImpl implements UsuarioController {
     
     @Override
     public Usuario efetuarLogin(String login, String senha) throws Exception {
-        Usuario usuario = usuarioDao.buscar(login);
+        Usuario usuario = new Usuario();
+        usuario.setLogin(login);
+        usuario = (Usuario)usuarioDao.buscar(usuario);
         if (usuario == null)
             throw new RegraNegocioException("Usuário não cadastrado");
         if (!confirmarSenha(usuario.getSenha(), senha))
@@ -43,7 +45,7 @@ public class UsuarioControllerImpl implements UsuarioController {
     
     @Override
     public void salvar(Usuario usuario, String confirmarSenha) throws Exception {
-        if (usuarioDao.buscar(usuario.getLogin()) != null)
+        if (usuarioDao.buscar(usuario) != null)
             throw new RegraNegocioException("Usuário já existe. Digite outro login");
         verificarCampos(usuario, confirmarSenha);
         usuarioDao.salvar(usuario);
@@ -51,7 +53,7 @@ public class UsuarioControllerImpl implements UsuarioController {
     
     @Override
     public void editar(Usuario usuario, String confirmarSenha) throws Exception {
-        if (usuarioDao.buscar(usuario.getLogin()) == null)
+        if (usuarioDao.buscar(usuario) == null)
             throw new RegraNegocioException("Usuário não cadastrado");
         verificarCampos(usuario, confirmarSenha);
         usuarioDao.editar(usuario);
@@ -67,15 +69,19 @@ public class UsuarioControllerImpl implements UsuarioController {
         if (!listaVenda.isEmpty()) 
             throw new RegraNegocioException("Usuário já efetuou vendas e não pode ser excluído");
 
-        Usuario usuario = usuarioDao.buscar(login);
+        Usuario usuario = new Usuario();
+        usuario.setLogin(login);
+        usuario = (Usuario)usuarioDao.buscar(usuario);
         if (usuario == null)
             throw new RegraNegocioException("Usuário não cadastrado");
-        usuarioDao.excluir(login);
+        usuarioDao.excluir(usuario);
     }
 
     @Override
     public Usuario buscar(String login) throws Exception {
-        return usuarioDao.buscar(login);
+        Usuario usuario = new Usuario();
+        usuario.setLogin(login);
+        return (Usuario)usuarioDao.buscar(usuario);
     }
 
     @Override
@@ -85,6 +91,6 @@ public class UsuarioControllerImpl implements UsuarioController {
 
     @Override
     public List<Usuario> listar(Usuario usuario) throws Exception {
-        return usuarioDao.listar(usuario);
+        return usuarioDao.listar(usuario, null);
     }
 }
