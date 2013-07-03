@@ -2,7 +2,7 @@ package controller.impl;
 
 import controller.ClienteController;
 import controller.VendaController;
-import controller.dao.ClienteDao;
+import controller.dao.DAO;
 import controller.dao.impl.ClienteDaoImpl;
 import java.util.List;
 import model.Cliente;
@@ -17,7 +17,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 public class ClienteControllerImpl implements ClienteController {
 
-    public ClienteDao clienteDao;
+    public DAO clienteDao;
 
     public ClienteControllerImpl() {
         clienteDao = new ClienteDaoImpl();
@@ -40,7 +40,7 @@ public class ClienteControllerImpl implements ClienteController {
 
     @Override
     public void salvar(Cliente cliente) throws Exception {
-        if (clienteDao.buscar(cliente.getId()) != null) {
+        if (clienteDao.buscar(cliente) != null) {
             throw new RegraNegocioException("Cliente com identificador " + String.valueOf(cliente.getId()) + " já existe\nDigite outro identificador");
         }
         verificarCampos(cliente);
@@ -49,7 +49,7 @@ public class ClienteControllerImpl implements ClienteController {
 
     @Override
     public void editar(Cliente cliente) throws Exception {
-        if (clienteDao.buscar(cliente.getId()) == null) {
+        if (clienteDao.buscar(cliente) == null) {
             throw new RegraNegocioException("Cliente não cadastrado");
         }
         verificarCampos(cliente);
@@ -67,15 +67,19 @@ public class ClienteControllerImpl implements ClienteController {
             throw new RegraNegocioException("Cliente já efetuou compras e não pode ser excluído.");
 
         
-        if (clienteDao.buscar(id) == null) {
+        Cliente cliente = new Cliente();
+        cliente.setId(id);
+        if (clienteDao.buscar(cliente) == null) {
             throw new RegraNegocioException("Cliente não cadastrado.");
         }
-        clienteDao.excluir(id);
+        clienteDao.excluir(cliente);
     }
 
     @Override
     public Cliente buscar(int id) throws Exception {
-        return clienteDao.buscar(id);
+        Cliente cliente = new Cliente();
+        cliente.setId(id);
+        return (Cliente)clienteDao.buscar(cliente);
     }
 
     @Override
@@ -85,7 +89,7 @@ public class ClienteControllerImpl implements ClienteController {
 
     @Override
     public List<Cliente> listar(Cliente cliente) throws Exception {
-        return clienteDao.listar(cliente);
+        return clienteDao.listar(cliente, null);
     }
 
     @Override
