@@ -172,9 +172,11 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
         cbImprimirProdutos = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Consulta de Vendas Detalhadas");
+        setResizable(false);
 
         lbHeader.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        lbHeader.setText("Consulta de Vendas Detalhada");
+        lbHeader.setText("Consulta de Vendas Detalhadas");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -458,6 +460,8 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
                         .addComponent(btSair)))
                 .addContainerGap())
         );
+
+        getAccessibleContext().setAccessibleName("Consulta de Vendas Detalhadas");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

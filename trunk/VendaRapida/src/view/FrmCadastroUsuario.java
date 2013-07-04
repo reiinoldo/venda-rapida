@@ -52,6 +52,8 @@ public class FrmCadastroUsuario extends javax.swing.JDialog {
         btExcluir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Cadastro de Usuário");
+        setResizable(false);
 
         lbNome.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
         lbNome.setText("Nome:");

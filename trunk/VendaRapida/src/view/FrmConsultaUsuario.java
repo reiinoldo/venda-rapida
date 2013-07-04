@@ -147,6 +147,8 @@ public class FrmConsultaUsuario extends javax.swing.JDialog {
         onibus = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Consulta de Usários");
+        setResizable(false);
 
         cbAdministrador.setText("Administrador");
 
@@ -274,9 +276,8 @@ public class FrmConsultaUsuario extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cbVendeProduto)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(cbAdministrador)
-                                .addComponent(cbCadastraProduto)))
+                            .addComponent(cbAdministrador)
+                            .addComponent(cbCadastraProduto))
                         .addContainerGap(216, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(

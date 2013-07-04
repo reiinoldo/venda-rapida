@@ -61,7 +61,7 @@ public class FrmTelaLogin extends javax.swing.JFrame {
         edSenha = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Login");
+        setTitle("Venda Rápida - Login");
         setResizable(false);
         addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -128,8 +128,6 @@ public class FrmTelaLogin extends javax.swing.JFrame {
                 .addComponent(btEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(94, Short.MAX_VALUE))
         );
-
-        getAccessibleContext().setAccessibleName("TEsteeeeeeeee");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

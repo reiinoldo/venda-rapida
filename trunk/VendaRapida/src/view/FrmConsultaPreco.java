@@ -137,6 +137,8 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
         edQuantidade = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Consulta de Preços");
+        setResizable(false);
 
         lbHeader.setFont(new java.awt.Font("DejaVu Sans", 1, 24)); // NOI18N
         lbHeader.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cifrao.png"))); // NOI18N
