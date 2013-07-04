@@ -34,6 +34,7 @@ public class ViewUtil {
     public static String createFileChooserToSaveRelatorio(Component view) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, IOException {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fileChooser.setDialogTitle("Escolha o Local Para Salvar");
         MetalFileChooserUI ui = (MetalFileChooserUI) fileChooser.getUI();
         Field field;
 
@@ -58,11 +59,12 @@ public class ViewUtil {
             }
         });
         fileChooser.setAcceptAllFileFilterUsed(false);
-        fileChooser.showOpenDialog(view);
-
-        if (fileChooser.getSelectedFile() != null) {
-            if (fileChooser.getSelectedFile().isDirectory()) {
-                return fileChooser.getSelectedFile() + "/";
+        int returnVal = fileChooser.showOpenDialog(view);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            if (fileChooser.getSelectedFile() != null) {
+                if (fileChooser.getSelectedFile().isDirectory()) {
+                    return fileChooser.getSelectedFile() + "/";
+                }
             }
         }
         return null;

@@ -11,10 +11,10 @@ import controller.relatorio.formato.RelatorioHTML;
 import controller.relatorio.formato.RelatorioPDF;
 import controller.relatorio.formato.RelatorioXML;
 import java.awt.Color;
+import java.awt.Frame;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.JOptionPane;
-import net.sf.jasperreports.engine.JRException;
 import view.util.ViewUtil;
 
 /**
@@ -251,26 +251,16 @@ public class FrmGerarRelatorio extends javax.swing.JDialog {
 
     private void btnGerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerarActionPerformed
         try {
-            String path = null;
-            try {
-                path = ViewUtil.createFileChooserToSaveRelatorio(this);
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            }
+            String path = ViewUtil.createFileChooserToSaveRelatorio(this);
             if (path != null) {
                 gerador.setRelatorio(relatorioSelecionado);
                 composicaoRelatorio.setLocalSalvar(path);
-                gerador.gerarRelatorio(composicaoRelatorio);
-                int abrir = JOptionPane.showConfirmDialog(null, "Relatório Gerado Com Sucesso em '" + relatorioSelecionado.getNomeRelatorio() + "'. \nDeseja abrí-lo?", "Sucesso", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
-                if (abrir == JOptionPane.OK_OPTION) {
-                    java.awt.Desktop.getDesktop().open(new File(relatorioSelecionado.getNomeRelatorio()));
-                }
+                new DialogGerandoRelatorio((Frame) getParent(), true, gerador, composicaoRelatorio, relatorioSelecionado).setVisible(true);
             }
-        } catch (JRException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao gerar relatório, causa: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao abrir o arquivo, causa: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
+
     }//GEN-LAST:event_btnGerarActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGerar;

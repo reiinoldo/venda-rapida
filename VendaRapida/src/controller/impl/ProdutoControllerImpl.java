@@ -98,13 +98,6 @@ public class ProdutoControllerImpl implements ProdutoController {
     }
 
     @Override
-    public void gerarRelatorio(List listaGerada, String path) throws JRException {
-        JasperReport report = JasperCompileManager.compileReport("src/relatorios/relProdutos.jrxml");
-        JasperPrint print = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(listaGerada));
-        JasperExportManager.exportReportToPdfFile(print, path);
-    }
-
-    @Override
     public Produto buscarCodigoBarras(String codigoBarras) throws Exception {
         /*Produto produto = produtoDao.buscarCodigoBarras(codigoBarras);
         return produto;*/
