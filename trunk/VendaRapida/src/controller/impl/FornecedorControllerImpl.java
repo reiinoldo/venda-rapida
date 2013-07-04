@@ -1,6 +1,7 @@
 package controller.impl;
 
 import controller.FornecedorController;
+import controller.FornecedorProdutoController;
 import controller.dao.Dao;
 import controller.dao.DaoFactory;
 import controller.dao.TipoDao;
@@ -55,8 +56,11 @@ public class FornecedorControllerImpl implements FornecedorController {
     public void excluir(int id) throws Exception{
         Fornecedor fornecedor = new Fornecedor();
         fornecedor.setId(id);
+        FornecedorProdutoController fornecedorProdutoController = new FornecedorProdutoControllerImpl();
+        if (!fornecedorProdutoController.listarProdutos(id).isEmpty())
+            throw new RegraNegocioException("Fornecedor não pode ser excluído porque tem\nprodutos vinculados à ele.");
         if (fornecedorDao.buscar(fornecedor) == null)
-            throw new RegraNegocioException("Fornecedor não cadastrado");
+            throw new RegraNegocioException("Fornecedor não cadastrado.");
         fornecedorDao.excluir(fornecedor);
     }
     
