@@ -8,8 +8,6 @@ import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
@@ -20,21 +18,6 @@ import javax.swing.plaf.metal.MetalFileChooserUI;
  * @author Maicon
  */
 public class ViewUtil {
-
-    public enum GeradorNomePDF {
-
-        PRODUTOS("Produtos"), VENDAS("Vendas"), CLIENTES("Clientes"), FORNECEDORES("Fornecedores"), VENDA("Venda");
-        private String nomeRel;
-        private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss");
-
-        GeradorNomePDF(String nomeRel) {
-            this.nomeRel = nomeRel;
-        }
-
-        public String getNomePdf() {
-            return this.nomeRel + " " + sdf.format(new Date()) + ".pdf";
-        }
-    }
 
     /**
      * Método que cria um JFileChooser e caso selecionado um path, retorna a
@@ -48,9 +31,7 @@ public class ViewUtil {
      * @throws IllegalAccessException
      * @throws IOException
      */
-    public static String createFileChooserToSavePDF(Component view, GeradorNomePDF nomePDF) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, IOException {
-        String nomeRelatorio = nomePDF.getNomePdf();
-
+    public static String createFileChooserToSaveRelatorio(Component view) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, IOException {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         MetalFileChooserUI ui = (MetalFileChooserUI) fileChooser.getUI();
@@ -81,8 +62,7 @@ public class ViewUtil {
 
         if (fileChooser.getSelectedFile() != null) {
             if (fileChooser.getSelectedFile().isDirectory()) {
-                return fileChooser.getSelectedFile()
-                        + "/" + nomeRelatorio;
+                return fileChooser.getSelectedFile() + "/";
             }
         }
         return null;

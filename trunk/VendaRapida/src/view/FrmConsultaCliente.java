@@ -3,26 +3,24 @@ package view;
 import controller.ClienteController;
 import controller.impl.ClienteControllerImpl;
 import controller.impl.RegraNegocioException;
-import java.io.File;
-import java.io.IOException;
+import controller.relatorio.ComposicaoRelatorio;
+import controller.relatorio.TipoRelatorio;
+import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Cliente;
-import net.sf.jasperreports.engine.JRException;
-import view.util.ViewUtil;
-import view.util.ViewUtil.GeradorNomePDF;
 
 public class FrmConsultaCliente extends javax.swing.JDialog {
-
+    
     private DefaultTableModel dtm;
     private Cliente cliente;
     private Cliente clienteSelecionado;
     private List<Cliente> listaClientesBuscados;
     private ClienteController clienteController = new ClienteControllerImpl();
-
+    
     public FrmConsultaCliente(java.awt.Frame parent, boolean modal, Cliente clienteSelecionado) {
         super(parent, modal);
         this.clienteSelecionado = clienteSelecionado;
@@ -30,13 +28,15 @@ public class FrmConsultaCliente extends javax.swing.JDialog {
         initComponents();
         setLocationRelativeTo(null);
     }
-
+    
     public void carregarCliente() {
         cliente = new Cliente();
-        if (!edNome.getText().isEmpty())
+        if (!edNome.getText().isEmpty()) {
             cliente.setNome(edNome.getText());
-        if (!edCPFCNPJ.getText().isEmpty())
+        }
+        if (!edCPFCNPJ.getText().isEmpty()) {
             cliente.setCpfCnpj(edCPFCNPJ.getText());
+        }
         try {
             listaClientesBuscados = clienteController.listar(cliente);
             carregarGrid();
@@ -44,30 +44,30 @@ public class FrmConsultaCliente extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
-
+    
     public void carregarGrid() {
         Vector<Vector> dados = new Vector<Vector>();
-
+        
         for (Cliente cliente : listaClientesBuscados) {
             Vector registroDb = new Vector();
-
+            
             registroDb.add(cliente.getId());
             registroDb.add(cliente.getNome());
             registroDb.add(cliente.getCpfCnpj());
             registroDb.add(cliente.getTelefone());
             registroDb.add(cliente.getEmail());
-
+            
             dados.add(registroDb);
         }
-
+        
         dtm = (DefaultTableModel) tabelaConsulta.getModel();
         dtm.setRowCount(0);
-
+        
         for (Vector v : dados) {
             dtm.addRow(v);
         }
     }
-
+    
     public void carregarEdicao() {
         try {
             if (tabelaConsulta.getSelectedRow() != -1) {
@@ -80,7 +80,7 @@ public class FrmConsultaCliente extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
-
+    
     private void setProdutoRetorno(Cliente cliente) {
         if (clienteSelecionado != null) {
             clienteSelecionado.setId(cliente.getId());
@@ -91,15 +91,15 @@ public class FrmConsultaCliente extends javax.swing.JDialog {
             clienteSelecionado.setEmail(cliente.getEmail());
         }
     }
-
+    
     private void limpar() {
         edNome.setText("");
         edCPFCNPJ.setText("");
         listaClientesBuscados = new ArrayList<Cliente>();
-
+        
         dtm = new DefaultTableModel();
         dtm = (DefaultTableModel) tabelaConsulta.getModel();
-
+        
         dtm.setRowCount(0);
     }
 
@@ -184,7 +184,7 @@ public class FrmConsultaCliente extends javax.swing.JDialog {
         lbImg.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         lbImg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/passageiros.png"))); // NOI18N
 
-        btGerarPDF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/pdf_file.png"))); // NOI18N
+        btGerarPDF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/relatorio.png"))); // NOI18N
         btGerarPDF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btGerarPDFActionPerformed(evt);
@@ -242,7 +242,6 @@ public class FrmConsultaCliente extends javax.swing.JDialog {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 840, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btSair)
                             .addComponent(btPesquisar)
@@ -301,49 +300,32 @@ public class FrmConsultaCliente extends javax.swing.JDialog {
     private void btConfirmaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btConfirmaActionPerformed
         carregarEdicao();
     }//GEN-LAST:event_btConfirmaActionPerformed
-
+    
     private void btSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSairActionPerformed
         this.dispose();
     }//GEN-LAST:event_btSairActionPerformed
-
+    
     private void btSairKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btSairKeyPressed
         // TODO add your handling code here:
     }//GEN-LAST:event_btSairKeyPressed
-
+    
     private void btLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLimparActionPerformed
         limpar();
     }//GEN-LAST:event_btLimparActionPerformed
-
+    
     private void btPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPesquisarActionPerformed
         carregarCliente();
     }//GEN-LAST:event_btPesquisarActionPerformed
-
+    
     private void btGerarPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGerarPDFActionPerformed
         if (!listaClientesBuscados.isEmpty()) {
-            try {
-                String path = null;
-                try {
-                    path = ViewUtil.createFileChooserToSavePDF(this, GeradorNomePDF.CLIENTES);
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-                }
-                if (path != null) {
-                    clienteController.gerarRelatorio(listaClientesBuscados, path);
-                    int abrir = JOptionPane.showConfirmDialog(null, "PDF Gerado Com Sucesso em '" + path + "'. \nDeseja abrí-lo?", "Sucesso", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
-                    if (abrir == JOptionPane.OK_OPTION) {
-                        java.awt.Desktop.getDesktop().open(new File(path));
-                    }
-                }
-            } catch (JRException ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao gerar relatório, causa: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao abrir o arquivo, causa: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            }
+            ComposicaoRelatorio composicao = new ComposicaoRelatorio(listaClientesBuscados, TipoRelatorio.CLIENTES);
+            new FrmGerarRelatorio((Frame) getParent(), true, composicao).setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(null, "Necessita-se ao menos de um registro para gerar o PDF.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Necessita-se ao menos de um registro para gerar um relatório.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btGerarPDFActionPerformed
-
+    
     private void tabelaConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaConsultaMouseClicked
         if (evt.getClickCount() == 2) {
             carregarEdicao();

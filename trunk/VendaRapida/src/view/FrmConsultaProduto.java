@@ -4,17 +4,15 @@ import controller.ProdutoController;
 import controller.dao.util.StringUtil;
 import controller.impl.ProdutoControllerImpl;
 import controller.impl.RegraNegocioException;
-import java.io.File;
-import java.io.IOException;
+import controller.relatorio.ComposicaoRelatorio;
+import controller.relatorio.TipoRelatorio;
+import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Produto;
-import net.sf.jasperreports.engine.JRException;
-import view.util.ViewUtil;
-import view.util.ViewUtil.GeradorNomePDF;
 
 public class FrmConsultaProduto extends javax.swing.JDialog {
     
@@ -241,7 +239,7 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
             }
         });
 
-        btGerarPDF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/pdf_file.png"))); // NOI18N
+        btGerarPDF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/relatorio.png"))); // NOI18N
         btGerarPDF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btGerarPDFActionPerformed(evt);
@@ -360,27 +358,10 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
     
     private void btGerarPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGerarPDFActionPerformed
         if (!listaProdutosBuscados.isEmpty()) {
-            try {
-                String path = null;
-                try {
-                    path = ViewUtil.createFileChooserToSavePDF(this, GeradorNomePDF.PRODUTOS);
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-                }
-                if (path != null) {
-                    produtoController.gerarRelatorio(listaProdutosBuscados, path);
-                    int abrir = JOptionPane.showConfirmDialog(null, "PDF Gerado Com Sucesso em '" + path + "'. \nDeseja abrí-lo?", "Sucesso", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
-                    if (abrir == JOptionPane.OK_OPTION) {
-                        java.awt.Desktop.getDesktop().open(new File(path));
-                    }
-                }
-            } catch (JRException ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao gerar relatório, causa: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao abrir o arquivo, causa: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            }
+            ComposicaoRelatorio composicao = new ComposicaoRelatorio(listaProdutosBuscados, TipoRelatorio.PRODUTOS);
+            new FrmGerarRelatorio((Frame) getParent(), true, composicao).setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(null, "Necessita-se ao menos de um registro para gerar o PDF.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Necessita-se ao menos de um registro para gerar um relatório.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btGerarPDFActionPerformed
     
