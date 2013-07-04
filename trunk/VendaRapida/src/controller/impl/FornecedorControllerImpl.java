@@ -2,7 +2,9 @@ package controller.impl;
 
 import controller.FornecedorController;
 import controller.dao.Dao;
-import controller.dao.impl.FornecedorDaoImpl;
+import controller.dao.DaoFactory;
+import controller.dao.TipoDao;
+import controller.dao.impl.DaoFactoryImpl;
 import java.util.List;
 import model.Fornecedor;
 import net.sf.jasperreports.engine.JRException;
@@ -15,10 +17,11 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 public class FornecedorControllerImpl implements FornecedorController {
     
-    public Dao fornecedorDao;
+    private Dao fornecedorDao;
     
     public FornecedorControllerImpl() {
-        fornecedorDao = new FornecedorDaoImpl();
+        DaoFactory daoFactory = new DaoFactoryImpl();
+        fornecedorDao = daoFactory.CriarDao(TipoDao.FORNECEDOR);
     }
     
     private void verificarCampos(Fornecedor fornecedor) throws RegraNegocioException {

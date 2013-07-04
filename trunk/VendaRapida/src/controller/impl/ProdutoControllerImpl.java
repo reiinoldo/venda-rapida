@@ -2,8 +2,9 @@ package controller.impl;
 
 import controller.ProdutoController;
 import controller.dao.Dao;
-import controller.dao.impl.ItemDaoImpl;
-import controller.dao.impl.ProdutoDaoImpl;
+import controller.dao.DaoFactory;
+import controller.dao.TipoDao;
+import controller.dao.impl.DaoFactoryImpl;
 import java.util.List;
 import model.Item;
 import model.Produto;
@@ -17,12 +18,13 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 public class ProdutoControllerImpl implements ProdutoController {
 
-    public Dao produtoDao;
-    public Dao itemDao;
+    private Dao produtoDao;
+    private Dao itemDao;
 
     public ProdutoControllerImpl() {
-        produtoDao = new ProdutoDaoImpl();
-        itemDao = new ItemDaoImpl();
+        DaoFactory daoFactory = new DaoFactoryImpl();
+        produtoDao = daoFactory.CriarDao(TipoDao.PRODUTO);
+        itemDao = daoFactory.CriarDao(TipoDao.ITEM);
     }
 
     private void verificarCampos(Produto produto) throws RegraNegocioException {

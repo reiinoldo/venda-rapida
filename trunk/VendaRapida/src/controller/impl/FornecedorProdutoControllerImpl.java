@@ -4,7 +4,9 @@ import controller.FornecedorController;
 import controller.FornecedorProdutoController;
 import controller.ProdutoController;
 import controller.dao.Dao;
-import controller.dao.impl.FornecedorProdutoDaoImpl;
+import controller.dao.DaoFactory;
+import controller.dao.TipoDao;
+import controller.dao.impl.DaoFactoryImpl;
 import java.util.ArrayList;
 import java.util.List;
 import model.Fornecedor;
@@ -13,10 +15,11 @@ import model.Produto;
 
 public class FornecedorProdutoControllerImpl implements FornecedorProdutoController {
     
-    public Dao fornecedorProdutoDao;
+    private Dao fornecedorProdutoDao;
     
     public FornecedorProdutoControllerImpl() {
-        fornecedorProdutoDao = new FornecedorProdutoDaoImpl();
+        DaoFactory daoFactory = new DaoFactoryImpl();
+        fornecedorProdutoDao = daoFactory.CriarDao(TipoDao.FORNECEDORPRODUTO);
     }
     
     private void verificarCampos(FornecedorProduto fornecedorProduto) throws RegraNegocioException {

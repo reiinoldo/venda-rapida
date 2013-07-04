@@ -3,17 +3,20 @@ package controller.impl;
 import controller.UsuarioController;
 import controller.VendaController;
 import controller.dao.Dao;
-import controller.dao.impl.UsuarioDaoImpl;
+import controller.dao.DaoFactory;
+import controller.dao.TipoDao;
+import controller.dao.impl.DaoFactoryImpl;
 import java.util.List;
 import model.Usuario;
 import model.Venda;
 
 public class UsuarioControllerImpl implements UsuarioController {
 
-    public Dao usuarioDao;
+    private Dao usuarioDao;
     
     public UsuarioControllerImpl() {
-        usuarioDao = new UsuarioDaoImpl();
+        DaoFactory daoFactory = new DaoFactoryImpl();
+        usuarioDao = daoFactory.CriarDao(TipoDao.USUARIO);
     }
     
     private boolean confirmarSenha(String senha, String senha2) {
