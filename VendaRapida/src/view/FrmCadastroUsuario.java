@@ -1,6 +1,7 @@
 package view;
 
 import controller.UsuarioController;
+import controller.dao.util.StringUtil;
 import controller.impl.RegraNegocioException;
 import controller.impl.UsuarioControllerImpl;
 import java.awt.Frame;
@@ -275,10 +276,11 @@ public class FrmCadastroUsuario extends javax.swing.JDialog {
             usuario.setSenha(new String(edSenha.getPassword()));
 
             //Tava dando erro "empty String" quando deixava o campo comissão vazio.
-            if (edComissao.getText().trim().equals(""))
+            /*if (edComissao.getText().trim().equals(""))
                 usuario.setComissao(0);
             else
-                usuario.setComissao(Double.parseDouble(edComissao.getText()));
+                usuario.setComissao(Double.parseDouble(edComissao.getText()));*/
+            usuario.setComissao(edComissao.getText().isEmpty() ? 0d : StringUtil.getValorR$(edComissao.getText()));
            
             usuario.setAdministrador(cbAdministrador.isSelected());
             usuario.setVendeProduto(cbVendeProduto.isSelected());
