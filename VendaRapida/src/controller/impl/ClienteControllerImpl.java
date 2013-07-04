@@ -2,7 +2,7 @@ package controller.impl;
 
 import controller.ClienteController;
 import controller.VendaController;
-import controller.dao.DAO;
+import controller.dao.Dao;
 import controller.dao.impl.ClienteDaoImpl;
 import java.util.List;
 import model.Cliente;
@@ -17,7 +17,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 public class ClienteControllerImpl implements ClienteController {
 
-    public DAO clienteDao;
+    public Dao clienteDao;
 
     public ClienteControllerImpl() {
         clienteDao = new ClienteDaoImpl();

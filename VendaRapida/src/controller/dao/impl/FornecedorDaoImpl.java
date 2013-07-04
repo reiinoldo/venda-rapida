@@ -1,6 +1,6 @@
 package controller.dao.impl;
 
-import controller.dao.FornecedorDao;
+import controller.dao.Dao;
 import controller.dao.util.ConnectionMySql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Fornecedor;
 
-public class FornecedorDaoImpl implements FornecedorDao{
+public class FornecedorDaoImpl implements Dao<Fornecedor>{
 
     @Override
     public boolean salvar(Fornecedor fornecedor) throws Exception {
@@ -53,13 +53,13 @@ public class FornecedorDaoImpl implements FornecedorDao{
     }
 
     @Override
-    public boolean excluir(int id) throws Exception {
+    public boolean excluir(Fornecedor fornecedor) throws Exception {
         Connection conexao = null;
         try {
             conexao = ConnectionMySql.getConnection();
 
             PreparedStatement p = conexao.prepareStatement("delete from " + Fornecedor.TABELA_FORNECEDOR + " where " + Fornecedor.CAMPO_ID + " = ?");
-            p.setInt(1, id);
+            p.setInt(1, fornecedor.getId());
 
             boolean execution = p.execute();
 
@@ -99,8 +99,8 @@ public class FornecedorDaoImpl implements FornecedorDao{
     }
 
     @Override
-    public List<Fornecedor> listar(Fornecedor fornecedor) throws Exception {
-        if (fornecedor != null) {
+    public List<Fornecedor> listar(Fornecedor fornecedorInicial, Fornecedor fornecedorFinal) throws Exception {
+        if (fornecedorInicial != null) {
             Connection conexao = null;
             try {
                 conexao = ConnectionMySql.getConnection();
@@ -124,38 +124,38 @@ public class FornecedorDaoImpl implements FornecedorDao{
 
                 PreparedStatement pr = conexao.prepareStatement(str.toString());
 
-                if (fornecedor.getId() != 0) {
-                    pr.setString(1, "%" + fornecedor.getId() + "%");
+                if (fornecedorInicial.getId() != 0) {
+                    pr.setString(1, "%" + fornecedorInicial.getId() + "%");
                 } else {
                     pr.setString(1, "%%");
                 }
 
-                if (fornecedor.getCpfCnpj() != null) {
-                    pr.setString(2, "%" + fornecedor.getCpfCnpj() + "%");
+                if (fornecedorInicial.getCpfCnpj() != null) {
+                    pr.setString(2, "%" + fornecedorInicial.getCpfCnpj() + "%");
                 } else {
                     pr.setString(2, "%%");
                 }            
 
-                if (fornecedor.getEmail() != null) {
-                    pr.setString(3, "%" + fornecedor.getEmail() + "%");
+                if (fornecedorInicial.getEmail() != null) {
+                    pr.setString(3, "%" + fornecedorInicial.getEmail() + "%");
                 } else {
                     pr.setString(3, "%%");
                 }
 
-                if (fornecedor.getEndereco() != null) {
-                    pr.setString(4, "%" + fornecedor.getEndereco() + "%");
+                if (fornecedorInicial.getEndereco() != null) {
+                    pr.setString(4, "%" + fornecedorInicial.getEndereco() + "%");
                 } else {
                     pr.setString(4, "%%");
                 }
 
-                if (fornecedor.getNome() != null) {
-                    pr.setString(5, "%" + fornecedor.getNome() + "%");
+                if (fornecedorInicial.getNome() != null) {
+                    pr.setString(5, "%" + fornecedorInicial.getNome() + "%");
                 } else {
                     pr.setString(5, "%%");
                 }
 
-                if (fornecedor.getTelefone() != null) {
-                    pr.setString(6, "%" + fornecedor.getTelefone() + "%");
+                if (fornecedorInicial.getTelefone() != null) {
+                    pr.setString(6, "%" + fornecedorInicial.getTelefone() + "%");
                 } else {
                     pr.setString(6, "%%");
                 }
@@ -225,13 +225,13 @@ public class FornecedorDaoImpl implements FornecedorDao{
     }
 
     @Override
-    public Fornecedor buscar(int id) throws Exception {
+    public Fornecedor buscar(Fornecedor fornecedor) throws Exception {
         Connection conexao = null;
         try {
             conexao = ConnectionMySql.getConnection();
 
             PreparedStatement p = conexao.prepareStatement("select * from " + Fornecedor.TABELA_FORNECEDOR + " where " + Fornecedor.CAMPO_ID + " = ?");
-            p.setInt(1, id);
+            p.setInt(1, fornecedor.getId());
             ResultSet r = p.executeQuery();
 
             Fornecedor f = null; 

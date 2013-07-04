@@ -1,6 +1,6 @@
 package controller.dao.impl;
 
-import controller.dao.DAO;
+import controller.dao.Dao;
 import controller.dao.util.ConnectionMySql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Cliente;
 
-public class ClienteDaoImpl implements DAO<Cliente> {
+public class ClienteDaoImpl implements Dao<Cliente> {
 
     @Override
     public boolean salvar(Cliente cliente) throws Exception {

@@ -1,11 +1,11 @@
 package controller.impl;
 
 import controller.ProdutoController;
-import controller.dao.ItemDao;
-import controller.dao.ProdutoDao;
+import controller.dao.Dao;
 import controller.dao.impl.ItemDaoImpl;
 import controller.dao.impl.ProdutoDaoImpl;
 import java.util.List;
+import model.Item;
 import model.Produto;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -17,8 +17,8 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 public class ProdutoControllerImpl implements ProdutoController {
 
-    public ProdutoDao produtoDao;
-    public ItemDao itemDao;
+    public Dao produtoDao;
+    public Dao itemDao;
 
     public ProdutoControllerImpl() {
         produtoDao = new ProdutoDaoImpl();
@@ -42,7 +42,7 @@ public class ProdutoControllerImpl implements ProdutoController {
 
     @Override
     public void salvar(Produto produto) throws Exception {
-        if (produtoDao.buscar(produto.getReferencia()) != null) {
+        if (produtoDao.buscar(produto) != null) {
             throw new RegraNegocioException("Produto com referência " + produto.getReferencia() + " já existe\nDigite outra referência");
         }
         verificarCampos(produto);
@@ -51,7 +51,7 @@ public class ProdutoControllerImpl implements ProdutoController {
 
     @Override
     public void editar(Produto produto) throws Exception {
-        if (produtoDao.buscar(produto.getReferencia()) == null) {
+        if (produtoDao.buscar(produto) == null) {
             throw new RegraNegocioException("Produto não cadastrado");
         }
         verificarCampos(produto);
@@ -60,15 +60,24 @@ public class ProdutoControllerImpl implements ProdutoController {
 
     @Override
     public void excluir(String referencia) throws Exception {
-        if (itemDao.buscarItemPorProduto(referencia) != null) {
+        Produto produto = new Produto();
+        produto.setReferencia(referencia);
+        if (produtoDao.buscar(produto) == null) {
             throw new RegraNegocioException("Produto não cadastrado");
         }
-        produtoDao.excluir(referencia);
+        Item item = new Item();
+        item.setReferenciaProduto(referencia);
+        if (itemDao.buscar(item) != null) {
+            throw new RegraNegocioException("Produto está associado a uma venda, não sendo possível excluí-lo");
+        }
+        produtoDao.excluir(produto);
     }
 
     @Override
     public Produto buscar(String referencia) throws Exception {
-        return produtoDao.buscar(referencia);
+        Produto produto = new Produto();
+        produto.setReferencia(referencia);
+        return (Produto)produtoDao.buscar(produto);
     }
 
     @Override
@@ -81,7 +90,9 @@ public class ProdutoControllerImpl implements ProdutoController {
         if (produto.getValor() > valorFinal) {
             throw new RegraNegocioException("Valor inicial maior que o valor final");
         }
-        return produtoDao.listar(produto, valorFinal);
+        Produto produtoFinal = new Produto();
+        produtoFinal.setValor(valorFinal);
+        return produtoDao.listar(produto, produtoFinal);
     }
 
     @Override
@@ -93,7 +104,13 @@ public class ProdutoControllerImpl implements ProdutoController {
 
     @Override
     public Produto buscarCodigoBarras(String codigoBarras) throws Exception {
-        Produto produto = produtoDao.buscarCodigoBarras(codigoBarras);
-        return produto;
+        /*Produto produto = produtoDao.buscarCodigoBarras(codigoBarras);
+        return produto;*/
+        List<Produto> lista = this.listar();
+        for (int i =0; i < lista.size(); i++) {
+            if (lista.get(i).getCodigoBarrra().equals(codigoBarras))
+                return lista.get(i);
+        }
+        return null;
     }
 }

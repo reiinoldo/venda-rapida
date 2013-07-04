@@ -6,7 +6,7 @@ import java.util.List;
  *
  * @author andrebampi
  */
-public interface DAO<T> {
+public interface Dao<T> {
     public boolean salvar(T info) throws Exception;
     public boolean excluir(T identificador) throws Exception;
     public T buscar(T identificador) throws Exception;
