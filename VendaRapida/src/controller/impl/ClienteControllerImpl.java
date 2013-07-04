@@ -3,7 +3,9 @@ package controller.impl;
 import controller.ClienteController;
 import controller.VendaController;
 import controller.dao.Dao;
-import controller.dao.impl.ClienteDaoImpl;
+import controller.dao.DaoFactory;
+import controller.dao.TipoDao;
+import controller.dao.impl.DaoFactoryImpl;
 import java.util.List;
 import model.Cliente;
 import model.Venda;
@@ -17,10 +19,11 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 public class ClienteControllerImpl implements ClienteController {
 
-    public Dao clienteDao;
+    private Dao clienteDao;
 
     public ClienteControllerImpl() {
-        clienteDao = new ClienteDaoImpl();
+        DaoFactory daoFactory = new DaoFactoryImpl();
+        clienteDao = daoFactory.CriarDao(TipoDao.CLIENTE);
     }
 
     private void verificarCampos(Cliente cliente) throws RegraNegocioException {

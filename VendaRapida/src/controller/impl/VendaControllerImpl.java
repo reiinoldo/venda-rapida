@@ -2,12 +2,13 @@ package controller.impl;
 
 import VO.ItemVO;
 import VO.VendaVO;
+import controller.ClienteController;
 import controller.ProdutoController;
 import controller.VendaController;
 import controller.dao.Dao;
-import controller.dao.impl.ClienteDaoImpl;
-import controller.dao.impl.ItemDaoImpl;
-import controller.dao.impl.VendaDaoImpl;
+import controller.dao.DaoFactory;
+import controller.dao.TipoDao;
+import controller.dao.impl.DaoFactoryImpl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,10 +26,13 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 public class VendaControllerImpl implements VendaController {
 
-    public Dao vendaDao;
+    private Dao vendaDao;
+    private Dao itemDao;
 
     public VendaControllerImpl() {
-        vendaDao = new VendaDaoImpl();
+        DaoFactory daoFactory = new DaoFactoryImpl();
+        vendaDao = daoFactory.CriarDao(TipoDao.VENDA);
+        itemDao = daoFactory.CriarDao(TipoDao.ITEM);
     }
 
     private void verificarCampos(Venda venda) throws RegraNegocioException {
@@ -63,11 +67,10 @@ public class VendaControllerImpl implements VendaController {
     }
 
     private List<Venda> adicionarItensNaListaDeVendas(List<Venda> lista) throws Exception {
-        Dao itemVenda = new ItemDaoImpl();
         Item item = new Item();
         for (int i = 0; i < lista.size(); i++) {
             item.setCodigoVenda(lista.get(i).getCodigoVenda());
-            lista.get(i).setItems(itemVenda.listar(item, null));
+            lista.get(i).setItems(itemDao.listar(item, null));
         }
         return lista;
     }
@@ -78,7 +81,6 @@ public class VendaControllerImpl implements VendaController {
         vendaDao.salvar(venda);
 
         //Salvar os ítens da venda
-        Dao itemDao = new ItemDaoImpl();
         for (int i = 0; i < venda.getItems().size(); i++) {
             itemDao.salvar(venda.getItems().get(i));
         }
@@ -92,7 +94,6 @@ public class VendaControllerImpl implements VendaController {
         if (venda == null) {
             throw new RegraNegocioException("Venda não encontrada");
         }
-        Dao itemDao = new ItemDaoImpl();
         Item item = new Item();
         item.setCodigoVenda(venda.getCodigoVenda());
         venda.setItems(itemDao.listar(item, null));
@@ -154,11 +155,11 @@ public class VendaControllerImpl implements VendaController {
                     ItemVO itemVO = new ItemVO(item.getReferenciaProduto(), item.getQuantidade(), item.getValor(), produto.getDescricao());
                     itensVO.add(itemVO);
                 }
-                Dao clienteDao = new ClienteDaoImpl();
+                ClienteController clienteController = new ClienteControllerImpl();
                 Cliente cli = new Cliente();
                 try {
                     cli.setId(venda.getIdCliente());
-                    cli = (Cliente)clienteDao.buscar(cli);
+                    cli = clienteController.buscar(cli.getId());
                 } catch (Exception ex) {
                     throw new JRException(ex);
                 }
