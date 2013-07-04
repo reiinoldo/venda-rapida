@@ -1,7 +1,7 @@
 package controller.impl;
 
 import controller.FornecedorController;
-import controller.dao.FornecedorDao;
+import controller.dao.Dao;
 import controller.dao.impl.FornecedorDaoImpl;
 import java.util.List;
 import model.Fornecedor;
@@ -15,7 +15,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 public class FornecedorControllerImpl implements FornecedorController {
     
-    public FornecedorDao fornecedorDao;
+    public Dao fornecedorDao;
     
     public FornecedorControllerImpl() {
         fornecedorDao = new FornecedorDaoImpl();
@@ -34,7 +34,7 @@ public class FornecedorControllerImpl implements FornecedorController {
     
     @Override
     public void salvar(Fornecedor fornecedor) throws Exception {
-        if (fornecedorDao.buscar(fornecedor.getId()) != null)
+        if (fornecedorDao.buscar(fornecedor) != null)
             throw new RegraNegocioException("Fornecedor com identificador " + String.valueOf(fornecedor.getId()) + " já existe\nDigite outro identificador");
         verificarCampos(fornecedor);
         fornecedorDao.salvar(fornecedor);
@@ -42,7 +42,7 @@ public class FornecedorControllerImpl implements FornecedorController {
     
     @Override
     public void editar(Fornecedor fornecedor) throws Exception {
-        if (fornecedorDao.buscar(fornecedor.getId()) == null)
+        if (fornecedorDao.buscar(fornecedor) == null)
             throw new RegraNegocioException("Fornecedor não cadastrado");
         verificarCampos(fornecedor);
         fornecedorDao.editar(fornecedor);
@@ -50,14 +50,18 @@ public class FornecedorControllerImpl implements FornecedorController {
     
     @Override
     public void excluir(int id) throws Exception{
-        if (fornecedorDao.buscar(id) == null)
+        Fornecedor fornecedor = new Fornecedor();
+        fornecedor.setId(id);
+        if (fornecedorDao.buscar(fornecedor) == null)
             throw new RegraNegocioException("Fornecedor não cadastrado");
-        fornecedorDao.excluir(id);
+        fornecedorDao.excluir(fornecedor);
     }
     
     @Override
     public Fornecedor buscar (int id) throws Exception {
-        return fornecedorDao.buscar(id);        
+        Fornecedor fornecedor = new Fornecedor();
+        fornecedor.setId(id);
+        return (Fornecedor)fornecedorDao.buscar(fornecedor);        
     }
     
     @Override
@@ -67,7 +71,7 @@ public class FornecedorControllerImpl implements FornecedorController {
     
     @Override
     public List<Fornecedor> listar(Fornecedor fornecedor) throws Exception {
-        return fornecedorDao.listar(fornecedor);
+        return fornecedorDao.listar(fornecedor, null);
     }
 
     @Override

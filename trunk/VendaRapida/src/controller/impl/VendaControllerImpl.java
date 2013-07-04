@@ -2,14 +2,11 @@ package controller.impl;
 
 import VO.ItemVO;
 import VO.VendaVO;
+import controller.ProdutoController;
 import controller.VendaController;
-import controller.dao.DAO;
-import controller.dao.ItemDao;
-import controller.dao.ProdutoDao;
-import controller.dao.VendaDao;
+import controller.dao.Dao;
 import controller.dao.impl.ClienteDaoImpl;
 import controller.dao.impl.ItemDaoImpl;
-import controller.dao.impl.ProdutoDaoImpl;
 import controller.dao.impl.VendaDaoImpl;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,7 +25,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 public class VendaControllerImpl implements VendaController {
 
-    public VendaDao vendaDao;
+    public Dao vendaDao;
 
     public VendaControllerImpl() {
         vendaDao = new VendaDaoImpl();
@@ -66,9 +63,11 @@ public class VendaControllerImpl implements VendaController {
     }
 
     private List<Venda> adicionarItensNaListaDeVendas(List<Venda> lista) throws Exception {
-        ItemDao itemVenda = new ItemDaoImpl();
+        Dao itemVenda = new ItemDaoImpl();
+        Item item = new Item();
         for (int i = 0; i < lista.size(); i++) {
-            lista.get(i).setItems(itemVenda.listar(lista.get(i).getCodigoVenda()));
+            item.setCodigoVenda(lista.get(i).getCodigoVenda());
+            lista.get(i).setItems(itemVenda.listar(item, null));
         }
         return lista;
     }
@@ -79,7 +78,7 @@ public class VendaControllerImpl implements VendaController {
         vendaDao.salvar(venda);
 
         //Salvar os ítens da venda
-        ItemDao itemDao = new ItemDaoImpl();
+        Dao itemDao = new ItemDaoImpl();
         for (int i = 0; i < venda.getItems().size(); i++) {
             itemDao.salvar(venda.getItems().get(i));
         }
@@ -87,12 +86,16 @@ public class VendaControllerImpl implements VendaController {
 
     @Override
     public Venda buscar(int codigoVenda) throws Exception {
-        Venda venda = vendaDao.buscar(codigoVenda);
+        Venda venda = new Venda();
+        venda.setCodigoVenda(codigoVenda);
+        venda = (Venda)vendaDao.buscar(venda);
         if (venda == null) {
             throw new RegraNegocioException("Venda não encontrada");
         }
-        ItemDao itemDao = new ItemDaoImpl();
-        venda.setItems(itemDao.listar(codigoVenda));
+        Dao itemDao = new ItemDaoImpl();
+        Item item = new Item();
+        item.setCodigoVenda(venda.getCodigoVenda());
+        venda.setItems(itemDao.listar(item, null));
         return venda;
     }
 
@@ -104,15 +107,17 @@ public class VendaControllerImpl implements VendaController {
     @Override
     public List<Venda> listar(Venda venda, Date dataFinal, Double valorInicial, Double valorFinal) throws Exception {
         verificarCamposListagem(venda, dataFinal, valorInicial, valorFinal);
-        List<Venda> listaVendas = vendaDao.listar(venda, dataFinal);
+        Venda vendaFinal = new Venda();
+        vendaFinal.setDataVenda(dataFinal);
+        List<Venda> listaVendas = vendaDao.listar(venda, vendaFinal);
         listaVendas = adicionarItensNaListaDeVendas(listaVendas);
 
         // filtra por valor
 
         List<Venda> listaVendasAux = new ArrayList<Venda>();
         for (Venda vend : listaVendas) {
-            double valorSemDesconto = 0;
-            /*for (Item item : vend.getItems()) {
+            /*double valorSemDesconto = 0;
+            for (Item item : vend.getItems()) {
                 valorSemDesconto += item.getValor();
             }
             double valorTotal = valorSemDesconto - vend.getDesconto();*/
@@ -139,21 +144,21 @@ public class VendaControllerImpl implements VendaController {
             for (Venda venda : (List<Venda>) listaGerada) {
                 List<ItemVO> itensVO = new ArrayList<ItemVO>();
                 for (Item item : venda.getItems()) {
-                    ProdutoDao produtoDao = new ProdutoDaoImpl();
+                    ProdutoController produtoController = new ProdutoControllerImpl();
                     Produto produto = null;
                     try {
-                        produto = produtoDao.buscar(item.getReferenciaProduto());
+                        produto = produtoController.buscar(item.getReferenciaProduto());
                     } catch (Exception ex) {
                         throw new JRException(ex);
                     }
                     ItemVO itemVO = new ItemVO(item.getReferenciaProduto(), item.getQuantidade(), item.getValor(), produto.getDescricao());
                     itensVO.add(itemVO);
                 }
-                DAO clienteDao = new ClienteDaoImpl();
+                Dao clienteDao = new ClienteDaoImpl();
                 Cliente cli = new Cliente();
                 try {
                     cli.setId(venda.getIdCliente());
-                    cli = (Cliente)clienteDao.buscar(cli.getId());
+                    cli = (Cliente)clienteDao.buscar(cli);
                 } catch (Exception ex) {
                     throw new JRException(ex);
                 }

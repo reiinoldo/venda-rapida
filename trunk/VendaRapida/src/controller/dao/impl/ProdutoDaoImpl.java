@@ -1,6 +1,6 @@
 package controller.dao.impl;
 
-import controller.dao.ProdutoDao;
+import controller.dao.Dao;
 import controller.dao.util.ConnectionMySql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Produto;
 
-public class ProdutoDaoImpl implements ProdutoDao{
+public class ProdutoDaoImpl implements Dao<Produto>{
 
     @Override
     public boolean salvar(Produto produto) throws Exception {
@@ -48,13 +48,13 @@ public class ProdutoDaoImpl implements ProdutoDao{
     }
 
     @Override
-    public boolean excluir(String referencia) throws Exception {
+    public boolean excluir(Produto produto) throws Exception {
         Connection conexao = null;
         try {
             conexao = ConnectionMySql.getConnection();
 
             PreparedStatement p = conexao.prepareStatement("delete from " + Produto.TABELA_PRODUTO + " where " + Produto.CAMPO_REFERENCIA + " = ?");
-            p.setString(1, referencia);
+            p.setString(1, produto.getReferencia());
 
             boolean execution = p.execute();
 
@@ -92,8 +92,8 @@ public class ProdutoDaoImpl implements ProdutoDao{
     }
 
     @Override
-    public List<Produto> listar(Produto produto, double valorFinal) throws Exception {   
-        if (produto != null) {
+    public List<Produto> listar(Produto produtoInicial, Produto produtoFinal) throws Exception {   
+        if (produtoInicial != null) {
             Connection conexao = null;
             try {
                 conexao = ConnectionMySql.getConnection();
@@ -114,32 +114,32 @@ public class ProdutoDaoImpl implements ProdutoDao{
 
                 PreparedStatement pr = conexao.prepareStatement(str.toString());
 
-                if (produto.getReferencia() != null) {
-                    pr.setString(1, "%" + produto.getReferencia() + "%");
+                if (produtoInicial.getReferencia() != null) {
+                    pr.setString(1, "%" + produtoInicial.getReferencia() + "%");
                 } else {
                     pr.setString(1, "%%");
                 }
 
-                if (produto.getCodigoBarrra() != null) {
-                    pr.setString(2, "%" + produto.getCodigoBarrra() + "%");
+                if (produtoInicial.getCodigoBarrra() != null) {
+                    pr.setString(2, "%" + produtoInicial.getCodigoBarrra() + "%");
                 } else {
                     pr.setString(2, "%%");
                 }            
 
-                if (produto.getDescricao() != null) {
-                    pr.setString(3, "%" + produto.getDescricao() + "%");
+                if (produtoInicial.getDescricao() != null) {
+                    pr.setString(3, "%" + produtoInicial.getDescricao() + "%");
                 } else {
                     pr.setString(3, "%%");
                 }
 
-                if (produto.getValor() != 0) {
-                    pr.setDouble(4, produto.getValor() );
+                if (produtoInicial.getValor() != 0) {
+                    pr.setDouble(4, produtoInicial.getValor() );
                 } else {
                     pr.setDouble(4, 0);
                 }
 
-                if (valorFinal != 0) {
-                    pr.setDouble(5, valorFinal );
+                if (produtoFinal.getValor() != 0) {
+                    pr.setDouble(5, produtoFinal.getValor() );
                 } else {
                     pr.setDouble(5, Double.MAX_VALUE);
                 }
@@ -204,13 +204,13 @@ public class ProdutoDaoImpl implements ProdutoDao{
         }
 
     @Override
-    public Produto buscar(String referencia) throws Exception {
+    public Produto buscar(Produto produto) throws Exception {
         Connection conexao = null;
         try {
             conexao = ConnectionMySql.getConnection();
 
             PreparedStatement ps = conexao.prepareStatement("select * from " + Produto.TABELA_PRODUTO + " where " + Produto.CAMPO_REFERENCIA + " = ?");
-            ps.setString(1, referencia);
+            ps.setString(1, produto.getReferencia());
             ResultSet r = ps.executeQuery();
 
             Produto p = null; 
@@ -229,7 +229,7 @@ public class ProdutoDaoImpl implements ProdutoDao{
         }
     }
 
-    @Override
+    /*@Override
     public Produto buscarCodigoBarras(String codigoBarras) throws Exception {
         Connection conexao = null;
         try {
@@ -253,6 +253,11 @@ public class ProdutoDaoImpl implements ProdutoDao{
         } finally {
             ConnectionMySql.closeConnection(conexao);
         }
+    }*/
+
+    @Override
+    public int incrementar() throws Exception {
+        return 0;
     }
 
 }

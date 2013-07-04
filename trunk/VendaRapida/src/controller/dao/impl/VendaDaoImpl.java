@@ -4,7 +4,7 @@
  */
 package controller.dao.impl;
 
-import controller.dao.VendaDao;
+import controller.dao.Dao;
 import controller.dao.util.ConnectionMySql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,7 +24,7 @@ import model.Venda;
  *
  * @author andrebampi
  */
-public class VendaDaoImpl implements VendaDao {
+public class VendaDaoImpl implements Dao<Venda> {
 
     @Override
     public boolean salvar(Venda venda) throws Exception {
@@ -97,8 +97,8 @@ public class VendaDaoImpl implements VendaDao {
     }
 
     @Override
-    public List<Venda> listar(Venda venda, Date dataFinal) throws Exception {
-        if (venda != null) {
+    public List<Venda> listar(Venda vendaInicial, Venda vendaFinal) throws Exception {
+        if (vendaInicial != null) {
             Connection conexao = null;
             try {
                 conexao = ConnectionMySql.getConnection();
@@ -125,20 +125,20 @@ public class VendaDaoImpl implements VendaDao {
 
                 PreparedStatement pr = conexao.prepareStatement(str.toString());
 
-                if (venda.getCodigoVenda() != 0) {
-                    pr.setString(1, "%" + venda.getCodigoVenda() + "%");
+                if (vendaInicial.getCodigoVenda() != 0) {
+                    pr.setString(1, "%" + vendaInicial.getCodigoVenda() + "%");
                 } else {
                     pr.setString(1, "%%");
                 }
 
-                if (venda.getCodigoPagSeguro() != null) {
-                    pr.setString(2, "%" + venda.getCodigoPagSeguro() + "%");
+                if (vendaInicial.getCodigoPagSeguro() != null) {
+                    pr.setString(2, "%" + vendaInicial.getCodigoPagSeguro() + "%");
                 } else {
                     pr.setString(2, "%%");
                 }
 
-                if (venda.getDataVenda() != null) {
-                    pr.setTimestamp(3, new Timestamp(venda.getDataVenda().getTime()));
+                if (vendaInicial.getDataVenda() != null) {
+                    pr.setTimestamp(3, new Timestamp(vendaInicial.getDataVenda().getTime()));
                 } else {
                     try {
                         pr.setTimestamp(3, new Timestamp(format.parse("01/01/1910").getTime()));
@@ -148,26 +148,26 @@ public class VendaDaoImpl implements VendaDao {
 
                 }
 
-                if (dataFinal != null) {
-                    pr.setTimestamp(4, new Timestamp(dataFinal.getTime()));
+                if (vendaFinal.getDataVenda() != null) {
+                    pr.setTimestamp(4, new Timestamp(vendaFinal.getDataVenda().getTime()));
                 } else {
                     pr.setTimestamp(4, new Timestamp(new Date().getTime()));
                 }
 
-                if (venda.getDesconto() > 0) {
-                    pr.setString(5, "%" + venda.getDesconto() + "%");
+                if (vendaInicial.getDesconto() > 0) {
+                    pr.setString(5, "%" + vendaInicial.getDesconto() + "%");
                 } else {
                     pr.setString(5, "%%");
                 }
 
-                if (venda.getIdCliente() != 0) {
-                    pr.setString(6, venda.getIdCliente() + "");
+                if (vendaInicial.getIdCliente() != 0) {
+                    pr.setString(6, vendaInicial.getIdCliente() + "");
                 } else {
                     pr.setString(6, "%%");
                 }
 
-                if (venda.getLoginUsuario() != null) {
-                    pr.setString(7, "%" + venda.getLoginUsuario() + "%");
+                if (vendaInicial.getLoginUsuario() != null) {
+                    pr.setString(7, "%" + vendaInicial.getLoginUsuario() + "%");
                 } else {
                     pr.setString(7, "%%");
                 }
@@ -199,13 +199,13 @@ public class VendaDaoImpl implements VendaDao {
     }
 
     @Override
-    public Venda buscar(int codigoVenda) throws Exception {
+    public Venda buscar(Venda venda) throws Exception {
         Connection conexao = null;
         try {
             conexao = ConnectionMySql.getConnection();
 
             PreparedStatement p = conexao.prepareStatement("select * from " + Venda.TABELA_VENDA + " where " + Venda.CAMPO_CODIGOVENDA + " = ?");
-            p.setInt(1, codigoVenda);
+            p.setInt(1, venda.getCodigoVenda());
             ResultSet r = p.executeQuery();
 
             Venda v = null;
@@ -239,5 +239,15 @@ public class VendaDaoImpl implements VendaDao {
         } finally {
             ConnectionMySql.closeConnection(conexao);
         }
+    }
+
+    @Override
+    public boolean excluir(Venda identificador) throws Exception {
+        throw new UnsupportedOperationException("Não é possível excluir uma venda.");
+    }
+
+    @Override
+    public boolean editar(Venda info) throws Exception {
+        throw new UnsupportedOperationException("Não é possível editar uma venda.");
     }
 }

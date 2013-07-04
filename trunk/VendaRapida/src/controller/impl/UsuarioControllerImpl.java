@@ -2,7 +2,7 @@ package controller.impl;
 
 import controller.UsuarioController;
 import controller.VendaController;
-import controller.dao.DAO;
+import controller.dao.Dao;
 import controller.dao.impl.UsuarioDaoImpl;
 import java.util.List;
 import model.Usuario;
@@ -10,7 +10,7 @@ import model.Venda;
 
 public class UsuarioControllerImpl implements UsuarioController {
 
-    public DAO usuarioDao;
+    public Dao usuarioDao;
     
     public UsuarioControllerImpl() {
         usuarioDao = new UsuarioDaoImpl();

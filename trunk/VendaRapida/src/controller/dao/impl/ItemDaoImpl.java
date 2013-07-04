@@ -1,6 +1,6 @@
 package controller.dao.impl;
 
-import controller.dao.ItemDao;
+import controller.dao.Dao;
 import controller.dao.util.ConnectionMySql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Item;
 
-public class ItemDaoImpl implements ItemDao {
+public class ItemDaoImpl implements Dao<Item> {
 
     @Override
     public boolean salvar(Item item) throws Exception {
@@ -48,7 +48,7 @@ public class ItemDaoImpl implements ItemDao {
     }
 
     @Override
-    public boolean excluir(int codigoVenda, String referenciaProduto) throws Exception {
+    public boolean excluir(Item item) throws Exception {
         Connection conexao = null;
         try {
             conexao = ConnectionMySql.getConnection();
@@ -56,8 +56,8 @@ public class ItemDaoImpl implements ItemDao {
             PreparedStatement p = conexao.prepareStatement("delete from " + Item.TABELA_ITEM
                     + " where " + Item.CAMPO_CODIGOVENDA + " = ?"
                     + " and " + Item.CAMPO_REFERENCIAPRODUTO + " = ?");
-            p.setInt(1, codigoVenda);
-            p.setString(2, referenciaProduto);
+            p.setInt(1, item.getCodigoVenda());
+            p.setString(2, item.getReferenciaProduto());
 
             boolean execution = p.execute();
 
@@ -70,13 +70,13 @@ public class ItemDaoImpl implements ItemDao {
     }
 
     @Override
-    public List<Item> listar(int codigoVenda) throws Exception {
+    public List<Item> listar(Item itemInicial, Item itemFinal) throws Exception {
         Connection conexao = null;
         try {
             conexao = ConnectionMySql.getConnection();
 
             PreparedStatement p = conexao.prepareStatement("select * from " + Item.TABELA_ITEM + " where " + Item.CAMPO_CODIGOVENDA + " = ?");
-            p.setInt(1, codigoVenda);
+            p.setInt(1, itemInicial.getCodigoVenda());
             ResultSet r = p.executeQuery();
 
             List<Item> list = new ArrayList<Item>();
@@ -98,27 +98,62 @@ public class ItemDaoImpl implements ItemDao {
     }
 
     @Override
-    public Item buscarItemPorProduto(String referenciaProduto) throws Exception {
+    public Item buscar(Item item) throws Exception {
         Connection conexao = null;
         try {
             conexao = ConnectionMySql.getConnection();
             PreparedStatement ps = conexao.prepareStatement("select * from " + Item.TABELA_ITEM + " where " + Item.CAMPO_REFERENCIAPRODUTO + " = ?");
-            ps.setString(1, referenciaProduto);
+            ps.setString(1, item.getReferenciaProduto());
             ResultSet r = ps.executeQuery();
 
-            Item item = null;
+            Item i = null;
             if (r.next()) {
-                item = new Item();
-                item.setCodigoVenda(r.getInt(Item.CAMPO_CODIGOVENDA));
-                item.setQuantidade(r.getInt(Item.CAMPO_QUANTIDADE));
-                item.setReferenciaProduto(r.getString(Item.CAMPO_REFERENCIAPRODUTO));
-                item.setValor(r.getDouble(Item.CAMPO_VALOR));
+                i = new Item();
+                i.setCodigoVenda(r.getInt(Item.CAMPO_CODIGOVENDA));
+                i.setQuantidade(r.getInt(Item.CAMPO_QUANTIDADE));
+                i.setReferenciaProduto(r.getString(Item.CAMPO_REFERENCIAPRODUTO));
+                i.setValor(r.getDouble(Item.CAMPO_VALOR));
             }
-            return item;
+            return i;
         } catch (SQLException ex) {
             throw ex;
         } finally {
             ConnectionMySql.closeConnection(conexao);
         }
+    }
+
+    @Override
+    public List<Item> listar() throws Exception {
+        Connection conexao = null;
+        try {
+            conexao = ConnectionMySql.getConnection();
+
+            ResultSet r = conexao.prepareStatement("select * from " + Item.TABELA_ITEM).executeQuery();
+            List<Item> list = new ArrayList<Item>();
+
+            while (r.next()) {
+                Item i = new Item();
+                i.setCodigoVenda(r.getInt(Item.CAMPO_CODIGOVENDA));
+                i.setReferenciaProduto(r.getString(Item.CAMPO_REFERENCIAPRODUTO));
+                i.setQuantidade(r.getInt(Item.CAMPO_QUANTIDADE));
+                i.setValor(r.getInt(Item.CAMPO_VALOR));
+                list.add(i);
+            }
+            return list;
+        } catch (SQLException ex) {
+            throw ex;
+        } finally {
+            ConnectionMySql.closeConnection(conexao);
+        }
+    }
+
+    @Override
+    public boolean editar(Item info) throws Exception {
+        throw new UnsupportedOperationException("Ítens da venda não são editáveis");
+    }
+
+    @Override
+    public int incrementar() throws Exception {
+        return 0;
     }
 }
