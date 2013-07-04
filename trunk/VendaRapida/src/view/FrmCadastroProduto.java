@@ -172,7 +172,7 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
         jScrollPane1.setViewportView(tabelaConsulta);
 
         btAdicionarFornecedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/mais_icon.png"))); // NOI18N
-        btAdicionarFornecedor.setToolTipText("Confirma");
+        btAdicionarFornecedor.setToolTipText("");
         btAdicionarFornecedor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btAdicionarFornecedorActionPerformed(evt);
@@ -180,7 +180,7 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
         });
 
         btRemoverFornecedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/menos_icon.png"))); // NOI18N
-        btRemoverFornecedor.setToolTipText("Confirma");
+        btRemoverFornecedor.setToolTipText("");
         btRemoverFornecedor.setPreferredSize(new java.awt.Dimension(60, 60));
         btRemoverFornecedor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
