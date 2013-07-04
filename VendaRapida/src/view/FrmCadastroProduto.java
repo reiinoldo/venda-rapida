@@ -70,6 +70,8 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
         btRemoverFornecedor = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Cadastro de Produto");
+        setResizable(false);
 
         lbConfirmarSenha.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
         lbConfirmarSenha.setText("Valor:");

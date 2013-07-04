@@ -137,6 +137,8 @@ public class FrmConsultaProduto extends javax.swing.JDialog {
         btGerarPDF = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Consulta de Produtos");
+        setResizable(false);
 
         cadastroAluno.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         cadastroAluno.setText("Consulta de Produtos");

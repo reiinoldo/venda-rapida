@@ -128,6 +128,8 @@ public class FrmConsultaCliente extends javax.swing.JDialog {
         tabelaConsulta = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Consulta de Clientes");
+        setResizable(false);
 
         cadastroAluno.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         cadastroAluno.setText("Consulta de Clientes");

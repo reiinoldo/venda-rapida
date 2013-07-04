@@ -189,6 +189,8 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
         txtCodigoCliente = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Simulação de Venda");
+        setResizable(false);
 
         btnFinalizarVenda.setFont(new java.awt.Font("DejaVu Sans", 0, 18)); // NOI18N
         btnFinalizarVenda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/confirma.png"))); // NOI18N

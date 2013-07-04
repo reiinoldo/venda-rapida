@@ -88,10 +88,12 @@ public final class FrmConsultaItensVenda extends javax.swing.JDialog {
         lbImgHeader = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Ítens da Venda");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setResizable(false);
 
         lbHeader.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        lbHeader.setText("Ítens da venda ");
+        lbHeader.setText("Ítens da Venda ");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 

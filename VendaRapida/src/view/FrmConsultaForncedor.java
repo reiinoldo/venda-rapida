@@ -125,6 +125,8 @@ public class FrmConsultaForncedor extends javax.swing.JDialog {
         edCPFCNPJ = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Consulta de Fornecedores");
+        setResizable(false);
 
         cadastroAluno.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         cadastroAluno.setText("Consulta de Fornecedores");
@@ -233,7 +235,7 @@ public class FrmConsultaForncedor extends javax.swing.JDialog {
                 .addComponent(lbImg)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cadastroAluno)
-                .addContainerGap(574, Short.MAX_VALUE))
+                .addContainerGap(563, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

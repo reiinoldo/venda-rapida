@@ -87,6 +87,8 @@ public class FrmCadastroFornecedor extends javax.swing.JDialog {
         btExcluir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Cadastro de Fornecedor");
+        setResizable(false);
 
         lbContato.setText("Contato:");
 

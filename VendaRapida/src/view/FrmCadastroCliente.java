@@ -59,6 +59,8 @@ public class FrmCadastroCliente extends javax.swing.JDialog {
         lbEndereco = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Cadastro de Clientes");
+        setResizable(false);
 
         edEndereco.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
 

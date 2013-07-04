@@ -1,5 +1,7 @@
 package view;
 
+import java.awt.Image;
+import java.awt.Toolkit;
 import model.Sessao;
 import model.Usuario;
 
@@ -15,6 +17,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
         usuarioLogado = Sessao.getInstance().getUsuario();
         lbUsuario.setText(usuarioLogado.getNome());
         setLocationRelativeTo(null);
+        Image image = Toolkit.getDefaultToolkit().getImage("src/img/vendaRapida02.png");
+        setIconImage(image);
         configurarTela();
     }
 
@@ -59,6 +63,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
         lbUsuario = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Venda Rápida - Principal");
+        setResizable(false);
 
         btTrocarUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/http-__iconesbr.oficinadanet.com_8432_64x64.png"))); // NOI18N
         btTrocarUsuario.setPreferredSize(new java.awt.Dimension(20, 20));
@@ -110,7 +116,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addGroup(pnVendasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnEfetuarVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnConsultaPrecos, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(108, Short.MAX_VALUE))
+                .addContainerGap(123, Short.MAX_VALUE))
         );
 
         tabs.addTab("Vendas", pnVendas);
@@ -318,6 +324,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addContainerGap(24, Short.MAX_VALUE))
         );
 
+        getAccessibleContext().setAccessibleName("Venda Rápida - Principal");
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -364,9 +372,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnConsultaProdutosActionPerformed
 
     private void btnConsultarVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarVendasActionPerformed
-        new FrmConsultaVendas(this, true).setVisible(true);        
+        new FrmConsultaVendas(this, true).setVisible(true);
     }//GEN-LAST:event_btnConsultarVendasActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btCadastroFornecedor;
     private javax.swing.JButton btConsultaFornecedores;
