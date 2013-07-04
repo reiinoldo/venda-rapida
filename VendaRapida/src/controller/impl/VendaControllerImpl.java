@@ -47,6 +47,9 @@ public class VendaControllerImpl implements VendaController {
         if (venda.getLoginUsuario().trim().equals("")) {
             throw new RegraNegocioException("Vendedor não informado");
         }
+        if (venda.getItems().isEmpty()) {
+            throw new RegraNegocioException("Impossível efetuar uma venda sem itens.");
+        }
     }
 
     private void verificarCamposListagem(Venda venda, Date dataFinal, Double valorInicial, Double valorFinal) throws RegraNegocioException {
