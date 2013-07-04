@@ -99,11 +99,4 @@ public class ClienteControllerImpl implements ClienteController {
     public int incrementar() throws Exception {
         return clienteDao.incrementar();
     }
-    
-    @Override
-    public void gerarRelatorio(List listaGerada, String path) throws JRException {
-        JasperReport report = JasperCompileManager.compileReport("src/relatorios/relClientes.jrxml");
-        JasperPrint print = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(listaGerada));
-        JasperExportManager.exportReportToPdfFile(print, path);
-    }
 }

@@ -85,11 +85,4 @@ public class FornecedorControllerImpl implements FornecedorController {
     public int incrementar() throws Exception {
         return fornecedorDao.incrementar();
     }
-
-    @Override
-    public void gerarRelatorio(List listaGerada, String path) throws JRException {
-        JasperReport report = JasperCompileManager.compileReport("src/relatorios/relFornecedores.jrxml");
-        JasperPrint print = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(listaGerada));
-        JasperExportManager.exportReportToPdfFile(print, path);
-    }
 }

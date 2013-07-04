@@ -6,8 +6,6 @@ import controller.impl.VendaControllerImpl;
 import controller.relatorio.ComposicaoRelatorio;
 import controller.relatorio.TipoRelatorio;
 import java.awt.Frame;
-import java.io.File;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,8 +20,6 @@ import javax.swing.table.DefaultTableModel;
 import model.Cliente;
 import model.Usuario;
 import model.Venda;
-import net.sf.jasperreports.engine.JRException;
-import view.util.ViewUtil;
 
 public class FrmConsultaVendas extends javax.swing.JDialog {
 
@@ -461,8 +457,6 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
                 .addContainerGap())
         );
 
-        getAccessibleContext().setAccessibleName("Consulta de Vendas Detalhadas");
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -500,9 +494,13 @@ public class FrmConsultaVendas extends javax.swing.JDialog {
 
     private void btGerarPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGerarPDFActionPerformed
         if (!listaVendasBuscadas.isEmpty()) {
-            ComposicaoRelatorio composicao;
+            ComposicaoRelatorio composicao = null;
             if (cbImprimirProdutos.isSelected()) {
-                composicao = new ComposicaoRelatorio(listaVendasBuscadas, TipoRelatorio.VENDAS_COM_ITENS);
+                try {
+                    composicao = new ComposicaoRelatorio(vendaController.getListaVendaComItens(listaVendasBuscadas), TipoRelatorio.VENDAS_COM_ITENS);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                }
             } else {
                 composicao = new ComposicaoRelatorio(listaVendasBuscadas, TipoRelatorio.VENDAS);
             }

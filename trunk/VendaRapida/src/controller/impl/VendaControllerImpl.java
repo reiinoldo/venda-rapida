@@ -17,12 +17,6 @@ import model.Item;
 import model.Produto;
 import model.Venda;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 public class VendaControllerImpl implements VendaController {
 
@@ -90,7 +84,7 @@ public class VendaControllerImpl implements VendaController {
     public Venda buscar(int codigoVenda) throws Exception {
         Venda venda = new Venda();
         venda.setCodigoVenda(codigoVenda);
-        venda = (Venda)vendaDao.buscar(venda);
+        venda = (Venda) vendaDao.buscar(venda);
         if (venda == null) {
             throw new RegraNegocioException("Venda não encontrada");
         }
@@ -118,10 +112,10 @@ public class VendaControllerImpl implements VendaController {
         List<Venda> listaVendasAux = new ArrayList<Venda>();
         for (Venda vend : listaVendas) {
             /*double valorSemDesconto = 0;
-            for (Item item : vend.getItems()) {
-                valorSemDesconto += item.getValor();
-            }
-            double valorTotal = valorSemDesconto - vend.getDesconto();*/
+             for (Item item : vend.getItems()) {
+             valorSemDesconto += item.getValor();
+             }
+             double valorTotal = valorSemDesconto - vend.getDesconto();*/
             double valorTotal = vend.getValorTotalComDesconto();
 
             //if (valorTotal >= valorFinal || valorTotal <= valorInicial) {
@@ -139,41 +133,33 @@ public class VendaControllerImpl implements VendaController {
     }
 
     @Override
-    public void gerarRelatorio(List listaGerada, String path, boolean comItens) throws JRException {
-        if (comItens) {
-            List listaVenda = new ArrayList();
-            for (Venda venda : (List<Venda>) listaGerada) {
-                List<ItemVO> itensVO = new ArrayList<ItemVO>();
-                for (Item item : venda.getItems()) {
-                    ProdutoController produtoController = new ProdutoControllerImpl();
-                    Produto produto = null;
-                    try {
-                        produto = produtoController.buscar(item.getReferenciaProduto());
-                    } catch (Exception ex) {
-                        throw new JRException(ex);
-                    }
-                    ItemVO itemVO = new ItemVO(item.getReferenciaProduto(), item.getQuantidade(), item.getValor(), produto.getDescricao());
-                    itensVO.add(itemVO);
-                }
-                ClienteController clienteController = new ClienteControllerImpl();
-                Cliente cli = new Cliente();
+    public List getListaVendaComItens(List<Venda> listaVenda) throws Exception {
+        List<VendaVO> listaVendaComItens = new ArrayList<VendaVO>();
+        for (Venda venda : listaVenda) {
+            List<ItemVO> itensVO = new ArrayList<ItemVO>();
+            for (Item item : venda.getItems()) {
+                ProdutoController produtoController = new ProdutoControllerImpl();
+                Produto produto = null;
                 try {
-                    cli.setId(venda.getIdCliente());
-                    cli = clienteController.buscar(cli.getId());
+                    produto = produtoController.buscar(item.getReferenciaProduto());
                 } catch (Exception ex) {
-                    throw new JRException(ex);
+                    throw new Exception(ex);
                 }
-                
-                VendaVO vendaVO = new VendaVO(venda.getCodigoVenda(), venda.getIdCliente(), cli.getNome(), venda.getLoginUsuario(), venda.getDataVenda(), venda.getDesconto(), venda.getValor(), itensVO);
-                listaVenda.add(vendaVO);
+                ItemVO itemVO = new ItemVO(item.getReferenciaProduto(), item.getQuantidade(), item.getValor(), produto.getDescricao());
+                itensVO.add(itemVO);
             }
-            JasperReport report = JasperCompileManager.compileReport("src/relatorios/relVendasComItens.jrxml");
-            JasperPrint print = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(listaVenda));
-            JasperExportManager.exportReportToPdfFile(print, path);
-        } else {
-            JasperReport report = JasperCompileManager.compileReport("src/relatorios/relVendas.jrxml");
-            JasperPrint print = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(listaGerada));
-            JasperExportManager.exportReportToPdfFile(print, path);
+            ClienteController clienteController = new ClienteControllerImpl();
+            Cliente cli = new Cliente();
+            try {
+                cli.setId(venda.getIdCliente());
+                cli = clienteController.buscar(cli.getId());
+            } catch (Exception ex) {
+                throw new JRException(ex);
+            }
+
+            VendaVO vendaVO = new VendaVO(venda.getCodigoVenda(), venda.getIdCliente(), cli.getNome(), venda.getLoginUsuario(), venda.getDataVenda(), venda.getDesconto(), venda.getValor(), itensVO);
+            listaVendaComItens.add(vendaVO);
         }
+        return listaVendaComItens;
     }
 }

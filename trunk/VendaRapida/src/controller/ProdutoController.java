@@ -2,7 +2,6 @@ package controller;
 
 import java.util.List;
 import model.Produto;
-import net.sf.jasperreports.engine.JRException;
 
 public interface ProdutoController {
 
@@ -18,8 +17,5 @@ public interface ProdutoController {
 
     List<Produto> listar(Produto produto, double valorFinal) throws Exception;
 
-    void salvar(Produto produto) throws Exception;
-
-    void gerarRelatorio(List listaGerada, String path) throws JRException;
-    
+    void salvar(Produto produto) throws Exception;    
 }
