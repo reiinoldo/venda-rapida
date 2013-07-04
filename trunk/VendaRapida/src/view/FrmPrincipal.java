@@ -352,7 +352,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btCadastroFornecedorActionPerformed
 
     private void btnEfetuarVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEfetuarVendaActionPerformed
-        new FrmSimulacaoVenda(this, true).setVisible(true);
+        new FrmSimulacaoVenda(this, true, false).setVisible(true);
     }//GEN-LAST:event_btnEfetuarVendaActionPerformed
 
     private void btnConsultaPrecosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultaPrecosActionPerformed

@@ -33,15 +33,15 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
      */
     public FrmConsultaPreco(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        initComponents();       
+        initComponents();
         setLocationRelativeTo(null);
-
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F10"), "checkout");
         getRootPane().getActionMap().put("checkout", new AbstractAction("checkout") {
             // The next two lines should be in one line              
             public void actionPerformed(ActionEvent evt) {
-                if(btSimula.isEnabled())
+                if (btSimula.isEnabled()) {
                     btSimulaActionPerformed(evt);
+                }
             }
         });
 
@@ -84,7 +84,7 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     private void contarTempoLimpar() {
         threadLimpaComponentesFrmConsultaPreco.interrupt();
         threadLimpaComponentesFrmConsultaPreco = new ThreadLimpaComponentesFrmConsultaPreco(this);
@@ -102,11 +102,11 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
 
             edPrecoTotal.setText(StringUtil.getR$FormmatedFromDouble(valor));
         } /*else {
-            JOptionPane.showMessageDialog(null, "A Quantidade não pode ser menor que 1(um)!", "Erro", JOptionPane.ERROR_MESSAGE);
-            edQuantidade.setText("1");
-        }*/
+         JOptionPane.showMessageDialog(null, "A Quantidade não pode ser menor que 1(um)!", "Erro", JOptionPane.ERROR_MESSAGE);
+         edQuantidade.setText("1");
+         }*/
     }
-    
+
     public void limpar() {
         edCodigoBarras.setText("");
         edPrecoTotal.setText("0,00");
@@ -326,9 +326,9 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
 
     private void btSimulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSimulaActionPerformed
         int qtd = Integer.parseInt(edQuantidade.getText());
-        if (produto == null)
-            new FrmSimulacaoVenda((Frame) getParent(), true).setVisible(true);
-        else {
+        if (produto == null) {
+            new FrmSimulacaoVenda((Frame) getParent(), true, true).setVisible(true);
+        } else {
             Item item = new Item(produto, qtd);
             new FrmSimulacaoVenda((Frame) getParent(), true, item).setVisible(true);
         }
@@ -350,7 +350,6 @@ public class FrmConsultaPreco extends javax.swing.JDialog {
     private void edQuantidadeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_edQuantidadeKeyPressed
         contarTempoLimpar();
     }//GEN-LAST:event_edQuantidadeKeyPressed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btMais;
     private javax.swing.JButton btMenos;
