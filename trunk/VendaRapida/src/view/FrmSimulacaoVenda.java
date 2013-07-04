@@ -322,6 +322,11 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
         });
 
         txtCodigoBarras.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtCodigoBarras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCodigoBarrasActionPerformed(evt);
+            }
+        });
         txtCodigoBarras.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtCodigoBarrasFocusLost(evt);
@@ -632,8 +637,14 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             buscarProdutoPeloCodigoBarra();
             btnAdicionarItemActionPerformed(null);
+            txtCodigoBarras.selectAll();
         }
     }//GEN-LAST:event_txtCodigoBarrasKeyPressed
+
+    private void txtCodigoBarrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoBarrasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCodigoBarrasActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddItem;
     private javax.swing.JButton btnAdicionarItem;

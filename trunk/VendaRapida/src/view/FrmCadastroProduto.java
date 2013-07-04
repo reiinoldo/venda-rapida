@@ -11,6 +11,7 @@ import controller.impl.FornecedorProdutoControllerImpl;
 import controller.impl.ProdutoControllerImpl;
 import controller.impl.RegraNegocioException;
 import java.awt.Frame;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -39,6 +40,7 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
         listaFornecedoresProduto = new ArrayList<Fornecedor>();
         fornecedorProdutoController = new FornecedorProdutoControllerImpl();
         initComponents();
+        this.getRootPane().setDefaultButton(null);
         setLocationRelativeTo(null);
     }
 
@@ -130,9 +132,19 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
         });
 
         edCodigoBarras.setFont(new java.awt.Font("Verdana", 1, 15)); // NOI18N
+        edCodigoBarras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                edCodigoBarrasActionPerformed(evt);
+            }
+        });
         edCodigoBarras.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 edCodigoBarrasFocusLost(evt);
+            }
+        });
+        edCodigoBarras.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                edCodigoBarrasKeyPressed(evt);
             }
         });
 
@@ -206,13 +218,14 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
                                     .addComponent(lbLogin))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(edDescricao)
-                                    .addComponent(edValor)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(edReferencia)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGap(4, 4, 4)
                                         .addComponent(btPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(edCodigoBarras)))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(edValor, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
+                                        .addComponent(edDescricao, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(edCodigoBarras, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -410,6 +423,15 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
 
     private void edCodigoBarrasFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edCodigoBarrasFocusLost
     }//GEN-LAST:event_edCodigoBarrasFocusLost
+
+    private void edCodigoBarrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edCodigoBarrasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_edCodigoBarrasActionPerformed
+
+    private void edCodigoBarrasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_edCodigoBarrasKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+            edCodigoBarras.selectAll();
+    }//GEN-LAST:event_edCodigoBarrasKeyPressed
     
     private void buscar() {
         try {
