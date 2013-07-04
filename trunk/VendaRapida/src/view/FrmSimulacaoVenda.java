@@ -140,12 +140,13 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
         }
     }
 
-    public void perguntarGerarPDFVenda() {
+    public void perguntarGerarPDFVenda() throws Exception {
         int gerarPDF = JOptionPane.showConfirmDialog(null, "Venda realizada com sucesso.\nDeseja gerar um relatorio da Venda?", "Sucesso", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
         if (gerarPDF == JOptionPane.OK_OPTION) {
             List listaVenda = new ArrayList();
             listaVenda.add(venda);
-            ComposicaoRelatorio composicao = new ComposicaoRelatorio(listaVenda, TipoRelatorio.VENDAS_COM_ITENS);
+            List listaRelatorio = vendaController.getListaVendaComItens(listaVenda);
+            ComposicaoRelatorio composicao = new ComposicaoRelatorio(listaRelatorio, TipoRelatorio.VENDAS_COM_ITENS);
 
             new FrmGerarRelatorio((Frame) getParent(), true, composicao).setVisible(true);
         }
