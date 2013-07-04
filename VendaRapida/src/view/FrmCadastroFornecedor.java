@@ -278,7 +278,7 @@ public class FrmCadastroFornecedor extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_edCodigoActionPerformed
 
-    private void btLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLimparActionPerformed
+    private void limpar() {
         edCodigo.setText("");
         edNome.setText("");        
         edCpfCnpj.setText("");
@@ -287,6 +287,10 @@ public class FrmCadastroFornecedor extends javax.swing.JDialog {
         edTelefone.setText("");        
         edCodigo.requestFocus();
         edCodigo.setEnabled(true);
+    }
+    
+    private void btLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLimparActionPerformed
+        limpar();
     }//GEN-LAST:event_btLimparActionPerformed
 
     private void btLimparKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btLimparKeyPressed
@@ -350,8 +354,13 @@ public class FrmCadastroFornecedor extends javax.swing.JDialog {
     }//GEN-LAST:event_edCodigoFocusLost
 
     private void btExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExcluirActionPerformed
-        try {            
-            fornecedorController.excluir(Integer.parseInt(edCodigo.getText()));
+        try {          
+            int excluir = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir este fornecedor?", "Excluir", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (excluir == JOptionPane.OK_OPTION) {
+                fornecedorController.excluir(Integer.parseInt(edCodigo.getText()));
+                JOptionPane.showMessageDialog(null, "Fornecedor excluído com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                limpar();
+            }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
