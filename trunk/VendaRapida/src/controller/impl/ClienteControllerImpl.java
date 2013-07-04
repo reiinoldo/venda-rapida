@@ -9,13 +9,6 @@ import controller.dao.impl.DaoFactoryImpl;
 import java.util.List;
 import model.Cliente;
 import model.Venda;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 public class ClienteControllerImpl implements ClienteController {
 
@@ -64,7 +57,7 @@ public class ClienteControllerImpl implements ClienteController {
         VendaController vendaController = new VendaControllerImpl();
         Venda venda = new Venda();
         venda.setIdCliente(id);
-        List<Venda> listaVenda = vendaController.listar(venda, null, null, null);
+        List<Venda> listaVenda = vendaController.listar(venda, null, 0d, Double.MAX_VALUE);
 
         if (!listaVenda.isEmpty()) 
             throw new RegraNegocioException("Cliente já efetuou compras e não pode ser excluído.");
