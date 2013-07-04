@@ -12,10 +12,10 @@ import controller.impl.ClienteControllerImpl;
 import controller.impl.ProdutoControllerImpl;
 import controller.impl.RegraNegocioException;
 import controller.impl.VendaControllerImpl;
+import controller.relatorio.ComposicaoRelatorio;
+import controller.relatorio.TipoRelatorio;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,8 +28,6 @@ import model.Produto;
 import model.Sessao;
 import model.Venda;
 import model.Venda.TipoDesconto;
-import net.sf.jasperreports.engine.JRException;
-import view.util.ViewUtil;
 
 /**
  *
@@ -143,30 +141,13 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
     }
 
     public void perguntarGerarPDFVenda() {
-        int gerarPDF = JOptionPane.showConfirmDialog(null, "Venda realizada com sucesso.\nDeseja gerar um PDF da Venda?", "Sucesso", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+        int gerarPDF = JOptionPane.showConfirmDialog(null, "Venda realizada com sucesso.\nDeseja gerar um relatorio da Venda?", "Sucesso", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
         if (gerarPDF == JOptionPane.OK_OPTION) {
-            try {
-                String path = null;
-                try {
-                    path = ViewUtil.createFileChooserToSavePDF(this, ViewUtil.GeradorNomePDF.VENDA);
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-                }
-                if (path != null) {
-                    List listaVendas = new ArrayList();
-                    listaVendas.add(venda);
-                    vendaController.gerarRelatorio(listaVendas, path, true);
-                    int abrir = JOptionPane.showConfirmDialog(null, "PDF Gerado Com Sucesso em '" + path + "'. \nDeseja abrí-lo?", "Sucesso", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
-                    if (abrir == JOptionPane.OK_OPTION) {
-                        java.awt.Desktop.getDesktop().open(new File(path));
-                    }
-                }
-            } catch (JRException ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao gerar relatório, causa: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-                ex.printStackTrace();
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao abrir o arquivo, causa: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            }
+            List listaVenda = new ArrayList();
+            listaVenda.add(venda);
+            ComposicaoRelatorio composicao = new ComposicaoRelatorio(listaVenda, TipoRelatorio.VENDAS_COM_ITENS);
+
+            new FrmGerarRelatorio((Frame) getParent(), true, composicao).setVisible(true);
         }
     }
 
@@ -585,7 +566,7 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     private void txtCodigoBarrasFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCodigoBarrasFocusLost
         buscarProdutoPeloCodigoBarra();
     }//GEN-LAST:event_txtCodigoBarrasFocusLost
@@ -641,7 +622,6 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
             btnAdicionarItemActionPerformed(null);
         }
     }//GEN-LAST:event_txtCodigoBarrasKeyPressed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddItem;
     private javax.swing.JButton btnAdicionarItem;

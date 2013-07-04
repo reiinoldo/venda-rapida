@@ -3,17 +3,15 @@ package view;
 import controller.FornecedorController;
 import controller.impl.FornecedorControllerImpl;
 import controller.impl.RegraNegocioException;
-import java.io.File;
-import java.io.IOException;
+import controller.relatorio.ComposicaoRelatorio;
+import controller.relatorio.TipoRelatorio;
+import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Fornecedor;
-import net.sf.jasperreports.engine.JRException;
-import view.util.ViewUtil;
-import view.util.ViewUtil.GeradorNomePDF;
 
 public class FrmConsultaForncedor extends javax.swing.JDialog {
 
@@ -35,7 +33,7 @@ public class FrmConsultaForncedor extends javax.swing.JDialog {
         fornecedor = new Fornecedor();
         if (!edNome.getText().isEmpty()) {
             fornecedor.setNome(edNome.getText());
-        }        
+        }
         try {
             listaFornecedoresBuscados = fornecedorController.listar(fornecedor);
             carregarGrid();
@@ -54,7 +52,7 @@ public class FrmConsultaForncedor extends javax.swing.JDialog {
             registroDb.add(fornecedor.getNome());
             registroDb.add(fornecedor.getCpfCnpj());
             registroDb.add(fornecedor.getTelefone());
-            registroDb.add(fornecedor.getEmail());            
+            registroDb.add(fornecedor.getEmail());
 
             dados.add(registroDb);
         }
@@ -93,7 +91,7 @@ public class FrmConsultaForncedor extends javax.swing.JDialog {
 
     private void limpar() {
         edNome.setText("");
-        edCPFCNPJ.setText("");        
+        edCPFCNPJ.setText("");
         listaFornecedoresBuscados = new ArrayList<Fornecedor>();
 
         dtm = new DefaultTableModel();
@@ -215,7 +213,7 @@ public class FrmConsultaForncedor extends javax.swing.JDialog {
         lbImg.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         lbImg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/motorista.png"))); // NOI18N
 
-        btGerarPDF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/pdf_file.png"))); // NOI18N
+        btGerarPDF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/relatorio.png"))); // NOI18N
         btGerarPDF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btGerarPDFActionPerformed(evt);
@@ -315,27 +313,10 @@ public class FrmConsultaForncedor extends javax.swing.JDialog {
 
     private void btGerarPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGerarPDFActionPerformed
         if (!listaFornecedoresBuscados.isEmpty()) {
-            try {
-                String path = null;
-                try {
-                    path = ViewUtil.createFileChooserToSavePDF(this, GeradorNomePDF.FORNECEDORES);
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-                }
-                if (path != null) {
-                    fornecedorController.gerarRelatorio(listaFornecedoresBuscados, path);
-                    int abrir = JOptionPane.showConfirmDialog(null, "PDF Gerado Com Sucesso em '" + path + "'. \nDeseja abrí-lo?", "Sucesso", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
-                    if (abrir == JOptionPane.OK_OPTION) {
-                        java.awt.Desktop.getDesktop().open(new File(path));
-                    }
-                }
-            } catch (JRException ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao gerar relatório, causa: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao abrir o arquivo, causa: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            }
+            ComposicaoRelatorio composicao = new ComposicaoRelatorio(listaFornecedoresBuscados, TipoRelatorio.FORNECEDORES);
+            new FrmGerarRelatorio((Frame) getParent(), true, composicao).setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(null, "Necessita-se ao menos de um registro para gerar o PDF.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Necessita-se ao menos de um registro para gerar um relatório.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btGerarPDFActionPerformed
 
