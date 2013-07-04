@@ -49,6 +49,9 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
+        if (!Sessao.getInstance().getUsuario().isVendeProduto()) {
+            btnFinalizarVenda.setVisible(false);
+        }
         venda = new Venda();
         try {
             venda.setCodigoVenda(vendaController.incrementar());
@@ -62,10 +65,16 @@ public class FrmSimulacaoVenda extends javax.swing.JDialog {
         atualizaTela();
     }
 
-    public FrmSimulacaoVenda(java.awt.Frame parent, boolean modal) {
+    public FrmSimulacaoVenda(java.awt.Frame parent, boolean modal, boolean simular) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
+        if (!Sessao.getInstance().getUsuario().isVendeProduto()) {
+            btnFinalizarVenda.setVisible(false);
+        } else if (!simular) {
+            setTitle("Efetuar Venda");
+            jLabel7.setText("Efetuar Venda");
+        }
         venda = new Venda();
         try {
             venda.setCodigoVenda(vendaController.incrementar());
