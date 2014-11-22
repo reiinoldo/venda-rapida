@@ -1,10 +1,11 @@
 package controller.dao.impl;
 
+import com.mongodb.DB;
 import controller.dao.Dao;
-import controller.dao.util.ConnectionMySql;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import controller.dao.util.ConnectionMongoDB;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,257 +13,173 @@ import model.Fornecedor;
 
 public class FornecedorDaoImpl implements Dao<Fornecedor>{
 
+    private static final String TABELA = "fornecedor";
+    
     @Override
     public boolean salvar(Fornecedor fornecedor) throws Exception {
-        Connection conexao = null;
+        DB conexao = null;
         try {
-            conexao = ConnectionMySql.getConnection();
-            StringBuilder str = new StringBuilder();
+            conexao = ConnectionMongoDB.getConnection();
+            DBCollection collection = conexao.getCollection(TABELA);
+            
+            collection.insert(fornecedor.getBasicDBObject());
 
-            str.append("INSERT INTO " + Fornecedor.TABELA_FORNECEDOR + " ");
-            str.append("( " + Fornecedor.CAMPO_ID + ", ");
-            str.append(Fornecedor.CAMPO_CPFCNPJ + ", ");
-            str.append(Fornecedor.CAMPO_EMAIL + ", ");
-            str.append(Fornecedor.CAMPO_ENDERECO + ", ");
-            str.append(Fornecedor.CAMPO_NOME + ", ");
-            str.append(Fornecedor.CAMPO_TELEFONE + " ) ");
-            str.append("values ( ");
-            str.append("?, ");
-            str.append("?, ");
-            str.append("?, ");
-            str.append("?, ");
-            str.append("?, ");
-            str.append("? )");
-
-            PreparedStatement p = conexao.prepareStatement(str.toString());
-            p.setInt(1, fornecedor.getId());
-            p.setString(2, fornecedor.getCpfCnpj());
-            p.setString(3, fornecedor.getEmail());
-            p.setString(4, fornecedor.getEndereco());
-            p.setString(5, fornecedor.getNome());
-            p.setString(6, fornecedor.getTelefone());
-
-            boolean execution = p.execute();
-
-            return !execution;
-        } catch (SQLException ex) {
+            return true;
+        } catch (Exception ex) {
             throw ex;
         } finally {
-            ConnectionMySql.closeConnection(conexao);
+            ConnectionMongoDB.closeConnection(conexao);
         }
     }
 
     @Override
     public boolean excluir(Fornecedor fornecedor) throws Exception {
-        Connection conexao = null;
+        DB conexao = null;
         try {
-            conexao = ConnectionMySql.getConnection();
+            conexao = ConnectionMongoDB.getConnection();
+            DBCollection collection = conexao.getCollection(TABELA);
 
-            PreparedStatement p = conexao.prepareStatement("delete from " + Fornecedor.TABELA_FORNECEDOR + " where " + Fornecedor.CAMPO_ID + " = ?");
-            p.setInt(1, fornecedor.getId());
+            collection.remove(new BasicDBObject("id", fornecedor.getId()));
 
-            boolean execution = p.execute();
-
-            return execution;
-        } catch (SQLException ex) {
+            return true;
+        } catch (Exception ex) {
             throw ex;
         } finally {
-            ConnectionMySql.closeConnection(conexao);
+            ConnectionMongoDB.closeConnection(conexao);
         }
     }
 
     @Override
     public List<Fornecedor> listar() throws Exception {
-        Connection conexao = null;
-        try{
-            conexao = ConnectionMySql.getConnection();
+        DB conexao = null;
+        try {
+            conexao = ConnectionMongoDB.getConnection();
+            DBCollection collection = conexao.getCollection(TABELA);
 
-            ResultSet r = conexao.prepareStatement("select * from " + Fornecedor.TABELA_FORNECEDOR).executeQuery();
             List<Fornecedor> list = new ArrayList<Fornecedor>();
 
-            while (r.next()) {
+            DBCursor cursor = collection.find();
+            while (cursor.hasNext()) {
                 Fornecedor f = new Fornecedor();
-                f.setId(r.getInt(Fornecedor.CAMPO_ID));
-                f.setCpfCnpj(r.getString(Fornecedor.CAMPO_CPFCNPJ));
-                f.setEmail(r.getString(Fornecedor.CAMPO_EMAIL));
-                f.setEndereco(r.getString(Fornecedor.CAMPO_ENDERECO));
-                f.setNome(r.getString(Fornecedor.CAMPO_NOME));
-                f.setTelefone(r.getString(Fornecedor.CAMPO_TELEFONE));
+                f.convertDBObjectToObject(cursor.next());
                 list.add(f);
             }
+            cursor.close();
             return list;
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             throw ex;
         } finally {
-            ConnectionMySql.closeConnection(conexao);
+            ConnectionMongoDB.closeConnection(conexao);
         }
     }
 
     @Override
     public List<Fornecedor> listar(Fornecedor fornecedorInicial, Fornecedor fornecedorFinal) throws Exception {
         if (fornecedorInicial != null) {
-            Connection conexao = null;
+            DB conexao = null;
             try {
-                conexao = ConnectionMySql.getConnection();
+                conexao = ConnectionMongoDB.getConnection();
+                DBCollection collection = conexao.getCollection(TABELA);
 
-                StringBuilder str = new StringBuilder();
-                str.append("SELECT ");
-                str.append(Fornecedor.CAMPO_ID + ", ");
-                str.append(Fornecedor.CAMPO_CPFCNPJ + ", ");
-                str.append(Fornecedor.CAMPO_EMAIL + ", ");
-                str.append(Fornecedor.CAMPO_ENDERECO + ", ");
-                str.append(Fornecedor.CAMPO_NOME + ", ");
-                str.append(Fornecedor.CAMPO_TELEFONE + " ");
-                str.append(" FROM " + Fornecedor.TABELA_FORNECEDOR);
-                str.append(" WHERE ");
-                str.append(Fornecedor.CAMPO_ID + " LIKE ? AND ");
-                str.append(Fornecedor.CAMPO_CPFCNPJ + " LIKE ? AND ");
-                str.append(Fornecedor.CAMPO_EMAIL + " LIKE ? AND ");
-                str.append(Fornecedor.CAMPO_ENDERECO + " LIKE ? AND ");
-                str.append(Fornecedor.CAMPO_NOME + " LIKE ? AND ");
-                str.append(Fornecedor.CAMPO_TELEFONE + " LIKE ? ");
-
-                PreparedStatement pr = conexao.prepareStatement(str.toString());
-
-                if (fornecedorInicial.getId() != 0) {
-                    pr.setString(1, "%" + fornecedorInicial.getId() + "%");
-                } else {
-                    pr.setString(1, "%%");
+                BasicDBObject filtro = new BasicDBObject();
+                if (fornecedorInicial.getId() < 0) {
+                    filtro.put("id", java.util.regex.Pattern.compile(fornecedorInicial.getId() + ""));
                 }
 
                 if (fornecedorInicial.getCpfCnpj() != null) {
-                    pr.setString(2, "%" + fornecedorInicial.getCpfCnpj() + "%");
-                } else {
-                    pr.setString(2, "%%");
-                }            
+                    filtro.put("cpfCnpj", java.util.regex.Pattern.compile(fornecedorInicial.getCpfCnpj()));
+                }
 
                 if (fornecedorInicial.getEmail() != null) {
-                    pr.setString(3, "%" + fornecedorInicial.getEmail() + "%");
-                } else {
-                    pr.setString(3, "%%");
+                    filtro.put("email", java.util.regex.Pattern.compile(fornecedorInicial.getEmail()));
                 }
 
                 if (fornecedorInicial.getEndereco() != null) {
-                    pr.setString(4, "%" + fornecedorInicial.getEndereco() + "%");
-                } else {
-                    pr.setString(4, "%%");
+                    filtro.put("endereco", java.util.regex.Pattern.compile(fornecedorInicial.getEndereco()));
                 }
 
                 if (fornecedorInicial.getNome() != null) {
-                    pr.setString(5, "%" + fornecedorInicial.getNome() + "%");
-                } else {
-                    pr.setString(5, "%%");
+                    filtro.put("nome", java.util.regex.Pattern.compile(fornecedorInicial.getNome()));
                 }
 
                 if (fornecedorInicial.getTelefone() != null) {
-                    pr.setString(6, "%" + fornecedorInicial.getTelefone() + "%");
-                } else {
-                    pr.setString(6, "%%");
+                    filtro.put("telefone", java.util.regex.Pattern.compile(fornecedorInicial.getTelefone()));
                 }
 
-                ResultSet r = pr.executeQuery();
+                DBCursor cursor = collection.find(filtro);
 
                 List<Fornecedor> list = new ArrayList<Fornecedor>();
-                while (r.next()) {
+                while (cursor.hasNext()) {
                     Fornecedor f = new Fornecedor();
-                    f.setId(r.getInt(Fornecedor.CAMPO_ID));
-                    f.setCpfCnpj(r.getString(Fornecedor.CAMPO_CPFCNPJ));
-                    f.setEmail(r.getString(Fornecedor.CAMPO_EMAIL));
-                    f.setEndereco(r.getString(Fornecedor.CAMPO_ENDERECO));
-                    f.setNome(r.getString(Fornecedor.CAMPO_NOME));
-                    f.setTelefone(r.getString(Fornecedor.CAMPO_TELEFONE));
+                    f.convertDBObjectToObject(cursor.next());
                     list.add(f);
                 }
-
+                cursor.close();
                 return list;
-            } catch (SQLException ex) {
+            } catch (Exception ex) {
                 throw ex;
             } finally {
-                ConnectionMySql.closeConnection(conexao);
+                ConnectionMongoDB.closeConnection(conexao);
             }
-
-        } else
+        } else {
             return this.listar();
-    }
-
+        }
+    }    
+    
     @Override
     public boolean editar(Fornecedor fornecedor) throws Exception {
         if (fornecedor != null) {
-            Connection conexao = null;
+            DB conexao = null;
             try {
-                conexao = ConnectionMySql.getConnection();
+                conexao = ConnectionMongoDB.getConnection();
+                DBCollection collection = conexao.getCollection(TABELA);
 
-                StringBuilder sb = new StringBuilder();
-                sb.append("update "+ Fornecedor.TABELA_FORNECEDOR +" ");
-                sb.append("set ");
-                sb.append(Fornecedor.CAMPO_CPFCNPJ +  " = ?, ");
-                sb.append(Fornecedor.CAMPO_EMAIL +  " = ?, ");
-                sb.append(Fornecedor.CAMPO_ENDERECO +  " = ?, ");
-                sb.append(Fornecedor.CAMPO_NOME +  " = ?, ");
-                sb.append(Fornecedor.CAMPO_TELEFONE +  " = ? ");
-                sb.append("where ");
-                sb.append(Fornecedor.CAMPO_ID +  " = ?");
+                collection.update(new BasicDBObject().append("id", fornecedor.getId()), fornecedor.getBasicDBObject());
 
-                PreparedStatement pr = conexao.prepareStatement(sb.toString());
-
-                pr.setString(1, fornecedor.getCpfCnpj());
-                pr.setString(2, fornecedor.getEmail());
-                pr.setString(3, fornecedor.getEndereco());
-                pr.setString(4, fornecedor.getNome());
-                pr.setString(5, fornecedor.getTelefone());
-                pr.setInt(6, fornecedor.getId());
-
-                boolean execution = pr.execute();
-                return execution;
-            } catch (SQLException ex) {
+                return true;
+            } catch (Exception ex) {
                 throw ex;
             } finally {
-                ConnectionMySql.closeConnection(conexao);
+                ConnectionMongoDB.closeConnection(conexao);
             }
         } else {
-            throw new SQLException("Fornecedor inválido");
+            throw new SQLException("Cliente inválido");
         }
     }
 
     @Override
     public Fornecedor buscar(Fornecedor fornecedor) throws Exception {
-        Connection conexao = null;
+        DB conexao = null;
         try {
-            conexao = ConnectionMySql.getConnection();
+            conexao = ConnectionMongoDB.getConnection();
+            DBCollection collection = conexao.getCollection(TABELA);
 
-            PreparedStatement p = conexao.prepareStatement("select * from " + Fornecedor.TABELA_FORNECEDOR + " where " + Fornecedor.CAMPO_ID + " = ?");
-            p.setInt(1, fornecedor.getId());
-            ResultSet r = p.executeQuery();
-
-            Fornecedor f = null; 
-            if (r.next()) {
-                f = new Fornecedor();
-                f.setId(r.getInt(Fornecedor.CAMPO_ID));
-                f.setCpfCnpj(r.getString(Fornecedor.CAMPO_CPFCNPJ));
-                f.setEmail(r.getString(Fornecedor.CAMPO_EMAIL));
-                f.setEndereco(r.getString(Fornecedor.CAMPO_ENDERECO));
-                f.setNome(r.getString(Fornecedor.CAMPO_NOME));
-                f.setTelefone(r.getString(Fornecedor.CAMPO_TELEFONE));
+            DBCursor cursor = collection.find(new BasicDBObject("id", fornecedor.getId()));
+            if (cursor.hasNext()) {
+                Fornecedor f = new Fornecedor();
+                f.convertDBObjectToObject(cursor.next());
+                return f;
             }
-            return f;
-        } catch (SQLException ex) {
+            return null;
+        } catch (Exception ex) {
             throw ex;
         } finally {
-            ConnectionMySql.closeConnection(conexao);
+            ConnectionMongoDB.closeConnection(conexao);
         }
-    }    
+    } 
 
     @Override
     public int incrementar() throws Exception {
-        Connection conexao = null;
+        DB conexao = null;
         try {
-            conexao = ConnectionMySql.getConnection();
-            int r = ConnectionMySql.nextId(Fornecedor.TABELA_FORNECEDOR, Fornecedor.CAMPO_ID, conexao);
-            return r;
-        } catch (SQLException ex) {
+            conexao = ConnectionMongoDB.getConnection();
+            DBCollection collection = conexao.getCollection(TABELA);
+
+            return ConnectionMongoDB.nextId(collection, "id");
+        } catch (Exception ex) {
             throw ex;
         } finally {
-            ConnectionMySql.closeConnection(conexao);
+            ConnectionMongoDB.closeConnection(conexao);
         }
     }
 }

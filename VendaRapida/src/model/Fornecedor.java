@@ -1,27 +1,15 @@
 package model;
 
+import controller.dao.util.MongoDBObject;
 import controller.dao.util.StringUtil;
 
-public class Fornecedor {
-    
-    public static final String TABELA_FORNECEDOR = "vendarapida.fornecedor";
-    
-    public static final String CAMPO_ID = "fornecedor.id";
+public class Fornecedor extends MongoDBObject {
+
     private int id;
-    
-    public static final String CAMPO_NOME = "fornecedor.nome";
     private String nome;
-    
-    public static final String CAMPO_CPFCNPJ = "fornecedor.cpfcnpj";
     private String cpfCnpj;
-    
-    public static final String CAMPO_EMAIL = "fornecedor.email";
     private String email;
-    
-    public static final String CAMPO_TELEFONE = "fornecedor.telefone";
     private String telefone;
-    
-    public static final String CAMPO_ENDERECO = "fornecedor.endereco";
     private String endereco;
     
     public int getId() {
