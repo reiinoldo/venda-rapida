@@ -325,7 +325,7 @@ public class FrmCadastroProduto extends javax.swing.JDialog {
             FornecedorProduto fornecedorProduto;
             for (Fornecedor fornecedor : listaFornecedoresProduto) {
                 fornecedorProduto = new FornecedorProduto();
-                fornecedorProduto.setIdFornecdor(fornecedor.getId());
+                fornecedorProduto.setIdFornecedor(fornecedor.getId());
                 fornecedorProduto.setReferenciaProduto(produto.getReferencia());
                 fornecedorProdutoController.salvar(fornecedorProduto);
             }

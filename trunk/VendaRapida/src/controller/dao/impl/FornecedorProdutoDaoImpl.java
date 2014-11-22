@@ -1,155 +1,133 @@
 package controller.dao.impl;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 import controller.dao.Dao;
-import controller.dao.util.ConnectionMySql;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import controller.dao.util.ConnectionMongoDB;
 import java.util.ArrayList;
 import java.util.List;
 import model.FornecedorProduto;
 
-public class FornecedorProdutoDaoImpl implements Dao<FornecedorProduto>{
+public class FornecedorProdutoDaoImpl implements Dao<FornecedorProduto> {
+
+    private static final String TABELA = "fornecedor_produto";
 
     @Override
     public boolean salvar(FornecedorProduto fornecedorProduto) throws Exception {
-        Connection conexao = null;
+        DB conexao = null;
         try {
-            conexao = ConnectionMySql.getConnection();
+            conexao = ConnectionMongoDB.getConnection();
+            DBCollection collection = conexao.getCollection(TABELA);
 
-            StringBuilder str = new StringBuilder();
+            collection.insert(fornecedorProduto.getBasicDBObject());
 
-            str.append("INSERT INTO " + FornecedorProduto.TABELA_FORNECEDORPRODUTO + " ");
-            str.append("( " + FornecedorProduto.CAMPO_IDFORNECEDOR + ", ");
-            str.append(FornecedorProduto.CAMPO_REFERENCIAPRODUTO + " ) ");
-            str.append("values ( ");
-            str.append("?, ");
-            str.append("? )");
-
-            PreparedStatement p = conexao.prepareStatement(str.toString());
-            p.setInt(1, fornecedorProduto.getIdFornecdor());
-            p.setString(2, fornecedorProduto.getReferenciaProduto());
-
-            boolean execution = p.execute();
-
-            return !execution;
-        } catch (SQLException ex) {
+            return true;
+        } catch (Exception ex) {
             throw ex;
         } finally {
-            ConnectionMySql.closeConnection(conexao);
+            ConnectionMongoDB.closeConnection(conexao);
         }
     }
 
     @Override
     public boolean excluir(FornecedorProduto fornecedorProduto) throws Exception {
-        Connection conexao = null;
+        DB conexao = null;
         try {
-            conexao = ConnectionMySql.getConnection();
+            conexao = ConnectionMongoDB.getConnection();
+            DBCollection collection = conexao.getCollection(TABELA);
 
-            PreparedStatement p = conexao.prepareStatement("delete from " + FornecedorProduto.TABELA_FORNECEDORPRODUTO + 
-                                                                              " where " + FornecedorProduto.CAMPO_IDFORNECEDOR + " = ?" + 
-                                                                              " and " + FornecedorProduto.CAMPO_REFERENCIAPRODUTO + " = ?");
-            p.setInt(1, fornecedorProduto.getIdFornecdor());
-            p.setString(2, fornecedorProduto.getReferenciaProduto());
+            collection.remove(fornecedorProduto.getBasicDBObject());
 
-            boolean execution = p.execute();
-
-            return execution;
-        } catch (SQLException ex) {
+            return true;
+        } catch (Exception ex) {
             throw ex;
         } finally {
-            ConnectionMySql.closeConnection(conexao);
+            ConnectionMongoDB.closeConnection(conexao);
         }
     }
 
     @Override
     public List<FornecedorProduto> listar(FornecedorProduto fornecedorProdutoInicial, FornecedorProduto fornecedorProdutoFinal) throws Exception {
-        Connection conexao = null;
+
+        DB conexao = null;
         try {
-            conexao = ConnectionMySql.getConnection();
+            conexao = ConnectionMongoDB.getConnection();
+            DBCollection collection = conexao.getCollection(TABELA);
 
             List<FornecedorProduto> list = new ArrayList<FornecedorProduto>();
-            
+
             if (fornecedorProdutoInicial.getReferenciaProduto() == null) {
-                PreparedStatement p = conexao.prepareStatement("select * from " + FornecedorProduto.TABELA_FORNECEDORPRODUTO + " where " + FornecedorProduto.CAMPO_IDFORNECEDOR + " = ?");
-                p.setInt(1, fornecedorProdutoInicial.getIdFornecdor());
-                ResultSet r = p.executeQuery();
+                DBCursor cursor = collection.find(new BasicDBObject("idFornecedor", fornecedorProdutoInicial.getIdFornecedor()));
 
-                while (r.next()) {
+                while (cursor.hasNext()) {
                     FornecedorProduto fp = new FornecedorProduto();
-                    fp.setIdFornecdor(r.getInt(FornecedorProduto.CAMPO_IDFORNECEDOR));
-                    fp.setReferenciaProduto(r.getString(FornecedorProduto.CAMPO_REFERENCIAPRODUTO));
+                    fp.convertDBObjectToObject(cursor.next());
                     list.add(fp);
                 }
+                cursor.close();
             } else {
-                PreparedStatement p = conexao.prepareStatement("select * from " + FornecedorProduto.TABELA_FORNECEDORPRODUTO + " where " + FornecedorProduto.CAMPO_REFERENCIAPRODUTO + " = ?");
-                p.setString(1, fornecedorProdutoInicial.getReferenciaProduto());
-                ResultSet r = p.executeQuery();
+                DBCursor cursor = collection.find(new BasicDBObject("referenciaProduto", fornecedorProdutoInicial.getIdFornecedor()));
 
-                while (r.next()) {
+                while (cursor.hasNext()) {
                     FornecedorProduto fp = new FornecedorProduto();
-                    fp.setIdFornecdor(r.getInt(FornecedorProduto.CAMPO_IDFORNECEDOR));
-                    fp.setReferenciaProduto(r.getString(FornecedorProduto.CAMPO_REFERENCIAPRODUTO));
+                    fp.convertDBObjectToObject(cursor.next());
                     list.add(fp);
                 }
+                cursor.close();
             }
             return list;
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             throw ex;
         } finally {
-            ConnectionMySql.closeConnection(conexao);
+            ConnectionMongoDB.closeConnection(conexao);
         }
     }
 
     @Override
     public FornecedorProduto buscar(FornecedorProduto fornecedorProduto) throws Exception {
-        Connection conexao = null;
+        DB conexao = null;
         try {
-            conexao = ConnectionMySql.getConnection();
-        
-            PreparedStatement p = conexao.prepareStatement("select * from " + FornecedorProduto.TABELA_FORNECEDORPRODUTO + 
-                                                                              " where " + FornecedorProduto.CAMPO_IDFORNECEDOR + " = ?" + 
-                                                                              " and " + FornecedorProduto.CAMPO_REFERENCIAPRODUTO + " = ?");
-            p.setInt(1, fornecedorProduto.getIdFornecdor());
-            p.setString(2, fornecedorProduto.getReferenciaProduto());
-            ResultSet r = p.executeQuery();
+            conexao = ConnectionMongoDB.getConnection();
+            DBCollection collection = conexao.getCollection(TABELA);
 
-            FornecedorProduto fp = null; 
-            if (r.next()) {
-                fp = new FornecedorProduto();
-                fp.setIdFornecdor(r.getInt(FornecedorProduto.CAMPO_IDFORNECEDOR));
-                fp.setReferenciaProduto(r.getString(FornecedorProduto.CAMPO_REFERENCIAPRODUTO));
+            DBCursor cursor = collection.find(fornecedorProduto.getBasicDBObject());
+            while (cursor.hasNext()) {
+                FornecedorProduto fp = new FornecedorProduto();
+                fp.convertDBObjectToObject(cursor.next());
+                cursor.close();
+                return fp;
             }
-            return fp;
-        } catch (SQLException ex) {
+            return null;
+        } catch (Exception ex) {
             throw ex;
         } finally {
-            ConnectionMySql.closeConnection(conexao);
+            ConnectionMongoDB.closeConnection(conexao);
         }
     }
 
     @Override
     public List<FornecedorProduto> listar() throws Exception {
-        Connection conexao = null;
+        DB conexao = null;
         try {
-        conexao = ConnectionMySql.getConnection();
+            conexao = ConnectionMongoDB.getConnection();
+            DBCollection collection = conexao.getCollection(TABELA);
 
-        List<FornecedorProduto> list = new ArrayList<FornecedorProduto>();
-        PreparedStatement p = conexao.prepareStatement("select * from " + FornecedorProduto.TABELA_FORNECEDORPRODUTO);
-        ResultSet r = p.executeQuery();
+            List<FornecedorProduto> list = new ArrayList<FornecedorProduto>();
 
-            while (r.next()) {
+            DBCursor cursor = collection.find();
+            while (cursor.hasNext()) {
                 FornecedorProduto fp = new FornecedorProduto();
-                fp.setIdFornecdor(r.getInt(FornecedorProduto.CAMPO_IDFORNECEDOR));
-                fp.setReferenciaProduto(r.getString(FornecedorProduto.CAMPO_REFERENCIAPRODUTO));
+                fp.convertDBObjectToObject(cursor.next());
                 list.add(fp);
             }
+            cursor.close();
             return list;
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             throw ex;
         } finally {
-            ConnectionMySql.closeConnection(conexao);
+            ConnectionMongoDB.closeConnection(conexao);
         }
     }
 
@@ -162,5 +140,4 @@ public class FornecedorProdutoDaoImpl implements Dao<FornecedorProduto>{
     public int incrementar() throws Exception {
         return 0;
     }
-    
 }
