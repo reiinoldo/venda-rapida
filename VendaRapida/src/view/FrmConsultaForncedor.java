@@ -34,6 +34,9 @@ public class FrmConsultaForncedor extends javax.swing.JDialog {
         if (!edNome.getText().isEmpty()) {
             fornecedor.setNome(edNome.getText());
         }
+        if(!edCPFCNPJ.getText().isEmpty()){
+            fornecedor.setCpfCnpj(edCPFCNPJ.getText());
+        }
         try {
             listaFornecedoresBuscados = fornecedorController.listar(fornecedor);
             carregarGrid();
