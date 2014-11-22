@@ -68,7 +68,7 @@ public class FornecedorProdutoDaoImpl implements Dao<FornecedorProduto> {
                 }
                 cursor.close();
             } else {
-                DBCursor cursor = collection.find(new BasicDBObject("referenciaProduto", fornecedorProdutoInicial.getIdFornecedor()));
+                DBCursor cursor = collection.find(new BasicDBObject("referenciaProduto", fornecedorProdutoInicial.getReferenciaProduto()));
 
                 while (cursor.hasNext()) {
                     FornecedorProduto fp = new FornecedorProduto();
