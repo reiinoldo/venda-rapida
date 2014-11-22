@@ -1,19 +1,12 @@
 package model;
 
-public class Produto {
-    
-    public static final String TABELA_PRODUTO = "vendarapida.produto";
-    
-    public static final String CAMPO_REFERENCIA = "produto.referencia";
-    private String referencia;
-    
-    public static final String CAMPO_CODIGOBARRA = "produto.codigobarra";
-    private String codigoBarrra;
-    
-    public static final String CAMPO_DESCRICAO = "produto.descricao";
-    private String descricao;
-    
-    public static final String CAMPO_VALOR = "produto.valor";
+import controller.dao.util.MongoDBObject;
+
+public class Produto extends MongoDBObject {
+           
+    private String referencia;    
+    private String codigoBarrra;    
+    private String descricao;    
     private double valor;
 
     public String getCodigoBarrra() {
