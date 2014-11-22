@@ -1,27 +1,16 @@
 package model;
 
-public class Cliente {
-    
-    public static final String TABELA_CLIENTE = "vendarapida.cliente";
-    
-    public static final String CAMPO_ID = "cliente.id";
+import controller.dao.util.MongoDBObject;
+
+public class Cliente extends MongoDBObject {
+
     private int id;
-    
-    public static final String CAMPO_NOME = "cliente.nome";
     private String nome;
-    
-    public static final String CAMPO_CPFCNPJ = "cliente.cpfcnpj";
     private String cpfCnpj;
-    
-    public static final String CAMPO_EMAIL = "cliente.email";
     private String email;
-    
-    public static final String CAMPO_TELEFONE = "cliente.telefone";
     private String telefone;
-    
-    public static final String CAMPO_ENDERECO = "cliente.endereco";
     private String endereco;
-    
+
     public int getId() {
         return id;
     }
@@ -69,5 +58,4 @@ public class Cliente {
     public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
-    
 }

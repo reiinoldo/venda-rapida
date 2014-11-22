@@ -1,149 +1,125 @@
 package controller.dao.impl;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 import controller.dao.Dao;
-import controller.dao.util.ConnectionMySql;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import controller.dao.util.ConnectionMongoDB;
 import java.util.ArrayList;
 import java.util.List;
 import model.Item;
 
 public class ItemDaoImpl implements Dao<Item> {
 
+    private static final String TABELA = "item";
+
     @Override
     public boolean salvar(Item item) throws Exception {
-        Connection conexao = null;
+        DB conexao = null;
         try {
-            conexao = ConnectionMySql.getConnection();
+            conexao = ConnectionMongoDB.getConnection();
+            DBCollection collection = conexao.getCollection(TABELA);
 
-            StringBuilder str = new StringBuilder();
+            collection.insert(item.getBasicDBObject());
 
-            str.append("INSERT INTO " + Item.TABELA_ITEM + " ");
-            str.append("( " + Item.CAMPO_CODIGOVENDA + ", ");
-            str.append(Item.CAMPO_REFERENCIAPRODUTO + ", ");
-            str.append(Item.CAMPO_QUANTIDADE + ", ");
-            str.append(Item.CAMPO_VALOR + " ) ");
-            str.append("values ( ");
-            str.append("?, ");
-            str.append("?, ");
-            str.append("?, ");
-            str.append("? )");
-
-            PreparedStatement p = conexao.prepareStatement(str.toString());
-            p.setInt(1, item.getCodigoVenda());
-            p.setString(2, item.getReferenciaProduto());
-            p.setInt(3, item.getQuantidade());
-            p.setDouble(4, item.getValor());
-
-            boolean execution = p.execute();
-
-            return !execution;
-        } catch (SQLException ex) {
+            return true;
+        } catch (Exception ex) {
             throw ex;
         } finally {
-            ConnectionMySql.closeConnection(conexao);
+            ConnectionMongoDB.closeConnection(conexao);
         }
     }
 
     @Override
     public boolean excluir(Item item) throws Exception {
-        Connection conexao = null;
+        DB conexao = null;
         try {
-            conexao = ConnectionMySql.getConnection();
+            conexao = ConnectionMongoDB.getConnection();
+            DBCollection collection = conexao.getCollection(TABELA);
+            
+            BasicDBObject find = new BasicDBObject();
+            find.put("codigoVenda", item.getCodigoVenda());
+            find.put("referenciaProduto",item.getReferenciaProduto());
+            
+            collection.remove(find);
 
-            PreparedStatement p = conexao.prepareStatement("delete from " + Item.TABELA_ITEM
-                    + " where " + Item.CAMPO_CODIGOVENDA + " = ?"
-                    + " and " + Item.CAMPO_REFERENCIAPRODUTO + " = ?");
-            p.setInt(1, item.getCodigoVenda());
-            p.setString(2, item.getReferenciaProduto());
-
-            boolean execution = p.execute();
-
-            return execution;
-        } catch (SQLException ex) {
+            return true;
+        } catch (Exception ex) {
             throw ex;
         } finally {
-            ConnectionMySql.closeConnection(conexao);
+            ConnectionMongoDB.closeConnection(conexao);
         }
     }
 
     @Override
     public List<Item> listar(Item itemInicial, Item itemFinal) throws Exception {
-        Connection conexao = null;
+        DB conexao = null;
         try {
-            conexao = ConnectionMySql.getConnection();
-
-            PreparedStatement p = conexao.prepareStatement("select * from " + Item.TABELA_ITEM + " where " + Item.CAMPO_CODIGOVENDA + " = ?");
-            p.setInt(1, itemInicial.getCodigoVenda());
-            ResultSet r = p.executeQuery();
-
+            conexao = ConnectionMongoDB.getConnection();
+            DBCollection collection = conexao.getCollection(TABELA);
+            
             List<Item> list = new ArrayList<Item>();
 
-            while (r.next()) {
+            DBCursor cursor = collection.find(new BasicDBObject("codigoVenda", itemInicial.getCodigoVenda()));
+            while (cursor.hasNext()) {
                 Item i = new Item();
-                i.setCodigoVenda(r.getInt(Item.CAMPO_CODIGOVENDA));
-                i.setReferenciaProduto(r.getString(Item.CAMPO_REFERENCIAPRODUTO));
-                i.setQuantidade(r.getInt(Item.CAMPO_QUANTIDADE));
-                i.setValor(r.getDouble(Item.CAMPO_VALOR));
+                i.convertDBObjectToObject(cursor.next());
                 list.add(i);
             }
+            cursor.close();
             return list;
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             throw ex;
         } finally {
-            ConnectionMySql.closeConnection(conexao);
+            ConnectionMongoDB.closeConnection(conexao);
         }
     }
 
     @Override
     public Item buscar(Item item) throws Exception {
-        Connection conexao = null;
+        
+        DB conexao = null;
         try {
-            conexao = ConnectionMySql.getConnection();
-            PreparedStatement ps = conexao.prepareStatement("select * from " + Item.TABELA_ITEM + " where " + Item.CAMPO_REFERENCIAPRODUTO + " = ?");
-            ps.setString(1, item.getReferenciaProduto());
-            ResultSet r = ps.executeQuery();
+            conexao = ConnectionMongoDB.getConnection();
+            DBCollection collection = conexao.getCollection(TABELA);
 
-            Item i = null;
-            if (r.next()) {
-                i = new Item();
-                i.setCodigoVenda(r.getInt(Item.CAMPO_CODIGOVENDA));
-                i.setQuantidade(r.getInt(Item.CAMPO_QUANTIDADE));
-                i.setReferenciaProduto(r.getString(Item.CAMPO_REFERENCIAPRODUTO));
-                i.setValor(r.getDouble(Item.CAMPO_VALOR));
+            DBCursor cursor = collection.find(new BasicDBObject("referenciaProduto", item.getReferenciaProduto()));
+            while (cursor.hasNext()) {
+                Item i = new Item();
+                i.convertDBObjectToObject(cursor.next());
+                cursor.close();
+                return i;
             }
-            return i;
-        } catch (SQLException ex) {
+            return null;
+        } catch (Exception ex) {
             throw ex;
         } finally {
-            ConnectionMySql.closeConnection(conexao);
+            ConnectionMongoDB.closeConnection(conexao);
         }
     }
 
     @Override
     public List<Item> listar() throws Exception {
-        Connection conexao = null;
+        DB conexao = null;
         try {
-            conexao = ConnectionMySql.getConnection();
+            conexao = ConnectionMongoDB.getConnection();
+            DBCollection collection = conexao.getCollection(TABELA);
 
-            ResultSet r = conexao.prepareStatement("select * from " + Item.TABELA_ITEM).executeQuery();
             List<Item> list = new ArrayList<Item>();
 
-            while (r.next()) {
+            DBCursor cursor = collection.find();
+            while (cursor.hasNext()) {
                 Item i = new Item();
-                i.setCodigoVenda(r.getInt(Item.CAMPO_CODIGOVENDA));
-                i.setReferenciaProduto(r.getString(Item.CAMPO_REFERENCIAPRODUTO));
-                i.setQuantidade(r.getInt(Item.CAMPO_QUANTIDADE));
-                i.setValor(r.getInt(Item.CAMPO_VALOR));
+                i.convertDBObjectToObject(cursor.next());
                 list.add(i);
             }
+            cursor.close();
             return list;
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             throw ex;
         } finally {
-            ConnectionMySql.closeConnection(conexao);
+            ConnectionMongoDB.closeConnection(conexao);
         }
     }
 

@@ -1,19 +1,11 @@
 package model;
 
-public class Item {
+import controller.dao.util.MongoDBObject;
 
-    public static final String TABELA_ITEM = "vendarapida.item";
-    
-    public static final String CAMPO_CODIGOVENDA = "item.codigovenda";
+public class Item extends MongoDBObject{    
     private int codigoVenda;
-    
-    public static final String CAMPO_REFERENCIAPRODUTO = "item.referenciaproduto";
     private String referenciaProduto;
-    
-    public static final String CAMPO_QUANTIDADE = "item.quantidade";
     private int quantidade;
-    
-    public static final String CAMPO_VALOR = "item.valor";
     private double valor;
     
     private Produto produto;
