@@ -4,7 +4,12 @@
  */
 package controller.dao.impl;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 import controller.dao.Dao;
+import controller.dao.util.ConnectionMongoDB;
 import controller.dao.util.ConnectionMySql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,227 +23,152 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Cliente;
 import model.Venda;
 
-/**
- *
- * @author andrebampi
- */
 public class VendaDaoImpl implements Dao<Venda> {
+    
+    private static final String TABELA = "venda";
 
     @Override
     public boolean salvar(Venda venda) throws Exception {
-        Connection conexao = null;
+        
+        DB conexao = null;
         try {
-            conexao = ConnectionMySql.getConnection();
+            conexao = ConnectionMongoDB.getConnection();
+            DBCollection collection = conexao.getCollection(TABELA);
 
-            StringBuilder str = new StringBuilder();
+            collection.insert(venda.getBasicDBObject());
 
-            str.append("INSERT INTO " + Venda.TABELA_VENDA + " ");
-            str.append("( " + Venda.CAMPO_CODIGOVENDA + ", ");
-            str.append(Venda.CAMPO_CODIGOPAGSEGURO + ", ");
-            str.append(Venda.CAMPO_DATAVENDA + ", ");
-            str.append(Venda.CAMPO_DESCONTO + ", ");
-            str.append(Venda.CAMPO_IDCLIENTE + ", ");
-            str.append(Venda.CAMPO_LOGINUSUARIO + " ) ");
-            str.append("values ( ");
-            str.append("?, ");
-            str.append("?, ");
-            str.append("?, ");
-            str.append("?, ");
-            str.append("?, ");
-            str.append("? )");
-
-            PreparedStatement p = conexao.prepareStatement(str.toString());
-            p.setInt(1, venda.getCodigoVenda());
-            p.setString(2, venda.getCodigoPagSeguro());
-            p.setTimestamp(3, new Timestamp(venda.getDataVenda().getTime()));
-            p.setDouble(4, venda.getDesconto());
-            p.setInt(5, venda.getIdCliente());
-            p.setString(6, venda.getLoginUsuario());
-
-            boolean execution = p.execute();
-
-
-            return !execution;
-        } catch (SQLException ex) {
+            return true;
+        } catch (Exception ex) {
             throw ex;
         } finally {
-            ConnectionMySql.closeConnection(conexao);
-        }
+            ConnectionMongoDB.closeConnection(conexao);
+        }        
     }
 
     @Override
     public List<Venda> listar() throws Exception {
-        Connection conexao = null;
+        
+        DB conexao = null;
         try {
-            conexao = ConnectionMySql.getConnection();
+            conexao = ConnectionMongoDB.getConnection();
+            DBCollection collection = conexao.getCollection(TABELA);
 
-            ResultSet r = conexao.prepareStatement("select * from " + Venda.TABELA_VENDA).executeQuery();
             List<Venda> list = new ArrayList<Venda>();
 
-            while (r.next()) {
+            DBCursor cursor = collection.find();
+            while (cursor.hasNext()) {
                 Venda v = new Venda();
-                v.setCodigoVenda(r.getInt(Venda.CAMPO_CODIGOVENDA));
-                v.setCodigoPagSeguro(r.getString(Venda.CAMPO_CODIGOPAGSEGURO));
-                v.setDataVenda(r.getTimestamp(Venda.CAMPO_DATAVENDA));
-                v.setDesconto(r.getDouble(Venda.CAMPO_DESCONTO));
-                v.setIdCliente(r.getInt(Venda.CAMPO_IDCLIENTE));
-                v.setLoginUsuario(r.getString(Venda.CAMPO_LOGINUSUARIO));
-                v.setItems(null);
+                v.convertDBObjectToObject(cursor.next());
                 list.add(v);
             }
+            cursor.close();
             return list;
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             throw ex;
         } finally {
-            ConnectionMySql.closeConnection(conexao);
+            ConnectionMongoDB.closeConnection(conexao);
         }
+        
     }
 
     @Override
     public List<Venda> listar(Venda vendaInicial, Venda vendaFinal) throws Exception {
         if (vendaInicial != null) {
-            Connection conexao = null;
+            DB conexao = null;
             try {
-                conexao = ConnectionMySql.getConnection();
+                conexao = ConnectionMongoDB.getConnection();
+                DBCollection collection = conexao.getCollection(TABELA);
 
-                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-
-                StringBuilder str = new StringBuilder();
-                str.append("SELECT ");
-                str.append(Venda.CAMPO_CODIGOVENDA + ", ");
-                str.append(Venda.CAMPO_CODIGOPAGSEGURO + ", ");
-                str.append(Venda.CAMPO_DATAVENDA + ", ");
-                str.append(Venda.CAMPO_DESCONTO + ", ");
-                str.append(Venda.CAMPO_IDCLIENTE + ", ");
-                str.append(Venda.CAMPO_LOGINUSUARIO + " ");
-                str.append(" FROM " + Venda.TABELA_VENDA);
-                str.append(" WHERE ");
-                str.append(Venda.CAMPO_CODIGOVENDA + " LIKE ? AND ");
-                str.append(Venda.CAMPO_CODIGOPAGSEGURO + " LIKE ? AND ");
-                str.append(Venda.CAMPO_DATAVENDA + " >= ? AND ");
-                str.append(Venda.CAMPO_DATAVENDA + " <= ? AND ");
-                str.append(Venda.CAMPO_DESCONTO + " LIKE ? AND ");
-                str.append(Venda.CAMPO_IDCLIENTE + " LIKE ? AND ");
-                str.append(Venda.CAMPO_LOGINUSUARIO + " LIKE ?");
-
-                PreparedStatement pr = conexao.prepareStatement(str.toString());
-
-                if (vendaInicial.getCodigoVenda() != 0) {
-                    pr.setString(1, "%" + vendaInicial.getCodigoVenda() + "%");
-                } else {
-                    pr.setString(1, "%%");
+                BasicDBObject filtro = new BasicDBObject();
+                if (vendaInicial.getCodigoVenda() < 0) {
+                    filtro.put("codigoVenda", java.util.regex.Pattern.compile(vendaInicial.getCodigoVenda() + ""));
                 }
 
                 if (vendaInicial.getCodigoPagSeguro() != null) {
-                    pr.setString(2, "%" + vendaInicial.getCodigoPagSeguro() + "%");
-                } else {
-                    pr.setString(2, "%%");
+                    filtro.put("codigoPagSeguro", java.util.regex.Pattern.compile(vendaInicial.getCodigoPagSeguro()));
                 }
-
+                
                 if (vendaInicial.getDataVenda() != null) {
-                    pr.setTimestamp(3, new Timestamp(vendaInicial.getDataVenda().getTime()));
-                } else {
-                    try {
-                        pr.setTimestamp(3, new Timestamp(format.parse("01/01/1910").getTime()));
-                    } catch (ParseException ex) {
-                        Logger.getLogger(VendaDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-
+                    filtro.put("dataVenda", new BasicDBObject("$gte", vendaInicial.getDataVenda()));
                 }
-
+                
                 if (vendaFinal.getDataVenda() != null) {
-                    pr.setTimestamp(4, new Timestamp(vendaFinal.getDataVenda().getTime()));
-                } else {
-                    pr.setTimestamp(4, new Timestamp(new Date().getTime()));
+                    filtro.put("dataVenda", new BasicDBObject("$lte", vendaFinal.getDataVenda()));
                 }
-
-                if (vendaInicial.getDesconto() > 0) {
-                    pr.setString(5, "%" + vendaInicial.getDesconto() + "%");
-                } else {
-                    pr.setString(5, "%%");
+                
+                if (vendaInicial.getDesconto() != 0) {
+                    filtro.put("desconto", java.util.regex.Pattern.compile(vendaInicial.getDesconto() + ""));
                 }
-
+                
                 if (vendaInicial.getIdCliente() != 0) {
-                    pr.setString(6, vendaInicial.getIdCliente() + "");
-                } else {
-                    pr.setString(6, "%%");
+                    filtro.put("idCliente", java.util.regex.Pattern.compile(vendaInicial.getIdCliente() + ""));
                 }
-
-                if (vendaInicial.getLoginUsuario() != null) {
-                    pr.setString(7, "%" + vendaInicial.getLoginUsuario() + "%");
-                } else {
-                    pr.setString(7, "%%");
-                }
-
-                ResultSet r = pr.executeQuery();
+                
+                if (vendaInicial.getLoginUsuario()!= null) {
+                    filtro.put("loginUsuario", java.util.regex.Pattern.compile(vendaInicial.getLoginUsuario()));
+                }                
+                
+                DBCursor cursor = collection.find(filtro);
 
                 List<Venda> list = new ArrayList<Venda>();
-                while (r.next()) {
+                while (cursor.hasNext()) {
                     Venda v = new Venda();
-                    v.setCodigoVenda(r.getInt(Venda.CAMPO_CODIGOVENDA));
-                    v.setCodigoPagSeguro(r.getString(Venda.CAMPO_CODIGOPAGSEGURO));
-                    v.setDataVenda(r.getTimestamp(Venda.CAMPO_DATAVENDA));
-                    v.setDesconto(r.getDouble(Venda.CAMPO_DESCONTO));
-                    v.setIdCliente(r.getInt(Venda.CAMPO_IDCLIENTE));
-                    v.setLoginUsuario(r.getString(Venda.CAMPO_LOGINUSUARIO));
+                    v.convertDBObjectToObject(cursor.next());
                     list.add(v);
                 }
-
+                cursor.close();
                 return list;
-            } catch (SQLException ex) {
+            } catch (Exception ex) {
                 throw ex;
             } finally {
-                ConnectionMySql.closeConnection(conexao);
+                ConnectionMongoDB.closeConnection(conexao);
             }
-
         } else {
             return this.listar();
-        }
+        }        
+        
     }
 
     @Override
     public Venda buscar(Venda venda) throws Exception {
-        Connection conexao = null;
+        DB conexao = null;
         try {
-            conexao = ConnectionMySql.getConnection();
+            conexao = ConnectionMongoDB.getConnection();
+            DBCollection collection = conexao.getCollection(TABELA);
 
-            PreparedStatement p = conexao.prepareStatement("select * from " + Venda.TABELA_VENDA + " where " + Venda.CAMPO_CODIGOVENDA + " = ?");
-            p.setInt(1, venda.getCodigoVenda());
-            ResultSet r = p.executeQuery();
-
-            Venda v = null;
-            if (r.next()) {
-                v = new Venda();
-                v.setCodigoVenda(r.getInt(Venda.CAMPO_CODIGOVENDA));
-                v.setCodigoPagSeguro(r.getString(Venda.CAMPO_CODIGOPAGSEGURO));
-                v.setDataVenda(r.getTimestamp(Venda.CAMPO_DATAVENDA));
-                v.setDesconto(r.getDouble(Venda.CAMPO_DESCONTO));
-                v.setIdCliente(r.getInt(Venda.CAMPO_IDCLIENTE));
-                v.setLoginUsuario(r.getString(Venda.CAMPO_LOGINUSUARIO));
-                v.setItems(null);
+            DBCursor cursor = collection.find(new BasicDBObject("codigoVenda", venda.getCodigoVenda()));
+            if (cursor.hasNext()) {
+                Venda v = new Venda();
+                v.convertDBObjectToObject(cursor.next());
+                return v;
             }
-            return v;
-        } catch (SQLException ex) {
+            return null;
+        } catch (Exception ex) {
             throw ex;
         } finally {
-            ConnectionMySql.closeConnection(conexao);
+            ConnectionMongoDB.closeConnection(conexao);
         }
+                
     }
 
     @Override
     public int incrementar() throws Exception {
-        Connection conexao = null;
+        
+        DB conexao = null;
         try {
-            conexao = ConnectionMySql.getConnection();
-            int r = ConnectionMySql.nextId(Venda.TABELA_VENDA, Venda.CAMPO_CODIGOVENDA, conexao);
-            return r;
-        } catch (SQLException ex) {
+            conexao = ConnectionMongoDB.getConnection();
+            DBCollection collection = conexao.getCollection(TABELA);
+
+            return ConnectionMongoDB.nextId(collection, "codigoVenda");
+        } catch (Exception ex) {
             throw ex;
         } finally {
-            ConnectionMySql.closeConnection(conexao);
+            ConnectionMongoDB.closeConnection(conexao);
         }
+        
     }
 
     @Override

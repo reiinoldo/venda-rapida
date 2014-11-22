@@ -1,28 +1,22 @@
 package model;
 
+import controller.dao.util.MongoDBObject;
 import controller.impl.RegraNegocioException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Venda {
+public class Venda extends MongoDBObject{
 
     public enum TipoDesconto {
 
         PORCENTAGEM, DINHEIRO;
     }
-    public static final String TABELA_VENDA = "vendarapida.venda";
-    public static final String CAMPO_CODIGOVENDA = "venda.codigovenda";
     private int codigoVenda;
-    public static final String CAMPO_IDCLIENTE = "venda.idcliente";
-    private int idCliente;
-    public static final String CAMPO_CODIGOPAGSEGURO = "venda.codigopagseguro";
+    private int idCliente;   
     private String codigoPagSeguro;
-    public static final String CAMPO_DATAVENDA = "venda.datavenda";
     private Date dataVenda;
-    public static final String CAMPO_DESCONTO = "venda.desconto";
     private double desconto;
-    public static final String CAMPO_LOGINUSUARIO = "venda.loginusuario";
     private String loginUsuario;
     private List<Item> items;
 
