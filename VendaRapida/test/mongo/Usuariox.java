@@ -1,10 +1,10 @@
-package model;
+package mongo;
 
-import controller.dao.util.MongoDBObject;
-import java.util.List;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 
-public class Usuario extends MongoDBObject {
-    private List<String> teste;
+public class Usuariox {
+
     private String login;
     private String senha;
     private String nome;
@@ -67,5 +67,29 @@ public class Usuario extends MongoDBObject {
 
     public void setVendeProduto(boolean vendeProduto) {
         this.vendeProduto = vendeProduto;
+    }
+
+    public BasicDBObject getBasicDBObject() {
+        BasicDBObject obj = new BasicDBObject();
+
+        obj.put("login", login);
+        obj.put("senha", senha);
+        obj.put("nome", nome);
+        obj.put("comissao", comissao);
+        obj.put("cadastraProduto", cadastraProduto);
+        obj.put("administrador", administrador);
+        obj.put("vendeProduto", vendeProduto);
+
+        return obj;
+    }
+
+    public void convertDBObjectToObject(DBObject object) {
+        this.administrador = (Boolean) object.get("administrador");
+        this.cadastraProduto = (Boolean)  object.get("cadastraProduto");
+        this.comissao = (Double) object.get("comissao");
+        this.login = (String) object.get("login");
+        this.nome = (String) object.get("nome");
+        this.senha = (String) object.get("senha");
+        this.vendeProduto = (Boolean) object.get("vendeProduto");
     }
 }

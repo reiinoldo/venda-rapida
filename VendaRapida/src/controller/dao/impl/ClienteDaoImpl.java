@@ -1,10 +1,11 @@
 package controller.dao.impl;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 import controller.dao.Dao;
-import controller.dao.util.ConnectionMySql;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import controller.dao.util.ConnectionMongoDB;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,174 +13,113 @@ import model.Cliente;
 
 public class ClienteDaoImpl implements Dao<Cliente> {
 
+    private static final String TABELA = "cliente";
+
     @Override
     public boolean salvar(Cliente cliente) throws Exception {
-        Connection conexao = null;
+        DB conexao = null;
         try {
-            conexao = ConnectionMySql.getConnection();
+            conexao = ConnectionMongoDB.getConnection();
+            DBCollection collection = conexao.getCollection(TABELA);
 
-            StringBuilder str = new StringBuilder();
+            collection.insert(cliente.getBasicDBObject());
 
-            str.append("INSERT INTO " + Cliente.TABELA_CLIENTE + " ");
-            str.append("( " + Cliente.CAMPO_ID + ", ");
-            str.append(Cliente.CAMPO_CPFCNPJ + ", ");
-            str.append(Cliente.CAMPO_EMAIL + ", ");
-            str.append(Cliente.CAMPO_ENDERECO + ", ");
-            str.append(Cliente.CAMPO_NOME + ", ");
-            str.append(Cliente.CAMPO_TELEFONE + " ) ");
-            str.append("values ( ");
-            str.append("?, ");
-            str.append("?, ");
-            str.append("?, ");
-            str.append("?, ");
-            str.append("?, ");
-            str.append("? )");
-
-            PreparedStatement p = conexao.prepareStatement(str.toString());
-            p.setInt(1, cliente.getId());
-            p.setString(2, cliente.getCpfCnpj());
-            p.setString(3, cliente.getEmail());
-            p.setString(4, cliente.getEndereco());
-            p.setString(5, cliente.getNome());
-            p.setString(6, cliente.getTelefone());
-
-            boolean execution = p.execute();
-
-            return !execution;
-        } catch (SQLException ex) {
+            return true;
+        } catch (Exception ex) {
             throw ex;
         } finally {
-            ConnectionMySql.closeConnection(conexao);
+            ConnectionMongoDB.closeConnection(conexao);
         }
     }
 
     @Override
     public boolean excluir(Cliente cliente) throws Exception {
-        Connection conexao = null;
+        DB conexao = null;
         try {
-            conexao = ConnectionMySql.getConnection();
+            conexao = ConnectionMongoDB.getConnection();
+            DBCollection collection = conexao.getCollection(TABELA);
 
-            PreparedStatement p = conexao.prepareStatement("delete from " + Cliente.TABELA_CLIENTE + " where " + Cliente.CAMPO_ID + " = ?");
-            p.setInt(1, cliente.getId());
+            collection.remove(new BasicDBObject("id", cliente.getId()));
 
-            boolean execution = p.execute();
-
-            return execution;
-        } catch (SQLException ex) {
+            return true;
+        } catch (Exception ex) {
             throw ex;
         } finally {
-            ConnectionMySql.closeConnection(conexao);
+            ConnectionMongoDB.closeConnection(conexao);
         }
     }
 
     @Override
     public List<Cliente> listar() throws Exception {
-        Connection conexao = null;
+        DB conexao = null;
         try {
-            conexao = ConnectionMySql.getConnection();
+            conexao = ConnectionMongoDB.getConnection();
+            DBCollection collection = conexao.getCollection(TABELA);
 
-            ResultSet r = conexao.prepareStatement("select * from " + Cliente.TABELA_CLIENTE).executeQuery();
             List<Cliente> list = new ArrayList<Cliente>();
 
-            while (r.next()) {
-                Cliente f = new Cliente();
-                f.setId(r.getInt(Cliente.CAMPO_ID));
-                f.setCpfCnpj(r.getString(Cliente.CAMPO_CPFCNPJ));
-                f.setEmail(r.getString(Cliente.CAMPO_EMAIL));
-                f.setEndereco(r.getString(Cliente.CAMPO_ENDERECO));
-                f.setNome(r.getString(Cliente.CAMPO_NOME));
-                f.setTelefone(r.getString(Cliente.CAMPO_TELEFONE));
-                list.add(f);
+            DBCursor cursor = collection.find();
+            while (cursor.hasNext()) {
+                Cliente c = new Cliente();
+                c.convertDBObjectToObject(cursor.next());
+                list.add(c);
             }
+            cursor.close();
             return list;
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             throw ex;
         } finally {
-            ConnectionMySql.closeConnection(conexao);
+            ConnectionMongoDB.closeConnection(conexao);
         }
     }
 
     @Override
     public List<Cliente> listar(Cliente clienteInicial, Cliente clienteFinal) throws Exception {
         if (clienteInicial != null) {
-            Connection conexao = null;
+            DB conexao = null;
             try {
-                conexao = ConnectionMySql.getConnection();
-                
-                StringBuilder str = new StringBuilder();
-                str.append("SELECT ");
-                str.append(Cliente.CAMPO_ID + ", ");
-                str.append(Cliente.CAMPO_CPFCNPJ + ", ");
-                str.append(Cliente.CAMPO_EMAIL + ", ");
-                str.append(Cliente.CAMPO_ENDERECO + ", ");
-                str.append(Cliente.CAMPO_NOME + ", ");
-                str.append(Cliente.CAMPO_TELEFONE + " ");
-                str.append(" FROM " + Cliente.TABELA_CLIENTE);
-                str.append(" WHERE ");
-                str.append(Cliente.CAMPO_ID + " LIKE ? AND ");
-                str.append(Cliente.CAMPO_CPFCNPJ + " LIKE ? AND ");
-                str.append(Cliente.CAMPO_EMAIL + " LIKE ? AND ");
-                str.append(Cliente.CAMPO_ENDERECO + " LIKE ? AND ");
-                str.append(Cliente.CAMPO_NOME + " LIKE ? AND ");
-                str.append(Cliente.CAMPO_TELEFONE + " LIKE ?");
+                conexao = ConnectionMongoDB.getConnection();
+                DBCollection collection = conexao.getCollection(TABELA);
 
-                PreparedStatement pr = conexao.prepareStatement(str.toString());
-
-                if (clienteInicial.getId() != 0) {
-                    pr.setString(1, "%" + clienteInicial.getId() + "%");
-                } else {
-                    pr.setString(1, "%%");
+                BasicDBObject filtro = new BasicDBObject();
+                if (clienteInicial.getId() < 0) {
+                    filtro.put("id", java.util.regex.Pattern.compile(clienteInicial.getId() + ""));
                 }
 
                 if (clienteInicial.getCpfCnpj() != null) {
-                    pr.setString(2, "%" + clienteInicial.getCpfCnpj() + "%");
-                } else {
-                    pr.setString(2, "%%");
+                    filtro.put("cpfCnpj", java.util.regex.Pattern.compile(clienteInicial.getCpfCnpj()));
                 }
 
                 if (clienteInicial.getEmail() != null) {
-                    pr.setString(3, "%" + clienteInicial.getEmail() + "%");
-                } else {
-                    pr.setString(3, "%%");
+                    filtro.put("email", java.util.regex.Pattern.compile(clienteInicial.getEmail()));
                 }
 
                 if (clienteInicial.getEndereco() != null) {
-                    pr.setString(4, "%" + clienteInicial.getEndereco() + "%");
-                } else {
-                    pr.setString(4, "%%");
+                    filtro.put("endereco", java.util.regex.Pattern.compile(clienteInicial.getEndereco()));
                 }
 
                 if (clienteInicial.getNome() != null) {
-                    pr.setString(5, "%" + clienteInicial.getNome() + "%");
-                } else {
-                    pr.setString(5, "%%");
+                    filtro.put("nome", java.util.regex.Pattern.compile(clienteInicial.getNome()));
                 }
 
                 if (clienteInicial.getTelefone() != null) {
-                    pr.setString(6, "%" + clienteInicial.getTelefone() + "%");
-                } else {
-                    pr.setString(6, "%%");
+                    filtro.put("telefone", java.util.regex.Pattern.compile(clienteInicial.getTelefone()));
                 }
 
-                ResultSet r = pr.executeQuery();
+                DBCursor cursor = collection.find(filtro);
 
                 List<Cliente> list = new ArrayList<Cliente>();
-                while (r.next()) {
+                while (cursor.hasNext()) {
                     Cliente c = new Cliente();
-                    c.setId(r.getInt(Cliente.CAMPO_ID));
-                    c.setCpfCnpj(r.getString(Cliente.CAMPO_CPFCNPJ));
-                    c.setEmail(r.getString(Cliente.CAMPO_EMAIL));
-                    c.setEndereco(r.getString(Cliente.CAMPO_ENDERECO));
-                    c.setNome(r.getString(Cliente.CAMPO_NOME));
-                    c.setTelefone(r.getString(Cliente.CAMPO_TELEFONE));
+                    c.convertDBObjectToObject(cursor.next());
                     list.add(c);
                 }
-
+                cursor.close();
                 return list;
-            } catch (SQLException ex) {
+            } catch (Exception ex) {
                 throw ex;
             } finally {
-                ConnectionMySql.closeConnection(conexao);
+                ConnectionMongoDB.closeConnection(conexao);
             }
         } else {
             return this.listar();
@@ -189,36 +129,18 @@ public class ClienteDaoImpl implements Dao<Cliente> {
     @Override
     public boolean editar(Cliente cliente) throws Exception {
         if (cliente != null) {
-            Connection conexao = null;
+            DB conexao = null;
             try {
-                conexao = ConnectionMySql.getConnection();
+                conexao = ConnectionMongoDB.getConnection();
+                DBCollection collection = conexao.getCollection(TABELA);
 
-                StringBuilder sb = new StringBuilder();
-                sb.append("update " + Cliente.TABELA_CLIENTE + " ");
-                sb.append("set ");
-                sb.append(Cliente.CAMPO_CPFCNPJ + " = ?, ");
-                sb.append(Cliente.CAMPO_EMAIL + " = ?, ");
-                sb.append(Cliente.CAMPO_ENDERECO + " = ?, ");
-                sb.append(Cliente.CAMPO_NOME + " = ?, ");
-                sb.append(Cliente.CAMPO_TELEFONE + " = ? ");
-                sb.append("where ");
-                sb.append(Cliente.CAMPO_ID + " = ?");
+                collection.update(new BasicDBObject().append("id", cliente.getId()), cliente.getBasicDBObject());
 
-                PreparedStatement pr = conexao.prepareStatement(sb.toString());
-
-                pr.setString(1, cliente.getCpfCnpj());
-                pr.setString(2, cliente.getEmail());
-                pr.setString(3, cliente.getEndereco());
-                pr.setString(4, cliente.getNome());
-                pr.setString(5, cliente.getTelefone());
-                pr.setInt(6, cliente.getId());
-
-                boolean execution = pr.execute();
-                return execution;
-            } catch (SQLException ex) {
+                return true;
+            } catch (Exception ex) {
                 throw ex;
             } finally {
-                ConnectionMySql.closeConnection(conexao);
+                ConnectionMongoDB.closeConnection(conexao);
             }
         } else {
             throw new SQLException("Cliente inválido");
@@ -227,43 +149,37 @@ public class ClienteDaoImpl implements Dao<Cliente> {
 
     @Override
     public Cliente buscar(Cliente cliente) throws Exception {
-        Connection conexao = null;
+        DB conexao = null;
         try {
-            conexao = ConnectionMySql.getConnection();
+            conexao = ConnectionMongoDB.getConnection();
+            DBCollection collection = conexao.getCollection(TABELA);
 
-            PreparedStatement p = conexao.prepareStatement("select * from " + Cliente.TABELA_CLIENTE + " where " + Cliente.CAMPO_ID + " = ?");
-            p.setInt(1, cliente.getId());
-            ResultSet r = p.executeQuery();
-
-            Cliente c = null;
-            if (r.next()) {
-                c = new Cliente();
-                c.setId(r.getInt(Cliente.CAMPO_ID));
-                c.setCpfCnpj(r.getString(Cliente.CAMPO_CPFCNPJ));
-                c.setEmail(r.getString(Cliente.CAMPO_EMAIL));
-                c.setEndereco(r.getString(Cliente.CAMPO_ENDERECO));
-                c.setNome(r.getString(Cliente.CAMPO_NOME));
-                c.setTelefone(r.getString(Cliente.CAMPO_TELEFONE));
+            DBCursor cursor = collection.find(new BasicDBObject("id", cliente.getId()));
+            if (cursor.hasNext()) {
+                Cliente cli = new Cliente();
+                cli.convertDBObjectToObject(cursor.next());
+                return cli;
             }
-            return c;
-        } catch (SQLException ex) {
+            return null;
+        } catch (Exception ex) {
             throw ex;
         } finally {
-            ConnectionMySql.closeConnection(conexao);
+            ConnectionMongoDB.closeConnection(conexao);
         }
     }
 
     @Override
     public int incrementar() throws Exception {
-        Connection conexao = null;
+        DB conexao = null;
         try {
-            conexao = ConnectionMySql.getConnection();
-            int r = ConnectionMySql.nextId(Cliente.TABELA_CLIENTE, Cliente.CAMPO_ID, conexao);
-            return r;
-        } catch (SQLException ex) {
+            conexao = ConnectionMongoDB.getConnection();
+            DBCollection collection = conexao.getCollection(TABELA);
+
+            return ConnectionMongoDB.nextId(collection, "id");
+        } catch (Exception ex) {
             throw ex;
         } finally {
-            ConnectionMySql.closeConnection(conexao);
+            ConnectionMongoDB.closeConnection(conexao);
         }
     }
 }
