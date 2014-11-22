@@ -23,7 +23,7 @@ public class FornecedorProdutoControllerImpl implements FornecedorProdutoControl
     }
     
     private void verificarCampos(FornecedorProduto fornecedorProduto) throws RegraNegocioException {
-        if (fornecedorProduto.getIdFornecdor() == 0)
+        if (fornecedorProduto.getIdFornecedor() == 0)
             throw new RegraNegocioException("Identificador do fornecedor não informado");
         if (fornecedorProduto.getReferenciaProduto().trim().equals(""))
             throw new RegraNegocioException("Referência do produto não encontrada");
@@ -32,7 +32,7 @@ public class FornecedorProdutoControllerImpl implements FornecedorProdutoControl
     @Override
     public void salvar(FornecedorProduto fornecedorProduto) throws Exception {
         if (fornecedorProdutoDao.buscar(fornecedorProduto) != null)
-            throw new RegraNegocioException("Produto " + fornecedorProduto.getReferenciaProduto() + " com fornecedor " + String.valueOf(fornecedorProduto.getIdFornecdor()) + " não encontrado");
+            throw new RegraNegocioException("Produto " + fornecedorProduto.getReferenciaProduto() + " com fornecedor " + String.valueOf(fornecedorProduto.getIdFornecedor()) + " não encontrado");
         verificarCampos(fornecedorProduto);
         fornecedorProdutoDao.salvar(fornecedorProduto);
     }
@@ -40,7 +40,7 @@ public class FornecedorProdutoControllerImpl implements FornecedorProdutoControl
     @Override
     public void excluir(int idFornecedor, String referenciaProduto) throws Exception{
         FornecedorProduto fornecedorProduto = new FornecedorProduto();
-        fornecedorProduto.setIdFornecdor(idFornecedor);
+        fornecedorProduto.setIdFornecedor(idFornecedor);
         fornecedorProduto.setReferenciaProduto(referenciaProduto);
         if (fornecedorProdutoDao.buscar(fornecedorProduto) == null)
             throw new RegraNegocioException("Produto " + referenciaProduto + " com fornecedor " + String.valueOf(idFornecedor) + " não encontrado");
@@ -50,7 +50,7 @@ public class FornecedorProdutoControllerImpl implements FornecedorProdutoControl
     @Override
     public FornecedorProduto buscar(int idFornecedor, String referenciaProduto) throws Exception {
         FornecedorProduto fornecedorProduto = new FornecedorProduto();
-        fornecedorProduto.setIdFornecdor(idFornecedor);
+        fornecedorProduto.setIdFornecedor(idFornecedor);
         fornecedorProduto.setReferenciaProduto(referenciaProduto);
         fornecedorProduto = (FornecedorProduto)fornecedorProdutoDao.buscar(fornecedorProduto);
         if (fornecedorProduto == null)
@@ -61,7 +61,7 @@ public class FornecedorProdutoControllerImpl implements FornecedorProdutoControl
     @Override
     public List<Produto> listarProdutos(int idFornecedor) throws Exception {
         FornecedorProduto fornecedorProduto = new FornecedorProduto();
-        fornecedorProduto.setIdFornecdor(idFornecedor);
+        fornecedorProduto.setIdFornecedor(idFornecedor);
         fornecedorProduto.setReferenciaProduto(null); //Garantir que não trará resultado errado
         List<FornecedorProduto> listaFPs = fornecedorProdutoDao.listar(fornecedorProduto, null);
         List<Produto> listaProdutos = new ArrayList<Produto>();
@@ -77,14 +77,14 @@ public class FornecedorProdutoControllerImpl implements FornecedorProdutoControl
     @Override
     public List<Fornecedor> listarFornecedores(String referenciaProduto) throws Exception {
         FornecedorProduto fornecedorProduto = new FornecedorProduto();
-        fornecedorProduto.setIdFornecdor(0); //Garantir que não trará resultado errado
+        fornecedorProduto.setIdFornecedor(0); //Garantir que não trará resultado errado
         fornecedorProduto.setReferenciaProduto(referenciaProduto);
         List<FornecedorProduto> listaFPs = fornecedorProdutoDao.listar(fornecedorProduto, null);
         List<Fornecedor> listaFornecedores = new ArrayList<Fornecedor>();
         FornecedorController fornecedorController = new FornecedorControllerImpl();
         Fornecedor fornecedor;
         for (int i = 0; i < listaFPs.size(); i++) {
-            fornecedor = fornecedorController.buscar(listaFPs.get(i).getIdFornecdor());
+            fornecedor = fornecedorController.buscar(listaFPs.get(i).getIdFornecedor());
             listaFornecedores.add(fornecedor);
         }
         return listaFornecedores;
@@ -95,7 +95,7 @@ public class FornecedorProdutoControllerImpl implements FornecedorProdutoControl
         List<Fornecedor> lista = this.listarFornecedores(referenciaProduto);
         FornecedorProduto fornecedorProduto = new FornecedorProduto();
         for (int i = 0; i < lista.size(); i++) {
-            fornecedorProduto.setIdFornecdor(lista.get(i).getId());
+            fornecedorProduto.setIdFornecedor(lista.get(i).getId());
             fornecedorProduto.setReferenciaProduto(referenciaProduto);
             fornecedorProdutoDao.excluir(fornecedorProduto);
         }
