@@ -83,7 +83,7 @@ public class ClienteDaoImpl implements Dao<Cliente> {
 
                 BasicDBObject filtro = new BasicDBObject();
                 if (clienteInicial.getId() < 0) {
-                    filtro.put("id", java.util.regex.Pattern.compile(clienteInicial.getId() + ""));
+                    filtro.put("id", clienteInicial.getId());
                 }
 
                 if (clienteInicial.getCpfCnpj() != null) {

@@ -97,11 +97,7 @@ public class ProdutoDaoImpl implements Dao<Produto>{
                 }
                 
                 if (produtoInicial.getValor() != 0) {
-                    filtro.put("valor", new BasicDBObject("$gte", produtoInicial.getValor()));
-                }
-                
-                if (produtoFinal.getValor() != 0) {
-                    filtro.put("valor", new BasicDBObject("$lte", produtoFinal.getValor()));
+                    filtro.put("valor", new BasicDBObject("$gte", produtoInicial.getValor()).append("$lte", produtoFinal.getValor()));
                 }                
                 
                 DBCursor cursor = collection.find(filtro);

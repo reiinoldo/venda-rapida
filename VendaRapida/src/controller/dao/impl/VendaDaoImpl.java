@@ -84,27 +84,23 @@ public class VendaDaoImpl implements Dao<Venda> {
 
                 BasicDBObject filtro = new BasicDBObject();
                 if (vendaInicial.getCodigoVenda() < 0) {
-                    filtro.put("codigoVenda", java.util.regex.Pattern.compile(vendaInicial.getCodigoVenda() + ""));
+                    filtro.put("codigoVenda", new BasicDBObject("$gte", vendaInicial.getCodigoVenda()).append("$lte", vendaInicial.getCodigoVenda()));
                 }
 
                 if (vendaInicial.getCodigoPagSeguro() != null) {
                     filtro.put("codigoPagSeguro", java.util.regex.Pattern.compile(vendaInicial.getCodigoPagSeguro()));
+                }                
+                
+                if (vendaInicial.getValor() != 0) {
+                    filtro.put("valor", new BasicDBObject("$gte", vendaInicial.getValor()).append("$lte", vendaFinal.getValor()));
                 }
                 
                 if (vendaInicial.getDataVenda() != null) {
-                    filtro.put("dataVenda", new BasicDBObject("$gte", vendaInicial.getDataVenda()));
-                }
-                
-                if (vendaFinal.getDataVenda() != null) {
-                    filtro.put("dataVenda", new BasicDBObject("$lte", vendaFinal.getDataVenda()));
-                }
-                
-                if (vendaInicial.getDesconto() != 0) {
-                    filtro.put("desconto", java.util.regex.Pattern.compile(vendaInicial.getDesconto() + ""));
-                }
+                    filtro.put("dataVenda", new BasicDBObject("$gte", vendaInicial.getDataVenda()).append("$lte", vendaFinal.getDataVenda()));
+                }                                
                 
                 if (vendaInicial.getIdCliente() != 0) {
-                    filtro.put("idCliente", java.util.regex.Pattern.compile(vendaInicial.getIdCliente() + ""));
+                    filtro.put("idCliente", vendaInicial.getIdCliente());
                 }
                 
                 if (vendaInicial.getLoginUsuario()!= null) {
